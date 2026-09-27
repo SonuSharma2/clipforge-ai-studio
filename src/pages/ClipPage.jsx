@@ -487,10 +487,13 @@ export default function ClipPage() {
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
-                  onClick={() => loadClipToStudio(clip)}
+                  onClick={() => {
+                    addToast('Studio editor is locked for polish! Check upcoming features.', 'info');
+                    setCurrentPage('studio');
+                  }}
                   className="h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 border border-slate-200 transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[16px]">tune</span> Studio
+                  <span className="material-symbols-outlined text-[15px] text-amber-600">lock</span> Studio (Soon)
                 </button>
                 <button
                   onClick={() => downloadSingle(clip)}

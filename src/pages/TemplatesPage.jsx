@@ -217,11 +217,14 @@ export default function TemplatesPage() {
 
             {/* Action */}
             <button
-              onClick={() => loadClipToStudio(tpl)}
-              className="w-full h-9 rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200 hover:border-indigo-600"
+              onClick={() => {
+                addToast('Studio editor is locked for polish! Check upcoming features.', 'info');
+                setCurrentPage('studio');
+              }}
+              className="w-full h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200"
             >
-              <span className="material-symbols-outlined text-[16px]">tune</span>
-              <span>Use in Studio</span>
+              <span className="material-symbols-outlined text-[15px] text-amber-600">lock</span>
+              <span>Studio (Coming Soon)</span>
             </button>
           </div>
         ))}

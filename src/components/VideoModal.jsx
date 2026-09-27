@@ -124,13 +124,14 @@ export default function VideoModal() {
           <div className="grid grid-cols-2 gap-2 mt-1">
             <button
               onClick={() => {
-                loadClipToStudio(modalVideo);
+                addToast('Studio editor is locked for polish! Check upcoming features.', 'info');
                 closeVideo();
+                setCurrentPage('studio');
               }}
               className="h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border border-slate-200"
             >
-              <span className="material-symbols-outlined text-[16px]">tune</span>
-              Open in Studio
+              <span className="material-symbols-outlined text-[15px] text-amber-600">lock</span>
+              Studio (Soon)
             </button>
             <button
               onClick={downloadClip}

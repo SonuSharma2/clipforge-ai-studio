@@ -174,7 +174,8 @@ export default function AuthPage() {
       const data = await res.json();
       if (data.success && data.user) {
         loginUser(data.user);
-        setCurrentPage('studio');
+        addToast(`Welcome back, ${data.user.name || 'Creator'}!`, 'success');
+        setCurrentPage('home');
       } else {
         addToast(data.error || 'Invalid credentials', 'error');
       }
@@ -187,7 +188,8 @@ export default function AuthPage() {
         plan: 'Pro Studio',
         emailVerified: true
       });
-      setCurrentPage('studio');
+      addToast('Welcome back to ClipForge AI!', 'success');
+      setCurrentPage('home');
     } finally {
       setLoading(false);
     }
@@ -251,7 +253,7 @@ export default function AuthPage() {
         });
 
         addToast('Email verified successfully! Welcome to ClipForge AI.', 'success');
-        setCurrentPage('studio');
+        setCurrentPage('home');
       } else {
         addToast(data.error || 'Invalid verification code', 'error');
       }
@@ -265,7 +267,7 @@ export default function AuthPage() {
         emailVerified: true
       });
       addToast('Email verified! Welcome to ClipForge AI.', 'success');
-      setCurrentPage('studio');
+      setCurrentPage('home');
     } finally {
       setLoading(false);
     }
@@ -284,7 +286,8 @@ export default function AuthPage() {
       const data = await res.json();
       if (data.success && data.user) {
         loginUser(data.user);
-        setCurrentPage('studio');
+        addToast(`Signed in as ${data.user.name}!`, 'success');
+        setCurrentPage('home');
       }
     } catch (err) {
       loginUser({
@@ -296,7 +299,8 @@ export default function AuthPage() {
         emailVerified: true,
         provider: 'google'
       });
-      setCurrentPage('studio');
+      addToast(`Signed in with Google as ${googleUser.name}!`, 'success');
+      setCurrentPage('home');
     } finally {
       setLoading(false);
     }

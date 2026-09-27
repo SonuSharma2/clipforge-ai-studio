@@ -19,12 +19,15 @@ export default function BottomNav() {
 
         <button
           onClick={() => setCurrentPage('studio')}
-          className={`flex flex-col items-center justify-center min-w-[44px] min-h-[44px] transition-colors ${
+          className={`flex flex-col items-center justify-center min-w-[44px] min-h-[44px] transition-colors relative ${
             currentPage === 'studio' ? 'text-indigo-600 font-semibold' : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <span className="material-symbols-outlined text-[20px]">movie_edit</span>
-          <span className="text-[10px] font-medium">Studio</span>
+          <span className="text-[10px] font-medium flex items-center gap-0.5">
+            Studio
+            <span className="text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1 rounded">Soon</span>
+          </span>
         </button>
 
         {/* Central glowing action button */}

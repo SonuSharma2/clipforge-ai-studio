@@ -9,7 +9,7 @@ export default function Header() {
 
   const navItems = [
     { id: 'home', label: 'Home', icon: 'home' },
-    { id: 'studio', label: 'Studio', icon: 'movie_edit' },
+    { id: 'studio', label: 'Studio', icon: 'movie_edit', badge: 'Soon' },
     { id: 'clip', label: 'Clip Generator', icon: 'auto_videocam' },
     { id: 'features', label: 'Features', icon: 'psychology' },
     { id: 'pricing', label: 'Pricing', icon: 'payments' },
@@ -48,6 +48,11 @@ export default function Header() {
               >
                 <span className="material-symbols-outlined text-[16px]">{item.icon}</span>
                 <span>{item.label}</span>
+                {item.badge && (
+                  <span className="text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                    {item.badge}
+                  </span>
+                )}
               </button>
             ))}
           </nav>
@@ -268,7 +273,12 @@ export default function Header() {
                     }`}
                   >
                     <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-                    <span>{item.label}</span>
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && (
+                      <span className="text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {item.badge}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
