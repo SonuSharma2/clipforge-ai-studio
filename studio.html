@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>ClipForge Studio - AI Video Editing Suite</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111319",
+            "surface-container-lowest": "#0c0e14",
+            "surface-container-low": "#191b22",
+            "surface-container": "#1d1f26",
+            "surface-container-high": "#282a30",
+            "surface-container-highest": "#33343b",
+            "on-surface": "#e2e2ea",
+            "on-surface-variant": "#c7c4d7",
+            "outline": "#908fa0",
+            "primary": "#c0c1ff",
+            "primary-container": "#8083ff",
+            "secondary": "#d0bcff",
+            "secondary-container": "#571bc1",
+            "tertiary": "#4cd7f6",
+            "tertiary-container": "#009eb9",
+            "error": "#ffb4ab"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .track-active {
+      box-shadow: inset 0 0 0 1px #4cd7f6;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-sans h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- TOP STUDIO TOOLBAR -->
+  <header class="h-14 border-b border-surface-container-highest bg-[#111319] px-4 flex items-center justify-between shrink-0 z-40">
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-2 text-on-surface hover:text-white transition-colors" title="Back to Home">
+        <span class="material-symbols-outlined text-[20px] text-tertiary">arrow_back</span>
+        <div class="w-7 h-7 rounded-md bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white">
+          <span class="material-symbols-outlined text-[16px]">movie_edit</span>
+        </div>
+      </a>
+      
+      <div class="h-5 w-[1px] bg-surface-container-highest hidden sm:block"></div>
+      
+      <div class="flex items-center gap-2">
+        <input id="project-title-input" type="text" value="Episode_42_Cut_01" class="bg-transparent font-mono text-xs sm:text-sm font-semibold text-white focus:bg-surface-container px-2 py-1 rounded border border-transparent focus:border-surface-container-highest transition-colors max-w-[140px] sm:max-w-none" />
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-high text-tertiary border border-tertiary/20 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 1080x1920 60FPS
+        </span>
+      </div>
+    </div>
+
+    <!-- Center Aspect Ratio Switcher -->
+    <div class="hidden md:flex items-center bg-surface-container-lowest p-1 rounded-lg border border-surface-container-highest font-mono text-xs">
+      <button id="ratio-916" class="px-2.5 py-1 rounded bg-primary-container text-white font-medium shadow-sm transition-all" onclick="setAspectRatio('9:16')">
+        9:16 Shorts
+      </button>
+      <button id="ratio-169" class="px-2.5 py-1 rounded text-outline hover:text-white transition-all" onclick="setAspectRatio('16:9')">
+        16:9 Wide
+      </button>
+      <button id="ratio-11" class="px-2.5 py-1 rounded text-outline hover:text-white transition-all" onclick="setAspectRatio('1:1')">
+        1:1 Square
+      </button>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-2">
+      <div class="hidden sm:flex items-center text-xs font-mono text-outline gap-1 mr-2">
+        <span class="material-symbols-outlined text-[16px] text-tertiary">cloud_done</span>
+        <span>Auto-saved</span>
+      </div>
+
+      <button onclick="undoAction()" class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition-colors" title="Undo (Ctrl+Z)">
+        <span class="material-symbols-outlined text-[18px]">undo</span>
+      </button>
+      <button onclick="redoAction()" class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition-colors" title="Redo (Ctrl+Y)">
+        <span class="material-symbols-outlined text-[18px]">redo</span>
+      </button>
+
+      <button onclick="openExportModal()" class="h-9 px-4 rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white font-semibold text-xs flex items-center gap-1.5 shadow-[0_0_16px_rgba(128,131,255,0.4)] hover:brightness-110 active:scale-95 transition-all">
+        <span class="material-symbols-outlined text-[16px]">file_download</span>
+        <span>Export</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN STUDIO WORKSPACE (3-COLUMN FLEX) -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT PANEL: MEDIA & ASSET DOCK -->
+    <aside class="w-64 border-r border-surface-container-highest bg-[#12141a] hidden lg:flex flex-col shrink-0">
+      <!-- Tab Headers -->
+      <div class="flex border-b border-surface-container-highest font-mono text-xs">
+        <button id="left-tab-clips" onclick="switchLeftTab('clips')" class="flex-1 py-2.5 text-center text-primary border-b-2 border-primary font-medium">Clips</button>
+        <button id="left-tab-styles" onclick="switchLeftTab('styles')" class="flex-1 py-2.5 text-center text-outline hover:text-white font-medium">Presets</button>
+        <button id="left-tab-audio" onclick="switchLeftTab('audio')" class="flex-1 py-2.5 text-center text-outline hover:text-white font-medium">Sound FX</button>
+      </div>
+
+      <!-- Tab Content: Clips -->
+      <div id="left-content-clips" class="flex-1 p-3 overflow-y-auto space-y-3">
+        <div class="flex items-center justify-between text-xs text-outline font-mono">
+          <span>AI Generated Clips (3)</span>
+          <a href="clip.html" class="text-tertiary hover:underline">+ New</a>
+        </div>
+
+        <!-- Clip item 1 -->
+        <div onclick="loadClipData('blueprint')" class="p-2 rounded-xl bg-surface-container border border-primary/60 cursor-pointer flex items-center gap-2.5 hover:bg-surface-container-high transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k" class="w-12 h-16 rounded object-cover" />
+          <div class="flex flex-col overflow-hidden">
+            <span class="text-xs font-semibold text-white truncate">Episode_42_Cut_01</span>
+            <span class="text-[10px] font-mono text-tertiary">Score: 98/100 • 0:34</span>
+            <span class="text-[10px] text-outline truncate">"THE EXACT BLUEPRINT"</span>
+          </div>
+        </div>
+
+        <!-- Clip item 2 -->
+        <div onclick="loadClipData('fail2026')" class="p-2 rounded-xl bg-surface-container-low border border-surface-container-highest cursor-pointer flex items-center gap-2.5 hover:bg-surface-container-high transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis" class="w-12 h-16 rounded object-cover" />
+          <div class="flex flex-col overflow-hidden">
+            <span class="text-xs font-semibold text-white truncate">Episode_42_Cut_02</span>
+            <span class="text-[10px] font-mono text-primary">Score: 94/100 • 0:48</span>
+            <span class="text-[10px] text-outline truncate">"WHY 99% FAIL IN 2026"</span>
+          </div>
+        </div>
+
+        <!-- Clip item 3 -->
+        <div onclick="loadClipData('stopdoing')" class="p-2 rounded-xl bg-surface-container-low border border-surface-container-highest cursor-pointer flex items-center gap-2.5 hover:bg-surface-container-high transition-all">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI" class="w-12 h-16 rounded object-cover" />
+          <div class="flex flex-col overflow-hidden">
+            <span class="text-xs font-semibold text-white truncate">Episode_42_Cut_03</span>
+            <span class="text-[10px] font-mono text-secondary">Score: 91/100 • 0:29</span>
+            <span class="text-[10px] text-outline truncate">"STOP DOING THIS TODAY"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Presets -->
+      <div id="left-content-styles" class="hidden flex-1 p-3 overflow-y-auto space-y-2">
+        <span class="text-xs text-outline font-mono">1-Click Caption Styles</span>
+        
+        <button onclick="applyPresetStyle('hormozi')" class="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-primary transition-all">
+          <span class="caption-hormozi text-[11px] block w-fit mb-1">HORMOZI PUNCH</span>
+          <span class="text-[10px] text-outline">Yellow box, all-caps, heavy drop shadow</span>
+        </button>
+
+        <button onclick="applyPresetStyle('mrbeast')" class="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-tertiary transition-all">
+          <span class="caption-mrbeast text-[11px] block w-fit mb-1">MRBEAST GLOW</span>
+          <span class="text-[10px] text-outline">Cyan pill highlight with black stroke outline</span>
+        </button>
+
+        <button onclick="applyPresetStyle('cyber')" class="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-tertiary transition-all">
+          <span class="caption-cyber text-[11px] block w-fit mb-1">CYBERPUNK NEON</span>
+          <span class="text-[10px] text-outline">JetBrains mono, cyan stroke, terminal glow</span>
+        </button>
+
+        <button onclick="applyPresetStyle('minimal')" class="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-white transition-all">
+          <span class="caption-minimal text-[11px] block w-fit mb-1">MINIMAL CLEAN</span>
+          <span class="text-[10px] text-outline">Semi-translucent frosted glass pill</span>
+        </button>
+      </div>
+
+      <!-- Tab Content: Audio FX -->
+      <div id="left-content-audio" class="hidden flex-1 p-3 overflow-y-auto space-y-2">
+        <span class="text-xs text-outline font-mono">Viral Sound FX Stings</span>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
+            <span class="text-xs text-white">Cinematic Whoosh</span>
+          </div>
+          <button onclick="showToast('Inserted Cinematic Whoosh at playhead!', 'success')" class="text-xs text-primary font-mono hover:underline">+ Add</button>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
+            <span class="text-xs text-white">Bass Drop Impact</span>
+          </div>
+          <button onclick="showToast('Inserted Bass Drop Impact at 00:08 Hook!', 'success')" class="text-xs text-primary font-mono hover:underline">+ Add</button>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
+            <span class="text-xs text-white">Cash Register Ka-ching</span>
+          </div>
+          <button onclick="showToast('Inserted Cash Register at playhead!', 'success')" class="text-xs text-primary font-mono hover:underline">+ Add</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER VIEWPORT (VIDEO CANVAS & PLAYBACK CONTROLS) -->
+    <main class="flex-1 flex flex-col bg-[#0b0c10] overflow-hidden relative">
+      
+      <!-- Video Stage Area -->
+      <div class="flex-1 flex items-center justify-center p-3 sm:p-6 overflow-hidden relative">
+        
+        <!-- Video Player Frame -->
+        <div id="viewport-frame" class="relative aspect-[9/16] h-full max-h-[540px] rounded-2xl bg-black border border-surface-container-highest shadow-2xl overflow-hidden flex items-center justify-center group transition-all duration-300">
+          
+          <!-- Background Video Image Simulation -->
+          <img id="active-video-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k" class="w-full h-full object-cover select-none pointer-events-none" />
+          <video id="studio-real-video" src="/generated_shorts/viral_blueprint_master.mp4" playsinline loop class="w-full h-full object-cover hidden"></video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+
+          <!-- Face Tracking Bounding Box -->
+          <div id="face-track-box" class="absolute top-[20%] left-[22%] w-[56%] h-[34%] border-2 border-dashed border-[#4cd7f6] rounded-xl pointer-events-none flex flex-col justify-between p-1.5 animate-pulse transition-opacity duration-300">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-mono bg-[#4cd7f6] text-[#003640] px-1 rounded font-bold">FACE TRACK 99.4%</span>
+              <span class="w-2 h-2 rounded-full bg-[#4cd7f6]"></span>
+            </div>
+            <span class="text-[8px] font-mono text-[#4cd7f6]/90 self-end">ACTIVE SPEAKER</span>
+          </div>
+
+          <!-- Watermark (Toggleable) -->
+          <div id="canvas-watermark" class="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-[10px] font-mono text-outline border border-white/10 pointer-events-none flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px] text-tertiary">auto_awesome</span> ClipForge AI
+          </div>
+
+          <!-- Viral Hook Indicator on Canvas -->
+          <div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#0c0e14]/90 backdrop-blur-md flex items-center gap-1.5 text-xs text-[#4cd7f6] font-mono border border-[#4cd7f6]/30 shadow-lg pointer-events-none">
+            <span class="material-symbols-outlined text-[14px]">trending_up</span>
+            <span id="canvas-score">Score: 98/100</span>
+          </div>
+
+          <!-- Real-Time Kinetic Caption Display -->
+          <div id="caption-wrapper" class="absolute bottom-14 left-3 right-3 text-center pointer-events-none transition-all duration-200">
+            <span id="live-caption" class="caption-hormozi text-sm sm:text-base inline-block">
+              "THE EXACT BLUEPRINT"
+            </span>
+          </div>
+
+          <!-- Center Play/Pause Large Overlay -->
+          <button id="canvas-play-trigger" onclick="togglePlayback()" class="absolute w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95 shadow-xl">
+            <span id="canvas-play-icon" class="material-symbols-outlined text-[32px]">play_arrow</span>
+          </button>
+        </div>
+
+        <!-- Floating View Controls -->
+        <div class="absolute top-4 right-4 hidden sm:flex items-center gap-2 bg-surface-container-low/80 backdrop-blur-md p-1.5 rounded-lg border border-surface-container-highest text-xs font-mono">
+          <button onclick="toggleFaceBox()" class="px-2 py-1 rounded hover:bg-surface-container text-tertiary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">face</span> Face Box
+          </button>
+          <span class="text-surface-container-highest">|</span>
+          <button onclick="resetZoom()" class="px-2 py-1 rounded hover:bg-surface-container text-outline hover:text-white">Fit</button>
+        </div>
+      </div>
+
+      <!-- Playback Control Dock -->
+      <div class="h-12 bg-[#12141a] border-t border-surface-container-highest px-4 flex items-center justify-between shrink-0">
+        <!-- Timecode Display -->
+        <div class="flex items-center gap-2 font-mono text-xs text-outline">
+          <span id="timer-current" class="text-white font-semibold">00:14</span>
+          <span>/</span>
+          <span id="timer-total">00:34</span>
+        </div>
+
+        <!-- Player Buttons -->
+        <div class="flex items-center gap-3">
+          <button onclick="seekRelative(-5)" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container" title="Rewind 5s">
+            <span class="material-symbols-outlined text-[18px]">replay_5</span>
+          </button>
+          <button onclick="togglePlayback()" class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center shadow-[0_0_12px_rgba(128,131,255,0.4)] active:scale-95 transition-transform">
+            <span id="main-play-icon" class="material-symbols-outlined text-[24px]">play_arrow</span>
+          </button>
+          <button onclick="seekRelative(5)" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container" title="Forward 5s">
+            <span class="material-symbols-outlined text-[18px]">forward_5</span>
+          </button>
+          <button onclick="toggleLoop()" id="loop-btn" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white" title="Toggle Loop">
+            <span class="material-symbols-outlined text-[18px]">repeat</span>
+          </button>
+        </div>
+
+        <!-- Speed & Volume -->
+        <div class="flex items-center gap-3 text-xs font-mono text-outline">
+          <button onclick="cycleSpeed()" id="speed-btn" class="px-2 py-0.5 rounded hover:bg-surface-container text-tertiary">1.0x</button>
+          <button onclick="toggleMute()" id="mute-btn" class="hover:text-white">
+            <span class="material-symbols-outlined text-[18px]">volume_up</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTTOM TIMELINE SUITE -->
+      <div class="h-44 bg-[#181b22] border-t border-surface-container-highest flex flex-col shrink-0">
+        
+        <!-- Timeline Tool Strip -->
+        <div class="h-9 px-4 border-b border-surface-container-highest flex items-center justify-between text-xs font-mono text-outline">
+          <div class="flex items-center gap-2">
+            <button onclick="splitClipAtPlayhead()" class="px-2 py-1 rounded bg-surface-container hover:text-white flex items-center gap-1 border border-surface-container-highest">
+              <span class="material-symbols-outlined text-[14px]">content_cut</span> Split (S)
+            </button>
+            <button onclick="showToast('Deleted active segment', 'info')" class="px-2 py-1 rounded bg-surface-container hover:text-white flex items-center gap-1 border border-surface-container-highest">
+              <span class="material-symbols-outlined text-[14px]">delete</span> Delete
+            </button>
+            <button onclick="showToast('AI Hook auto-snapped to nearest silence gap', 'success')" class="px-2 py-1 rounded bg-surface-container hover:text-white flex items-center gap-1 border border-surface-container-highest">
+              <span class="material-symbols-outlined text-[14px]">auto_fix_high</span> Auto-Trim Silence
+            </button>
+          </div>
+          
+          <!-- Zoom Controls -->
+          <div class="flex items-center gap-2">
+            <button onclick="zoomTimeline(-1)" class="w-6 h-6 rounded flex items-center justify-center hover:bg-surface-container hover:text-white">-</button>
+            <span>Zoom</span>
+            <button onclick="zoomTimeline(1)" class="w-6 h-6 rounded flex items-center justify-center hover:bg-surface-container hover:text-white">+</button>
+          </div>
+        </div>
+
+        <!-- Ruler & Multi-Track Area -->
+        <div id="timeline-scroll-container" class="flex-1 overflow-x-auto overflow-y-hidden relative select-none p-2 space-y-1.5 cursor-pointer" onclick="handleTimelineClick(event)">
+          
+          <!-- Playhead Vertical Line -->
+          <div id="timeline-needle" class="absolute top-0 bottom-0 w-0.5 bg-tertiary z-30 shadow-[0_0_8px_#4cd7f6] pointer-events-none" style="left: 41%;">
+            <div class="w-3 h-3 -ml-[5px] bg-tertiary rotate-45 -mt-1 shadow-md"></div>
+          </div>
+
+          <!-- Track 1: Subtitle Kinetic Blocks -->
+          <div class="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest">
+            <span class="absolute left-2 text-outline text-[9px] uppercase pointer-events-none">Subtitles</span>
+            <div class="ml-16 h-5 rounded bg-primary-container/80 text-white flex items-center px-2 font-bold truncate border border-primary">
+              "THE EXACT BLUEPRINT"
+            </div>
+            <div class="ml-2 h-5 rounded bg-surface-container-high text-on-surface-variant flex items-center px-2 truncate">
+              [Host: "...just two steps to scale..."]
+            </div>
+          </div>
+
+          <!-- Track 2: B-Roll & Visual Inserts -->
+          <div class="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest">
+            <span class="absolute left-2 text-outline text-[9px] uppercase pointer-events-none">B-Roll Cut</span>
+            <div class="ml-24 h-5 rounded bg-secondary-container text-on-secondary-container flex items-center px-2 font-medium border border-secondary/50">
+              ⚡ Studio Keylight Cutaway (00:08)
+            </div>
+          </div>
+
+          <!-- Track 3: Video Stream & Face Track -->
+          <div class="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest overflow-hidden">
+            <span class="absolute left-2 text-outline text-[9px] uppercase pointer-events-none z-10">Video 9:16</span>
+            <div class="ml-16 w-full h-full bg-gradient-to-r from-surface-container-highest via-[#282a30] to-surface-container-highest flex items-center pl-2 text-outline text-[10px]">
+              Active Speaker Framing: Host (Primary) • 1080x1920 60fps
+            </div>
+          </div>
+
+          <!-- Track 4: Audio Waveform with Viral Hook Markers -->
+          <div class="h-8 w-full rounded bg-surface-container-lowest flex items-center px-2 relative border border-surface-container-highest">
+            <span class="absolute left-2 text-outline text-[9px] uppercase pointer-events-none z-10">Audio</span>
+            <!-- Waveform bars -->
+            <div class="ml-16 flex-1 h-6 flex items-center gap-1 opacity-75">
+              <div class="w-1 h-2 bg-outline rounded"></div>
+              <div class="w-1 h-4 bg-outline rounded"></div>
+              <div class="w-1 h-3 bg-outline rounded"></div>
+              <div class="w-1 h-6 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
+              <div class="w-1 h-7 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
+              <div class="w-1 h-5 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
+              <div class="w-1 h-3 bg-outline rounded"></div>
+              <div class="w-1 h-4 bg-outline rounded"></div>
+              <div class="w-1 h-2 bg-outline rounded"></div>
+              <div class="w-1 h-5 bg-primary rounded"></div>
+              <div class="w-1 h-7 bg-primary rounded"></div>
+              <div class="w-1 h-6 bg-primary rounded"></div>
+              <div class="w-1 h-4 bg-outline rounded"></div>
+              <div class="w-1 h-2 bg-outline rounded"></div>
+              <div class="w-1 h-5 bg-outline rounded"></div>
+              <div class="w-1 h-6 bg-outline rounded"></div>
+              <div class="w-1 h-3 bg-outline rounded"></div>
+            </div>
+            <!-- Viral Hook Tag badge on timeline -->
+            <div class="absolute left-[24%] top-1 px-1.5 py-0.5 rounded bg-tertiary text-black text-[9px] font-mono font-bold flex items-center gap-0.5 shadow-md">
+              <span class="w-1 h-1 rounded-full bg-black"></span> Viral Hook (00:08)
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL: AI INSPECTOR & CAPTION CUSTOMIZER -->
+    <aside class="w-80 border-l border-surface-container-highest bg-[#12141a] hidden xl:flex flex-col shrink-0 overflow-y-auto">
+      
+      <!-- Inspector Tabs -->
+      <div class="flex border-b border-surface-container-highest font-mono text-xs">
+        <button id="right-tab-captions" onclick="switchRightTab('captions')" class="flex-1 py-3 text-center text-primary border-b-2 border-primary font-semibold">Captions</button>
+        <button id="right-tab-tracking" onclick="switchRightTab('tracking')" class="flex-1 py-3 text-center text-outline hover:text-white font-semibold">Tracking</button>
+        <button id="right-tab-hooks" onclick="switchRightTab('hooks')" class="flex-1 py-3 text-center text-outline hover:text-white font-semibold">AI Hooks</button>
+      </div>
+
+      <!-- Tab 1: Captions Styler -->
+      <div id="right-content-captions" class="p-4 space-y-4">
+        
+        <!-- Editable Caption Text -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-mono text-outline">Active Subtitle Text</label>
+          <textarea id="caption-text-input" rows="2" class="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-xs font-bold text-white focus:outline-none focus:border-primary uppercase transition-colors" oninput="updateCaptionText(this.value)">THE EXACT BLUEPRINT</textarea>
+        </div>
+
+        <!-- Font Family Selector -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-mono text-outline">Caption Typography</label>
+          <select id="font-family-select" onchange="updateCaptionFont(this.value)" class="w-full p-2 rounded-lg bg-surface-container border border-surface-container-highest text-xs text-white focus:outline-none font-mono">
+            <option value="Geist">Geist (Modern Sans)</option>
+            <option value="JetBrains Mono">JetBrains Mono (Coding/Cyber)</option>
+            <option value="Impact">Impact (Hormozi Classic)</option>
+            <option value="Arial Black">Arial Black (Bold Punch)</option>
+          </select>
+        </div>
+
+        <!-- Highlight Color Palette -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-mono text-outline">Highlight Color Accent</label>
+          <div class="flex items-center gap-2">
+            <button onclick="setCaptionColor('#FFE600', '#000000')" class="w-7 h-7 rounded-full bg-[#FFE600] border-2 border-white shadow-sm" title="Hormozi Yellow"></button>
+            <button onclick="setCaptionColor('#00E5FF', '#000000')" class="w-7 h-7 rounded-full bg-[#00E5FF] hover:scale-105 transition-transform" title="MrBeast Cyan"></button>
+            <button onclick="setCaptionColor('#FF2A85', '#FFFFFF')" class="w-7 h-7 rounded-full bg-[#FF2A85] hover:scale-105 transition-transform" title="Neon Magenta"></button>
+            <button onclick="setCaptionColor('#8083ff', '#FFFFFF')" class="w-7 h-7 rounded-full bg-[#8083ff] hover:scale-105 transition-transform" title="ClipForge Purple"></button>
+            <button onclick="setCaptionColor('#00FF66', '#000000')" class="w-7 h-7 rounded-full bg-[#00FF66] hover:scale-105 transition-transform" title="Electric Green"></button>
+          </div>
+        </div>
+
+        <!-- Caption Size Slider -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between text-xs font-mono text-outline">
+            <span>Font Size</span>
+            <span id="font-size-val">16px</span>
+          </div>
+          <input type="range" min="12" max="28" value="16" class="w-full accent-primary" oninput="updateFontSize(this.value)" />
+        </div>
+
+        <!-- Animation Style -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-mono text-outline">Word Animation Dynamics</label>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <button onclick="setWordAnim('pop')" class="p-2 rounded bg-surface-container border border-primary text-white text-center">Word Pop</button>
+            <button onclick="setWordAnim('glow')" class="p-2 rounded bg-surface-container hover:bg-surface-container-high text-outline hover:text-white text-center">Karaoke Glow</button>
+            <button onclick="setWordAnim('bounce')" class="p-2 rounded bg-surface-container hover:bg-surface-container-high text-outline hover:text-white text-center">Bounce Up</button>
+            <button onclick="setWordAnim('typewriter')" class="p-2 rounded bg-surface-container hover:bg-surface-container-high text-outline hover:text-white text-center">Typewriter</button>
+          </div>
+        </div>
+
+        <!-- Position Adjustment -->
+        <div class="space-y-1.5 pt-2 border-t border-surface-container-highest">
+          <label class="text-xs font-mono text-outline">Vertical Position</label>
+          <div class="flex gap-2 text-xs font-mono">
+            <button onclick="setCaptionPosition('bottom-8')" class="flex-1 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-white">Low</button>
+            <button onclick="setCaptionPosition('bottom-20')" class="flex-1 py-1.5 rounded bg-primary-container text-white">Mid</button>
+            <button onclick="setCaptionPosition('top-16')" class="flex-1 py-1.5 rounded bg-surface-container hover:bg-surface-container-high text-white">High</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tab 2: AI Reframing & Speaker Tracking -->
+      <div id="right-content-tracking" class="hidden p-4 space-y-4">
+        <span class="text-xs font-mono text-tertiary uppercase tracking-wider">Active Neural Speaker Tracking</span>
+        
+        <div class="space-y-2">
+          <label class="text-xs font-medium text-white">Reframing Mode</label>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 p-2 rounded bg-surface-container border border-primary/50 text-xs text-white cursor-pointer">
+              <input type="radio" name="reframe-mode" checked class="accent-primary" />
+              <span>Auto-Follow Active Speaker (Single 9:16)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded bg-surface-container-low text-xs text-on-surface-variant cursor-pointer hover:bg-surface-container">
+              <input type="radio" name="reframe-mode" class="accent-primary" />
+              <span>Split-Screen Stack (Dual Hosts)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded bg-surface-container-low text-xs text-on-surface-variant cursor-pointer hover:bg-surface-container">
+              <input type="radio" name="reframe-mode" class="accent-primary" />
+              <span>Cinematic Pan & Scan (Smoothed)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-1.5 pt-2">
+          <div class="flex justify-between text-xs font-mono text-outline">
+            <span>Camera Tracking Smoothness</span>
+            <span>85%</span>
+          </div>
+          <input type="range" min="10" max="100" value="85" class="w-full accent-tertiary" />
+        </div>
+
+        <div class="p-3 rounded-lg bg-surface-container border border-surface-container-highest text-xs text-outline leading-relaxed">
+          <span class="text-white font-semibold flex items-center gap-1 mb-1">
+            <span class="material-symbols-outlined text-tertiary text-[16px]">visibility</span>
+            Speaker Isolation Active
+          </span>
+          The AI neural net automatically pans the 9:16 viewport when audio decibels shift to guest microphone.
+        </div>
+      </div>
+
+      <!-- Tab 3: AI Detected Hooks -->
+      <div id="right-content-hooks" class="hidden p-4 space-y-3">
+        <span class="text-xs font-mono text-primary uppercase tracking-wider">Multimodal Viral Highlights</span>
+        
+        <div class="p-3 rounded-xl bg-surface-container border border-primary/60 flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-tertiary"></span> Hook Peak
+            </span>
+            <span class="text-xs font-mono text-tertiary font-bold">98% Viral Prob</span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant">"The exact blueprint why most creators burn out..."</span>
+          <div class="flex gap-2 mt-1">
+            <button onclick="seekToTimestamp(8)" class="flex-1 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors">
+              Jump to 00:08
+            </button>
+            <button onclick="showToast('Trimmed clip to Hook duration (0:34)', 'success')" class="px-2.5 py-1 rounded bg-primary-container text-white text-xs font-mono">
+              Trim
+            </button>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-surface-container-low border border-surface-container-highest flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span> Key Punchline
+            </span>
+            <span class="text-xs font-mono text-secondary font-bold">93% Viral Prob</span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant">"Stop doing this today if you want to grow in 2026..."</span>
+          <div class="flex gap-2 mt-1">
+            <button onclick="seekToTimestamp(24)" class="flex-1 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors">
+              Jump to 00:24
+            </button>
+            <button onclick="showToast('Trimmed clip to Punchline duration', 'success')" class="px-2.5 py-1 rounded bg-surface-container-high text-white text-xs font-mono">
+              Trim
+            </button>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-surface-container-low border border-surface-container-highest flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-primary"></span> Engagement Climax
+            </span>
+            <span class="text-xs font-mono text-primary font-bold">89% Viral Prob</span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant">"Here is the single prompt that replaced my team..."</span>
+          <div class="flex gap-2 mt-1">
+            <button onclick="seekToTimestamp(31)" class="flex-1 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors">
+              Jump to 00:31
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- EXPORT RENDER MODAL DIALOG -->
+  <div id="export-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl bg-surface-container border border-surface-container-highest shadow-2xl p-5 space-y-4">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[22px]">rocket_launch</span>
+          <h3 class="font-bold text-base text-white">Render & Export Short</h3>
+        </div>
+        <button onclick="closeExportModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Export Settings -->
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-mono text-outline block mb-1">Export Resolution</label>
+          <div class="grid grid-cols-3 gap-2 text-xs font-mono">
+            <button onclick="selectExportRes('1080p', this)" class="p-2 rounded-lg bg-primary-container text-white text-center font-semibold border border-primary">1080p 60fps</button>
+            <button onclick="selectExportRes('4k', this)" class="p-2 rounded-lg bg-surface-container-high text-outline hover:text-white text-center">4K Ultra-HD</button>
+            <button onclick="selectExportRes('720p', this)" class="p-2 rounded-lg bg-surface-container-high text-outline hover:text-white text-center">720p Fast</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-mono text-outline block mb-1">Direct Platform Format</label>
+          <div class="grid grid-cols-3 gap-2 text-xs font-mono">
+            <label class="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
+              <input type="checkbox" checked class="accent-primary" /> TikTok
+            </label>
+            <label class="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
+              <input type="checkbox" checked class="accent-primary" /> Shorts
+            </label>
+            <label class="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
+              <input type="checkbox" checked class="accent-primary" /> Reels
+            </label>
+          </div>
+        </div>
+
+        <!-- Rendering Progress Pipeline (Hidden during initial state) -->
+        <div id="render-progress-box" class="hidden flex-col gap-2 p-3 rounded-xl bg-surface-container-lowest border border-surface-container-highest">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span id="render-step-label" class="text-tertiary flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+              Encoding 60fps H.264 stream...
+            </span>
+            <span id="render-percent" class="text-white font-bold">25%</span>
+          </div>
+          <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+            <div id="render-bar" class="h-full bg-gradient-to-r from-primary-container to-tertiary rounded-full transition-all duration-300" style="width: 25%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="pt-2 flex gap-3">
+        <button onclick="closeExportModal()" class="flex-1 h-11 rounded-lg bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-on-surface transition-colors">
+          Cancel
+        </button>
+        <button id="start-render-btn" onclick="startExportRender()" class="flex-1 h-11 rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[18px]">download</span>
+          <span>Download MP4</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STUDIO INTERACTION LOGIC -->
+  <script src="shared.js"></script>
+  <script>
+    let isPlaying = false;
+    let playInterval = null;
+    let currentSeconds = 14;
+    const totalSeconds = 34;
+
+      let activeVideoUrl = '/generated_shorts/viral_blueprint_master.mp4';
+
+      function togglePlayback() {
+        isPlaying = !isPlaying;
+        const mainIcon = document.getElementById('main-play-icon');
+        const canvasIcon = document.getElementById('canvas-play-icon');
+        const video = document.getElementById('studio-real-video');
+        const img = document.getElementById('active-video-img');
+        
+        if (isPlaying) {
+          if (mainIcon) mainIcon.textContent = 'pause';
+          if (canvasIcon) canvasIcon.textContent = 'pause';
+          if (video) {
+            img.classList.add('hidden');
+            video.classList.remove('hidden');
+            video.play().catch(e => console.log('Autoplay policy notice:', e));
+          }
+          playInterval = setInterval(() => {
+            currentSeconds++;
+            if (currentSeconds > totalSeconds) {
+              currentSeconds = 0;
+            }
+            updatePlaybackUI();
+          }, 500);
+        } else {
+          if (mainIcon) mainIcon.textContent = 'play_arrow';
+          if (canvasIcon) canvasIcon.textContent = 'play_arrow';
+          if (video) video.pause();
+          if (playInterval) clearInterval(playInterval);
+        }
+      }
+
+    function startExportRender() {
+      const progressBox = document.getElementById('render-progress-box');
+      const stepLabel = document.getElementById('render-step-label');
+      const percent = document.getElementById('render-percent');
+      const bar = document.getElementById('render-bar');
+      const btn = document.getElementById('start-render-btn');
+
+      progressBox.classList.remove('hidden');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      let prog = 10;
+      const interval = setInterval(() => {
+        prog += 20;
+        if (prog <= 100) {
+          bar.style.width = prog + '%';
+          percent.textContent = prog + '%';
+          if (prog === 30) stepLabel.textContent = 'Reframing 9:16 vertical keyframes...';
+          if (prog === 70) stepLabel.textContent = 'Burning dynamic kinetic subtitles...';
+          if (prog === 90) stepLabel.textContent = 'Packaging MP4 60fps container...';
+        } else {
+          clearInterval(interval);
+          stepLabel.textContent = 'Render Complete!';
+          showToast('Render Complete! Real MP4 downloading...', 'success');
+          
+          // Trigger actual real browser file download
+          const a = document.createElement('a');
+          a.href = activeVideoUrl || '/generated_shorts/viral_blueprint_master.mp4';
+          a.download = `${(document.getElementById('project-title-input')?.value || 'Episode_42_Cut_01').replace(/[^a-zA-Z0-9_-]/g, '_')}.mp4`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(() => {
+            closeExportModal();
+            progressBox.classList.add('hidden');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50');
+          }, 1200);
+        }
+      }, 250);
+    }
+
+    function updatePlaybackUI() {
+      const curTimer = document.getElementById('timer-current');
+      const needle = document.getElementById('timeline-needle');
+      if (curTimer) {
+        const secStr = currentSeconds < 10 ? '0' + currentSeconds : currentSeconds;
+        curTimer.textContent = `00:${secStr}`;
+      }
+      if (needle) {
+        const pct = (currentSeconds / totalSeconds) * 100;
+        needle.style.left = `${pct}%`;
+      }
+    }
+
+    function seekRelative(delta) {
+      currentSeconds = Math.max(0, Math.min(totalSeconds, currentSeconds + delta));
+      updatePlaybackUI();
+    }
+
+    function seekToTimestamp(sec) {
+      currentSeconds = sec;
+      updatePlaybackUI();
+      showToast(`Jumped playhead to 00:${sec < 10 ? '0' + sec : sec}`, 'info');
+    }
+
+    function handleTimelineClick(e) {
+      const container = document.getElementById('timeline-scroll-container');
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      currentSeconds = Math.round(pct * totalSeconds);
+      updatePlaybackUI();
+    }
+
+    // Left Tabs
+    function switchLeftTab(tab) {
+      ['clips', 'styles', 'audio'].forEach(t => {
+        const tabBtn = document.getElementById(`left-tab-${t}`);
+        const content = document.getElementById(`left-content-${t}`);
+        if (t === tab) {
+          if (tabBtn) {
+            tabBtn.classList.add('text-primary', 'border-b-2', 'border-primary');
+            tabBtn.classList.remove('text-outline');
+          }
+          if (content) content.classList.remove('hidden');
+        } else {
+          if (tabBtn) {
+            tabBtn.classList.remove('text-primary', 'border-b-2', 'border-primary');
+            tabBtn.classList.add('text-outline');
+          }
+          if (content) content.classList.add('hidden');
+        }
+      });
+    }
+
+    // Right Tabs
+    function switchRightTab(tab) {
+      ['captions', 'tracking', 'hooks'].forEach(t => {
+        const tabBtn = document.getElementById(`right-tab-${t}`);
+        const content = document.getElementById(`right-content-${t}`);
+        if (t === tab) {
+          if (tabBtn) {
+            tabBtn.classList.add('text-primary', 'border-b-2', 'border-primary');
+            tabBtn.classList.remove('text-outline');
+          }
+          if (content) content.classList.remove('hidden');
+        } else {
+          if (tabBtn) {
+            tabBtn.classList.remove('text-primary', 'border-b-2', 'border-primary');
+            tabBtn.classList.add('text-outline');
+          }
+          if (content) content.classList.add('hidden');
+        }
+      });
+    }
+
+    // Caption Styling Controls
+    function updateCaptionText(val) {
+      const live = document.getElementById('live-caption');
+      if (live) live.textContent = `"${val}"`;
+    }
+
+    function updateCaptionFont(font) {
+      const live = document.getElementById('live-caption');
+      if (live) live.style.fontFamily = font;
+      showToast(`Font changed to ${font}`, 'info');
+    }
+
+    function setCaptionColor(bg, text) {
+      const live = document.getElementById('live-caption');
+      if (live) {
+        live.style.background = bg;
+        live.style.color = text;
+      }
+      showToast(`Caption color accent applied!`, 'info');
+    }
+
+    function updateFontSize(val) {
+      const live = document.getElementById('live-caption');
+      const label = document.getElementById('font-size-val');
+      if (live) live.style.fontSize = `${val}px`;
+      if (label) label.textContent = `${val}px`;
+    }
+
+    function setWordAnim(anim) {
+      showToast(`Subtitle word animation set to ${anim}`, 'success');
+    }
+
+    function setCaptionPosition(posClass) {
+      const wrapper = document.getElementById('caption-wrapper');
+      if (wrapper) {
+        wrapper.className = `absolute ${posClass} left-3 right-3 text-center pointer-events-none transition-all duration-200`;
+      }
+    }
+
+    function applyPresetStyle(style) {
+      const live = document.getElementById('live-caption');
+      if (!live) return;
+      live.className = `caption-${style} text-sm sm:text-base inline-block`;
+      showToast(`Applied preset: ${style.toUpperCase()}`, 'success');
+    }
+
+    function toggleFaceBox() {
+      const box = document.getElementById('face-track-box');
+      if (box) {
+        box.classList.toggle('opacity-0');
+        showToast('Toggled face tracking bounding box overlay', 'info');
+      }
+    }
+
+    function setAspectRatio(ratio) {
+      const frame = document.getElementById('viewport-frame');
+      const b916 = document.getElementById('ratio-916');
+      const b169 = document.getElementById('ratio-169');
+      const b11 = document.getElementById('ratio-11');
+      
+      [b916, b169, b11].forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-white');
+        b.classList.add('text-outline');
+      });
+
+      if (ratio === '9:16') {
+        frame.style.aspectRatio = '9/16';
+        b916.classList.add('bg-primary-container', 'text-white');
+      } else if (ratio === '16:9') {
+        frame.style.aspectRatio = '16/9';
+        b169.classList.add('bg-primary-container', 'text-white');
+      } else if (ratio === '1:1') {
+        frame.style.aspectRatio = '1/1';
+        b11.classList.add('bg-primary-container', 'text-white');
+      }
+      showToast(`Aspect ratio switched to ${ratio}`, 'info');
+    }
+
+    function loadClipData(type) {
+      const img = document.getElementById('active-video-img');
+      const title = document.getElementById('project-title-input');
+      const score = document.getElementById('canvas-score');
+      const caption = document.getElementById('caption-text-input');
+
+      if (type === 'blueprint') {
+        img.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k';
+        title.value = 'Episode_42_Cut_01';
+        score.textContent = 'Score: 98/100';
+        caption.value = 'THE EXACT BLUEPRINT';
+        updateCaptionText('THE EXACT BLUEPRINT');
+      } else if (type === 'fail2026') {
+        img.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis';
+        title.value = 'Episode_42_Cut_02';
+        score.textContent = 'Score: 94/100';
+        caption.value = 'WHY 99% FAIL IN 2026';
+        updateCaptionText('WHY 99% FAIL IN 2026');
+      } else if (type === 'stopdoing') {
+        img.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI';
+        title.value = 'Episode_42_Cut_03';
+        score.textContent = 'Score: 91/100';
+        caption.value = 'STOP DOING THIS TODAY';
+        updateCaptionText('STOP DOING THIS TODAY');
+      }
+      showToast(`Loaded ${title.value} into Studio!`, 'success');
+    }
+
+    // Split Clip
+    function splitClipAtPlayhead() {
+      showToast(`Split cut created at playhead (00:${currentSeconds < 10 ? '0' + currentSeconds : currentSeconds})`, 'success');
+    }
+
+    // Export Modal Logic
+    function openExportModal() {
+      const modal = document.getElementById('export-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (modal) modal.classList.add('flex');
+    }
+
+    function closeExportModal() {
+      const modal = document.getElementById('export-modal');
+      if (modal) modal.classList.add('hidden');
+      if (modal) modal.classList.remove('flex');
+    }
+
+    function selectExportRes(res, btn) {
+      btn.parentElement.querySelectorAll('button').forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-white', 'border', 'border-primary');
+        b.classList.add('bg-surface-container-high', 'text-outline');
+      });
+      btn.classList.add('bg-primary-container', 'text-white', 'border', 'border-primary');
+      btn.classList.remove('bg-surface-container-high', 'text-outline');
+    }
+
+    function startExportRender() {
+      const progressBox = document.getElementById('render-progress-box');
+      const stepLabel = document.getElementById('render-step-label');
+      const percent = document.getElementById('render-percent');
+      const bar = document.getElementById('render-bar');
+      const btn = document.getElementById('start-render-btn');
+
+      progressBox.classList.remove('hidden');
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+
+      let prog = 10;
+      const interval = setInterval(() => {
+        prog += 20;
+        if (prog <= 100) {
+          bar.style.width = prog + '%';
+          percent.textContent = prog + '%';
+          if (prog === 30) stepLabel.textContent = 'Reframing 9:16 vertical keyframes...';
+          if (prog === 70) stepLabel.textContent = 'Burning dynamic kinetic subtitles...';
+          if (prog === 90) stepLabel.textContent = 'Packaging MP4 60fps container...';
+        } else {
+          clearInterval(interval);
+          stepLabel.textContent = 'Render Complete!';
+          showToast('Render Complete! Download starting...', 'success');
+          setTimeout(() => {
+            closeExportModal();
+            progressBox.classList.add('hidden');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50');
+          }, 1200);
+        }
+      }, 250);
+    }
+
+    // Check URL query param to load specific clip
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const clipParam = urlParams.get('clip');
+      if (clipParam) {
+        if (clipParam.includes('fail')) loadClipData('fail2026');
+        else if (clipParam.includes('stop')) loadClipData('stopdoing');
+        else loadClipData('blueprint');
+      }
+    });
+
+    function undoAction() { showToast('Undo last edit', 'info'); }
+    function redoAction() { showToast('Redo edit', 'info'); }
+    function toggleLoop() { showToast('Playback loop toggled', 'info'); }
+    function cycleSpeed() { showToast('Playback speed: 1.5x', 'info'); }
+    function toggleMute() { showToast('Mute toggled', 'info'); }
+    function resetZoom() { showToast('Canvas reset to 100% Fit', 'info'); }
+  </script>
+</body>
+</html>

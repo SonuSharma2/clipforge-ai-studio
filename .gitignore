@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Large binaries
+ffmpeg.exe
+*.exe
+
+# Generated media
+generated_shorts/*.mp4
+generated_shorts/*.jpg
+generated_shorts/*.webp
+!generated_shorts/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+
+# System and logs
+*.log
+.DS_Store
+Thumbs.db

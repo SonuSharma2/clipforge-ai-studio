@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>ClipForge Generator - AI Multimodal Video Ingestion</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111319",
+            "surface-container-lowest": "#0c0e14",
+            "surface-container-low": "#191b22",
+            "surface-container": "#1d1f26",
+            "surface-container-high": "#282a30",
+            "surface-container-highest": "#33343b",
+            "on-surface": "#e2e2ea",
+            "on-surface-variant": "#c7c4d7",
+            "outline": "#908fa0",
+            "primary": "#c0c1ff",
+            "primary-container": "#8083ff",
+            "secondary": "#d0bcff",
+            "secondary-container": "#571bc1",
+            "tertiary": "#4cd7f6",
+            "tertiary-container": "#009eb9",
+            "error": "#ffb4ab"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="shared.css"/>
+</head>
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- TOP HEADER -->
+  <header class="fixed top-0 w-full z-50 pt-safe glass-nav">
+    <div class="max-w-7xl mx-auto h-16 px-4 md:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white shadow-[0_0_12px_rgba(128,131,255,0.4)] group-hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+        </div>
+        <span class="text-lg font-semibold tracking-tight text-on-surface">ClipForge</span>
+        <span class="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-high text-tertiary border border-surface-container-highest">AI Generator</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm text-on-surface-variant font-medium">
+        <a href="index.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">home</span> Home
+        </a>
+        <a href="studio.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">movie_edit</span> Studio
+        </a>
+        <a href="clip.html" class="text-primary hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">auto_videocam</span> Clip Generator
+        </a>
+        <a href="features.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">psychology</span> Features
+        </a>
+        <a href="pricing.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">payments</span> Pricing
+        </a>
+        <a href="templates.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">dashboard_customize</span> Templates
+        </a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-mono text-tertiary bg-surface-container px-2.5 py-1 rounded-full border border-surface-container-highest flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 60 GPU Mins Free
+        </span>
+        <button aria-label="Open navigation menu" class="mobile-menu-trigger flex md:hidden items-center p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant">
+          <span class="material-symbols-outlined text-[24px]">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-28 space-y-8">
+    
+    <!-- PAGE TITLE -->
+    <div class="flex flex-col space-y-2 text-center items-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-tertiary text-xs font-mono border border-surface-container-highest">
+        <span class="material-symbols-outlined text-[14px]">auto_videocam</span>
+        <span>Multimodal Neural Ingestion Engine</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+        Generate Viral Shorts From Any Video
+      </h1>
+      <p class="text-xs sm:text-sm text-on-surface-variant max-w-lg">
+        Input podcasts, long interviews, webinars, or Twitch streams. Our AI will isolate hooks, crop speakers in 9:16, and generate ready-to-post clips.
+      </p>
+    </div>
+
+    <!-- INGESTION CONSOLE CARD -->
+    <div class="rounded-2xl bg-surface-container-low border border-surface-container-highest p-5 sm:p-6 shadow-2xl space-y-6">
+      
+      <!-- Source Selector Tabs -->
+      <div class="flex border-b border-surface-container-highest font-mono text-xs">
+        <button id="src-tab-url" onclick="switchSourceTab('url')" class="pb-3 px-4 text-primary border-b-2 border-primary font-semibold flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">link</span> Video URL
+        </button>
+        <button id="src-tab-upload" onclick="switchSourceTab('upload')" class="pb-3 px-4 text-outline hover:text-white font-semibold flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">upload_file</span> Upload Local Video
+        </button>
+      </div>
+
+      <!-- URL Input Mode -->
+      <div id="src-content-url" class="space-y-4">
+        <div class="relative flex items-center">
+          <span class="material-symbols-outlined text-[20px] text-tertiary absolute left-3.5">play_circle</span>
+          <input id="main-url-input" type="text" value="https://youtube.com/watch?v=k9X8fG0vQw2" class="w-full bg-surface-container-lowest text-on-surface font-mono text-xs sm:text-sm pl-11 pr-24 py-3.5 rounded-xl border border-surface-container focus:border-primary-container focus:outline-none transition-colors" placeholder="Paste YouTube, Twitch, Vimeo or podcast link..." />
+          <button onclick="document.getElementById('main-url-input').value=''" class="absolute right-3 px-2 py-1 rounded bg-surface-container text-xs font-mono text-outline hover:text-white">
+            Clear
+          </button>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono text-outline">
+          <span>Popular presets:</span>
+          <button onclick="loadSampleUrl('https://youtube.com/watch?v=lex_huberman_ai')" class="hover:text-tertiary underline">Lex & Huberman Podcast</button>
+          <span>•</span>
+          <button onclick="loadSampleUrl('https://youtube.com/watch?v=hormozi_scale_100m')" class="hover:text-primary underline">Alex Hormozi Scaling</button>
+          <span>•</span>
+          <button onclick="loadSampleUrl('https://youtube.com/watch?v=altman_agi_keynote')" class="hover:text-secondary underline">Sam Altman AGI Keynote</button>
+        </div>
+      </div>
+
+      <!-- Upload File Mode (Hidden by default) -->
+      <div id="src-content-upload" class="hidden">
+        <div class="border-2 border-dashed border-surface-container-highest hover:border-primary/50 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors bg-surface-container-lowest" onclick="simulateFileUpload()">
+          <span class="material-symbols-outlined text-4xl text-tertiary mb-2">cloud_upload</span>
+          <span class="text-sm font-semibold text-white">Click or drag & drop video file here</span>
+          <span class="text-xs font-mono text-outline mt-1">MP4, MOV, MKV up to 4GB supported</span>
+        </div>
+      </div>
+
+      <!-- Advanced AI Parameters Accordion -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+        <!-- Target Duration -->
+        <div class="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
+          <label class="text-[11px] font-mono text-outline uppercase">Target Clip Duration</label>
+          <select id="clip-duration-select" class="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none">
+            <option value="auto">Auto (Best Hooks)</option>
+            <option value="30">30s (Shorts Standard)</option>
+            <option value="15">15s (TikTok Fast)</option>
+            <option value="60">60s (Deep Narrative)</option>
+          </select>
+        </div>
+
+        <!-- Caption Preset -->
+        <div class="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
+          <label class="text-[11px] font-mono text-outline uppercase">Caption Style Preset</label>
+          <select id="caption-style-select" class="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none">
+            <option value="hormozi">Hormozi Bold (Yellow)</option>
+            <option value="mrbeast">MrBeast Punch (Cyan)</option>
+            <option value="cyber">Cyberpunk Neon</option>
+            <option value="minimal">Minimal Clean</option>
+          </select>
+        </div>
+
+        <!-- Virality Threshold -->
+        <div class="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
+          <div class="flex justify-between text-[11px] font-mono text-outline uppercase">
+            <span>Virality Filter</span>
+            <span id="virality-label" class="text-tertiary font-bold">&gt; 85%</span>
+          </div>
+          <input type="range" min="70" max="95" value="85" class="accent-tertiary mt-2" oninput="document.getElementById('virality-label').textContent = '> ' + this.value + '%'" />
+        </div>
+
+        <!-- Language Selection -->
+        <div class="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
+          <label class="text-[11px] font-mono text-outline uppercase">Subtitle Language</label>
+          <select class="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none">
+            <option>Auto-Detect (40+ langs)</option>
+            <option>English (US / UK)</option>
+            <option>Spanish (Español)</option>
+            <option>German (Deutsch)</option>
+            <option>French (Français)</option>
+            <option>Japanese (日本語)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Generate Action Trigger -->
+      <div class="pt-2">
+        <button id="generator-run-btn" onclick="runGenerationPipeline()" class="w-full h-12 rounded-xl bg-gradient-to-r from-secondary-container via-primary-container to-tertiary text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(128,131,255,0.4)] hover:brightness-110 active:scale-[0.99] transition-all">
+          <span id="gen-spinner" class="material-symbols-outlined text-[20px] animate-spin hidden">progress_activity</span>
+          <span id="gen-sparkle" class="material-symbols-outlined text-[20px]">auto_awesome</span>
+          <span id="gen-btn-label">Run Multimodal AI Analysis</span>
+        </button>
+      </div>
+
+      <!-- Active Processing Pipeline Visualizer -->
+      <div id="generator-pipeline-box" class="hidden flex-col gap-3 p-4 rounded-xl bg-surface-container-lowest border border-surface-container-highest animate-fadeIn">
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span id="gen-pipeline-status" class="text-tertiary flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+            Stage 1: Downloading 4K stream & audio track separation...
+          </span>
+          <span id="gen-pipeline-pct" class="text-white font-bold">12%</span>
+        </div>
+        <div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+          <div id="gen-progress-bar" class="h-full bg-gradient-to-r from-primary-container via-tertiary to-secondary-container rounded-full transition-all duration-300" style="width: 12%;"></div>
+        </div>
+
+        <!-- Live Terminal Log Feed -->
+        <div class="p-2.5 rounded-lg bg-black/60 border border-surface-container-highest font-mono text-[11px] text-outline space-y-1 h-20 overflow-y-auto" id="terminal-feed">
+          <div>[GPU-CLUSTER] Connected to cluster-us-east-4a (1x NVIDIA H100)</div>
+          <div class="text-tertiary">[WHISPER-V3] Ingesting high-definition audio waveform...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GENERATED CLIPS REPOSITORY -->
+    <div class="space-y-4 pt-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[22px]">video_library</span>
+          <h2 class="text-xl font-bold text-white">Generated Viral Shorts (6)</h2>
+        </div>
+        
+        <!-- Batch Action Buttons -->
+        <div class="flex items-center gap-2">
+          <button onclick="downloadAllClips()" class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-xs font-mono text-tertiary flex items-center gap-1.5 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">archive</span> Download All (ZIP)
+          </button>
+          <button onclick="showToast('Pushed 6 clips to content scheduler queue!', 'success')" class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-xs font-mono text-on-surface flex items-center gap-1.5 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">schedule_send</span> Auto-Schedule
+          </button>
+        </div>
+      </div>
+
+      <!-- 6 Viral Clip Cards Grid -->
+      <div id="clips-list-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <!-- Clip 1 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'The Exact Blueprint', score:'98/100', caption:'THE EXACT BLUEPRINT', style:'Hormozi Bold', estViews:'120k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-tertiary flex items-center gap-1 border border-tertiary/20">
+              <span class="material-symbols-outlined text-[12px]">trending_up</span> Score 98/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:34</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-[#8083ff] text-white font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "THE EXACT BLUEPRINT"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>Hormozi Bold</span>
+              <span class="text-tertiary">120k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"Here is the exact blueprint why 99% fail before their first viral hit..."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=blueprint" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('The Exact Blueprint')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Clip 2 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Why 99% Fail in 2026', score:'94/100', caption:'WHY 99% FAIL IN 2026', style:'Minimal Clean', estViews:'85k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-primary flex items-center gap-1 border border-primary/20">
+              <span class="material-symbols-outlined text-[12px]">whatshot</span> Score 94/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:48</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-tertiary-container text-on-tertiary-container font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "WHY 99% FAIL IN 2026"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>Minimal Clean</span>
+              <span class="text-tertiary">85k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"The future isn't about writing code, it's about intelligence pipelines..."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=fail2026" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('Why 99% Fail in 2026')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Clip 3 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Stop Doing This Today', score:'91/100', caption:'STOP DOING THIS TODAY', style:'Viral Pulse', estViews:'64k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-secondary flex items-center gap-1 border border-secondary/20">
+              <span class="material-symbols-outlined text-[12px]">rocket_launch</span> Score 91/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:29</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-secondary-container text-on-secondary-container font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "STOP DOING THIS TODAY"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>Viral Pulse</span>
+              <span class="text-tertiary">64k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"Stop editing frame-by-frame manually. Automated multi-track pacing wins."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=stopdoing" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('Stop Doing This Today')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Clip 4 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Never Stop Testing', score:'95/100', caption:'NEVER STOP TESTING', style:'MrBeast Punch', estViews:'110k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuBpP3_3bPoiTRyB8UTAcuKGRZ-LguFnckiSxwe6fa2xPLft9J0EK8U8oKmFwaVGeEIOctN5QxdMKDsX8aJiMZ91cGafVH5ys4hSqzcoPASX6YuI8VjIWdc5Zm5eXzbWx9lqHjdtk6syGcv3dDFxOkGpS45yFk_18vaR3fdFN3L1vFgdutmc9aoM2n42RLR3vV_cc6J_ZTMX4f2teaCzonOwwe6x4gPoy49z7FnFDbI'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpP3_3bPoiTRyB8UTAcuKGRZ-LguFnckiSxwe6fa2xPLft9J0EK8U8oKmFwaVGeEIOctN5QxdMKDsX8aJiMZ91cGafVH5ys4hSqzcoPASX6YuI8VjIWdc5Zm5eXzbWx9lqHjdtk6syGcv3dDFxOkGpS45yFk_18vaR3fdFN3L1vFgdutmc9aoM2n42RLR3vV_cc6J_ZTMX4f2teaCzonOwwe6x4gPoy49z7FnFDbI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-tertiary flex items-center gap-1 border border-tertiary/20">
+              <span class="material-symbols-outlined text-[12px]">trending_up</span> Score 95/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:42</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-primary text-on-primary font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "NEVER STOP TESTING"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>MrBeast Punch</span>
+              <span class="text-tertiary">110k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"The only metric that matters in algorithms is 3-second hook retention..."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=testing" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('Never Stop Testing')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Clip 5 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'How They Made $10M', score:'89/100', caption:'HOW THEY MADE $10M', style:'Cyberpunk Neon', estViews:'52k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuDXgBy7_PcICd2Hfy6K8PFrm3OPreyFVlSfZdJx6AYrRNaLBbtf-MjgVdTaJ_DWjo_WKatFAi9DYEctUOCth2tIugKoXelJduQtGPKvlAXak_ymRpwFdpmCmDZWugY2CwhSqopPTzvYuzR85GKN2OV-RghiCR0HTilYxJEn_F7WuXYYbHkpzrTN3IU7lOqCfy1RiyXlwo5-2yKvyIyjgTIV5qC58c2CKsE2A7CwIz8'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXgBy7_PcICd2Hfy6K8PFrm3OPreyFVlSfZdJx6AYrRNaLBbtf-MjgVdTaJ_DWjo_WKatFAi9DYEctUOCth2tIugKoXelJduQtGPKvlAXak_ymRpwFdpmCmDZWugY2CwhSqopPTzvYuzR85GKN2OV-RghiCR0HTilYxJEn_F7WuXYYbHkpzrTN3IU7lOqCfy1RiyXlwo5-2yKvyIyjgTIV5qC58c2CKsE2A7CwIz8" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-tertiary flex items-center gap-1 border border-tertiary/20">
+              <span class="material-symbols-outlined text-[12px]">trending_up</span> Score 89/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:31</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-[#00E5FF] text-black font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "HOW THEY MADE $10M"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>Cyberpunk Neon</span>
+              <span class="text-tertiary">52k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"Dual podcast guest split screen revealing revenue mechanics..."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=tenmil" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('How They Made $10M')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Clip 6 -->
+        <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+          <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'AI Automation Loop', score:'87/100', caption:'AI AUTOMATION LOOP', style:'Hormozi Bold', estViews:'46k+ Est.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuDQhDYed36XU2nxQ-407cYqK5B0iZZflxmUuAojgNXyhbp7Ucv99X9MhidcW_LjiVT9SgB_wSx3AUA1yRnzk4aFcitDUw3kaqlpRXbUmDaHSPK_wOxpfnV6Fqletso7wGBgCBQeSzJqPDTVKPS45fdWn9mososfyH9rZ7O9P7P5yvIaQhOg6YDvLMpXFSm9W3FW5zUDSakMGGmfzZbwvY_qjrUZao0-AxbOC37FK3s'})">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQhDYed36XU2nxQ-407cYqK5B0iZZflxmUuAojgNXyhbp7Ucv99X9MhidcW_LjiVT9SgB_wSx3AUA1yRnzk4aFcitDUw3kaqlpRXbUmDaHSPK_wOxpfnV6Fqletso7wGBgCBQeSzJqPDTVKPS45fdWn9mososfyH9rZ7O9P7P5yvIaQhOg6YDvLMpXFSm9W3FW5zUDSakMGGmfzZbwvY_qjrUZao0-AxbOC37FK3s" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-secondary flex items-center gap-1 border border-secondary/20">
+              <span class="material-symbols-outlined text-[12px]">trending_up</span> Score 87/100
+            </div>
+            <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">0:25</div>
+            <div class="absolute bottom-3 left-2 right-2 text-center">
+              <span class="inline-block bg-primary text-on-primary font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                "AI AUTOMATION LOOP"
+              </span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+              <span>Hormozi Bold</span>
+              <span class="text-tertiary">46k+ Est. Views</span>
+            </div>
+            <p class="text-xs text-outline line-clamp-2">"Set up one autonomous agent pipeline and post 5x a day effortlessly."</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <a href="studio.html?clip=automation" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+            </a>
+            <button onclick="downloadClip('AI Automation Loop')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+              <span class="material-symbols-outlined text-[14px]">download</span> Export
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FIXED BOTTOM MOBILE NAVIGATION BAR -->
+  <nav class="md:hidden fixed bottom-0 w-full z-50 pb-safe glass-bottom-nav">
+    <div class="h-16 px-4 flex items-center justify-around">
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="index.html">
+        <span class="material-symbols-outlined text-[20px]">home</span>
+        <span class="text-[10px] font-mono">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="studio.html">
+        <span class="material-symbols-outlined text-[20px]">movie_edit</span>
+        <span class="text-[10px] font-mono">Studio</span>
+      </a>
+      <div class="relative -top-3 flex flex-col items-center justify-center">
+        <a class="w-12 h-12 rounded-full bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white shadow-[0_0_20px_rgba(128,131,255,0.4)] active:scale-95 transition-all" href="clip.html">
+          <span class="material-symbols-outlined text-[24px]">auto_videocam</span>
+        </a>
+        <span class="text-[10px] font-mono mt-1 text-primary">Clip</span>
+      </div>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="features.html">
+        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+        <span class="text-[10px] font-mono">Features</span>
+      </a>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="pricing.html">
+        <span class="material-symbols-outlined text-[20px]">payments</span>
+        <span class="text-[10px] font-mono">Pricing</span>
+      </a>
+    </div>
+  </nav>
+
+  <script src="shared.js"></script>
+  <script>
+    function switchSourceTab(type) {
+      const tabUrl = document.getElementById('src-tab-url');
+      const tabUpload = document.getElementById('src-tab-upload');
+      const contentUrl = document.getElementById('src-content-url');
+      const contentUpload = document.getElementById('src-content-upload');
+
+      if (type === 'url') {
+        tabUrl.className = 'pb-3 px-4 text-primary border-b-2 border-primary font-semibold flex items-center gap-1.5';
+        tabUpload.className = 'pb-3 px-4 text-outline hover:text-white font-semibold flex items-center gap-1.5';
+        contentUrl.classList.remove('hidden');
+        contentUpload.classList.add('hidden');
+      } else {
+        tabUpload.className = 'pb-3 px-4 text-primary border-b-2 border-primary font-semibold flex items-center gap-1.5';
+        tabUrl.className = 'pb-3 px-4 text-outline hover:text-white font-semibold flex items-center gap-1.5';
+        contentUpload.classList.remove('hidden');
+        contentUrl.classList.add('hidden');
+      }
+    }
+
+    function loadSampleUrl(url) {
+      const input = document.getElementById('main-url-input');
+      if (input) input.value = url;
+      showToast('Loaded sample video URL', 'info');
+    }
+
+    function simulateFileUpload() {
+      showToast('Selected "podcast_raw_interview_ep42.mp4" (1.2GB)', 'info');
+      switchSourceTab('url');
+      const input = document.getElementById('main-url-input');
+      if (input) input.value = 'local://podcast_raw_interview_ep42.mp4';
+    }
+
+    async function runGenerationPipeline() {
+      const spinner = document.getElementById('gen-spinner');
+      const sparkle = document.getElementById('gen-sparkle');
+      const label = document.getElementById('gen-btn-label');
+      const pipeline = document.getElementById('generator-pipeline-box');
+      const status = document.getElementById('gen-pipeline-status');
+      const pct = document.getElementById('gen-pipeline-pct');
+      const bar = document.getElementById('gen-progress-bar');
+      const terminal = document.getElementById('terminal-feed');
+      const urlInput = document.getElementById('main-url-input');
+      const urlVal = urlInput ? urlInput.value.trim() : 'https://youtube.com/watch?v=k9X8fG0vQw2';
+      const captionStyle = document.getElementById('caption-style-select')?.value || 'hormozi';
+
+      spinner.classList.remove('hidden');
+      sparkle.classList.add('hidden');
+      label.textContent = 'Processing Stream via GPU Cluster...';
+      pipeline.classList.remove('hidden');
+      pipeline.classList.add('flex');
+
+      terminal.innerHTML = `<div>[GPU-CLUSTER] Connected to cluster-us-east-4a (1x NVIDIA H100)</div>
+                            <div>[SOURCE] Target: ${urlVal}</div>`;
+
+      let progress = 15;
+      const interval = setInterval(() => {
+        progress += 20;
+        if (progress <= 90) {
+          bar.style.width = progress + '%';
+          pct.textContent = progress + '%';
+          if (progress === 35) {
+            status.innerHTML = '<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span> Stage 2: Whisper-V3 Semantic Chunking & Peak Sentiment Detection...';
+            terminal.innerHTML += '<div>[SENTIMENT] Identified high-energy hook at 00:08 and 00:24</div>';
+            terminal.scrollTop = terminal.scrollHeight;
+          } else if (progress === 75) {
+            status.innerHTML = '<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span> Stage 3: YOLO Face Mesh Tracking & 9:16 Re-framing...';
+            terminal.innerHTML += '<div>[YOLO-FACE] Host speaker coordinates tracked [x: 420, y: 180, w: 320, h: 480]</div>';
+            terminal.scrollTop = terminal.scrollHeight;
+          }
+        }
+      }, 250);
+
+      // Call real Python backend for metadata & real stream analysis
+      try {
+        const response = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: urlVal, caption_style: captionStyle, duration: 15 })
+        });
+        if (!response.ok) throw new Error('Server returned ' + response.status);
+        const data = await response.json();
+        
+        clearInterval(interval);
+        bar.style.width = '100%';
+        pct.textContent = '100%';
+        spinner.classList.add('hidden');
+        sparkle.classList.remove('hidden');
+        label.textContent = 'Run Multimodal AI Analysis';
+        status.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#4cd7f6]"></span> Analysis Complete! 6 Viral Shorts Generated';
+        
+        if (data.clips && data.clips.length > 0) {
+          const grid = document.getElementById('clips-list-grid');
+          if (grid) {
+            grid.innerHTML = data.clips.map(clip => `
+              <div class="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all">
+                <div class="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer" onclick='openVideoModal(${JSON.stringify(clip)})'>
+                  <img src="${clip.thumbnail || clip.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${clip.title}" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+                  <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-tertiary flex items-center gap-1 border border-tertiary/20">
+                    <span class="material-symbols-outlined text-[12px]">trending_up</span> Score ${clip.score}
+                  </div>
+                  <div class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">${clip.duration}</div>
+                  <div class="absolute bottom-3 left-2 right-2 text-center">
+                    <span class="inline-block bg-[#8083ff] text-white font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                      "${clip.caption}"
+                    </span>
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex justify-between text-xs font-mono text-on-surface-variant">
+                    <span>${clip.style}</span>
+                    <span class="text-tertiary">${clip.estViews}</span>
+                  </div>
+                  <p class="text-xs text-outline line-clamp-2">${clip.desc}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                  <a href="studio.html?clip=${clip.id}" class="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">tune</span> Studio
+                  </a>
+                  <button onclick="downloadClip('${clip.title}')" class="h-8 rounded bg-primary-container text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm">
+                    <span class="material-symbols-outlined text-[14px]">download</span> Export
+                  </button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        if (data.video_title) {
+          terminal.innerHTML += `<div class="text-[#4cd7f6]">[SUCCESS] Extracted: "${data.video_title}" (${data.channel || 'Creator'})</div>`;
+          terminal.innerHTML += `<div class="text-[#8083ff]">[RENDER] 9:16 vertical short rendered & ready.</div>`;
+          showToast(`Extracted real stream: "${data.video_title.slice(0, 30)}..."`, 'success');
+        } else {
+          terminal.innerHTML += '<div class="text-[#4cd7f6]">[SUCCESS] Generated 6 Viral Shorts. Virality scores: 98, 95, 94, 91, 89, 87.</div>';
+          showToast('Generated 6 viral shorts ready for export!', 'success');
+        }
+        terminal.scrollTop = terminal.scrollHeight;
+      } catch (err) {
+        clearInterval(interval);
+        bar.style.width = '0%';
+        pct.textContent = '0%';
+        spinner.classList.add('hidden');
+        sparkle.classList.remove('hidden');
+        label.textContent = 'Run Multimodal AI Analysis';
+        status.innerHTML = '<span class="w-2 h-2 rounded-full bg-error"></span> Processing Failed';
+        terminal.innerHTML += `<div class="text-error">[ERROR] Failed: ${err.message || 'Stream extraction error'}</div>`;
+        terminal.scrollTop = terminal.scrollHeight;
+        showToast('Failed to analyze video: ' + (err.message || 'Check link'), 'error');
+      }
+    }
+
+    function downloadAllClips() {
+      showToast('Bundling 6 shorts into "clipforge_batch_ep42.zip"...', 'info');
+      setTimeout(() => {
+        showToast('Downloaded "clipforge_batch_ep42.zip" (148MB)!', 'success');
+      }, 1800);
+    }
+  </script>
+</body>
+</html>

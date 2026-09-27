@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>ClipForge Templates - Viral Shorts Presets Library</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111319",
+            "surface-container-lowest": "#0c0e14",
+            "surface-container-low": "#191b22",
+            "surface-container": "#1d1f26",
+            "surface-container-high": "#282a30",
+            "surface-container-highest": "#33343b",
+            "on-surface": "#e2e2ea",
+            "on-surface-variant": "#c7c4d7",
+            "outline": "#908fa0",
+            "primary": "#c0c1ff",
+            "primary-container": "#8083ff",
+            "secondary": "#d0bcff",
+            "secondary-container": "#571bc1",
+            "tertiary": "#4cd7f6",
+            "tertiary-container": "#009eb9",
+            "error": "#ffb4ab"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="shared.css"/>
+</head>
+<body class="bg-surface text-on-surface font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- TOP HEADER -->
+  <header class="fixed top-0 w-full z-50 pt-safe glass-nav">
+    <div class="max-w-7xl mx-auto h-16 px-4 md:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white shadow-[0_0_12px_rgba(128,131,255,0.4)] group-hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+        </div>
+        <span class="text-lg font-semibold tracking-tight text-on-surface">ClipForge</span>
+        <span class="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-high text-tertiary border border-surface-container-highest">Templates</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm text-on-surface-variant font-medium">
+        <a href="index.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">home</span> Home
+        </a>
+        <a href="studio.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">movie_edit</span> Studio
+        </a>
+        <a href="clip.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">auto_videocam</span> Clip Generator
+        </a>
+        <a href="features.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">psychology</span> Features
+        </a>
+        <a href="pricing.html" class="hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">payments</span> Pricing
+        </a>
+        <a href="templates.html" class="text-primary hover:text-white transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">dashboard_customize</span> Templates
+        </a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="clip.html" class="h-9 px-4 rounded-lg bg-gradient-to-r from-primary-container to-secondary-container text-white text-xs font-semibold flex items-center gap-1.5 shadow-md">
+          <span>Create Shorts</span>
+        </a>
+        <button aria-label="Open navigation menu" class="mobile-menu-trigger flex md:hidden items-center p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant">
+          <span class="material-symbols-outlined text-[24px]">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-28 space-y-8">
+    
+    <!-- HEADER INTRO -->
+    <div class="flex flex-col space-y-2 text-center items-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-tertiary text-xs font-mono border border-surface-container-highest">
+        <span class="material-symbols-outlined text-[14px]">dashboard_customize</span>
+        <span>Curated Viral Video Presets</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+        Viral Shorts Templates Library
+      </h1>
+      <p class="text-xs sm:text-sm text-on-surface-variant max-w-lg">
+        Pre-configured animation styles, typography combinations, sound stings, and active speaker layout presets inspired by the top 0.1% creators.
+      </p>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface-container-low border border-surface-container-highest">
+      <div class="flex flex-wrap items-center gap-2 font-mono text-xs" id="template-filters">
+        <button onclick="filterTemplates('all', this)" class="px-3 py-1.5 rounded-lg bg-primary-container text-white font-semibold">All Templates (6)</button>
+        <button onclick="filterTemplates('podcast', this)" class="px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-white">Podcasts</button>
+        <button onclick="filterTemplates('tech', this)" class="px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-white">Tech & Coding</button>
+        <button onclick="filterTemplates('finance', this)" class="px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-white">Finance & Hustle</button>
+        <button onclick="filterTemplates('story', this)" class="px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-white">Storytelling</button>
+      </div>
+
+      <div class="relative w-full sm:w-60">
+        <span class="material-symbols-outlined text-[16px] text-outline absolute left-2.5 top-2.5">search</span>
+        <input type="text" placeholder="Search templates..." class="w-full bg-surface-container-lowest text-xs font-mono pl-8 pr-3 py-2 rounded-lg border border-surface-container focus:outline-none focus:border-primary text-white" />
+      </div>
+    </div>
+
+    <!-- TEMPLATES GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="templates-grid">
+      
+      <!-- Template 1: Hormozi Viral Podcast -->
+      <div class="template-card podcast p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-primary/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Hormozi Viral Podcast Template', score:'98/100', caption:'THE EXACT BLUEPRINT', style:'Hormozi Bold', estViews:'250k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-tertiary">Podcast Hook</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-hormozi text-xs inline-block">"THE EXACT BLUEPRINT"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">Hormozi High-Retention Podcast</h3>
+          <p class="text-xs text-outline">All-caps yellow emphasis with Shure SM7B audio tuning and dynamic speaker snap-in.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 Shorts</span>
+          <span class="text-tertiary">98% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=blueprint" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+      <!-- Template 2: MrBeast Pop Punch -->
+      <div class="template-card tech story p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-tertiary/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'MrBeast Pop Punch Template', score:'95/100', caption:'NEVER STOP TESTING', style:'MrBeast Punch', estViews:'400k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuBpP3_3bPoiTRyB8UTAcuKGRZ-LguFnckiSxwe6fa2xPLft9J0EK8U8oKmFwaVGeEIOctN5QxdMKDsX8aJiMZ91cGafVH5ys4hSqzcoPASX6YuI8VjIWdc5Zm5eXzbWx9lqHjdtk6syGcv3dDFxOkGpS45yFk_18vaR3fdFN3L1vFgdutmc9aoM2n42RLR3vV_cc6J_ZTMX4f2teaCzonOwwe6x4gPoy49z7FnFDbI'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpP3_3bPoiTRyB8UTAcuKGRZ-LguFnckiSxwe6fa2xPLft9J0EK8U8oKmFwaVGeEIOctN5QxdMKDsX8aJiMZ91cGafVH5ys4hSqzcoPASX6YuI8VjIWdc5Zm5eXzbWx9lqHjdtk6syGcv3dDFxOkGpS45yFk_18vaR3fdFN3L1vFgdutmc9aoM2n42RLR3vV_cc6J_ZTMX4f2teaCzonOwwe6x4gPoy49z7FnFDbI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-tertiary">Viral Challenge</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-mrbeast text-xs inline-block">"NEVER STOP TESTING"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">MrBeast Kinetic Punch</h3>
+          <p class="text-xs text-outline">Heavy black strokes with cyan neon background highlights and instant sound effect pops.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 TikTok</span>
+          <span class="text-tertiary">95% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=testing" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+      <!-- Template 3: Cyberpunk Developer Log -->
+      <div class="template-card tech p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-secondary/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Cyberpunk Dev Log Template', score:'94/100', caption:'WHY 99% FAIL IN 2026', style:'Cyberpunk Neon', estViews:'180k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-secondary">Tech & AI</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-cyber text-xs inline-block">"WHY 99% FAIL IN 2026"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">Cyberpunk Developer Log</h3>
+          <p class="text-xs text-outline">JetBrains Mono monospaced subtitle boxes with cyan rim glow and terminal typewriter fx.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 Reels</span>
+          <span class="text-secondary">94% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=fail2026" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+      <!-- Template 4: Clean Editorial Minimal -->
+      <div class="template-card finance story p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-white/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Editorial Minimalist Template', score:'91/100', caption:'STOP DOING THIS TODAY', style:'Minimal Clean', estViews:'140k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-outline">Editorial</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-minimal text-xs inline-block">"STOP DOING THIS TODAY"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">Editorial Minimal Glass</h3>
+          <p class="text-xs text-outline">Soft frosted glass pills with understated typography for luxury, design, and essay creators.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 Shorts</span>
+          <span class="text-outline">91% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=stopdoing" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+      <!-- Template 5: Dual Host Podcast Stack -->
+      <div class="template-card podcast finance p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-primary/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'Dual Host Podcast Stack', score:'89/100', caption:'HOW THEY MADE $10M', style:'Hormozi Bold', estViews:'210k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuDXgBy7_PcICd2Hfy6K8PFrm3OPreyFVlSfZdJx6AYrRNaLBbtf-MjgVdTaJ_DWjo_WKatFAi9DYEctUOCth2tIugKoXelJduQtGPKvlAXak_ymRpwFdpmCmDZWugY2CwhSqopPTzvYuzR85GKN2OV-RghiCR0HTilYxJEn_F7WuXYYbHkpzrTN3IU7lOqCfy1RiyXlwo5-2yKvyIyjgTIV5qC58c2CKsE2A7CwIz8'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXgBy7_PcICd2Hfy6K8PFrm3OPreyFVlSfZdJx6AYrRNaLBbtf-MjgVdTaJ_DWjo_WKatFAi9DYEctUOCth2tIugKoXelJduQtGPKvlAXak_ymRpwFdpmCmDZWugY2CwhSqopPTzvYuzR85GKN2OV-RghiCR0HTilYxJEn_F7WuXYYbHkpzrTN3IU7lOqCfy1RiyXlwo5-2yKvyIyjgTIV5qC58c2CKsE2A7CwIz8" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-tertiary">Duo Stack</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-hormozi text-xs inline-block">"HOW THEY MADE $10M"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">Dual Host Split Stack</h3>
+          <p class="text-xs text-outline">Upper frame host, lower frame guest with auto audio-reactive focus switching.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 Split</span>
+          <span class="text-tertiary">89% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=tenmil" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+      <!-- Template 6: Automation Fast Loop -->
+      <div class="template-card tech story p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-tertiary/50 transition-all">
+        <div class="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer" onclick="openVideoModal({title:'AI Automation Fast Loop', score:'87/100', caption:'AI AUTOMATION LOOP', style:'Cyberpunk Neon', estViews:'95k+ Avg.', image:'https://lh3.googleusercontent.com/aida-public/AB6AXuDQhDYed36XU2nxQ-407cYqK5B0iZZflxmUuAojgNXyhbp7Ucv99X9MhidcW_LjiVT9SgB_wSx3AUA1yRnzk4aFcitDUw3kaqlpRXbUmDaHSPK_wOxpfnV6Fqletso7wGBgCBQeSzJqPDTVKPS45fdWn9mososfyH9rZ7O9P7P5yvIaQhOg6YDvLMpXFSm9W3FW5zUDSakMGGmfzZbwvY_qjrUZao0-AxbOC37FK3s'})">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQhDYed36XU2nxQ-407cYqK5B0iZZflxmUuAojgNXyhbp7Ucv99X9MhidcW_LjiVT9SgB_wSx3AUA1yRnzk4aFcitDUw3kaqlpRXbUmDaHSPK_wOxpfnV6Fqletso7wGBgCBQeSzJqPDTVKPS45fdWn9mososfyH9rZ7O9P7P5yvIaQhOg6YDvLMpXFSm9W3FW5zUDSakMGGmfzZbwvY_qjrUZao0-AxbOC37FK3s" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-tertiary">Quick Cut</div>
+          <div class="absolute bottom-3 left-2 right-2 text-center">
+            <span class="caption-cyber text-xs inline-block">"AI AUTOMATION LOOP"</span>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <h3 class="text-sm font-bold text-white">AI Automation Fast Loop</h3>
+          <p class="text-xs text-outline">High-velocity 15-second rhythm with quick B-roll inserts for coding tutorials and tool reviews.</p>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
+          <span>9:16 TikTok</span>
+          <span class="text-tertiary">87% Retention</span>
+        </div>
+
+        <a href="studio.html?clip=automation" class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">tune</span> Use in Studio
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FIXED BOTTOM MOBILE NAVIGATION BAR -->
+  <nav class="md:hidden fixed bottom-0 w-full z-50 pb-safe glass-bottom-nav">
+    <div class="h-16 px-4 flex items-center justify-around">
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="index.html">
+        <span class="material-symbols-outlined text-[20px]">home</span>
+        <span class="text-[10px] font-mono">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="studio.html">
+        <span class="material-symbols-outlined text-[20px]">movie_edit</span>
+        <span class="text-[10px] font-mono">Studio</span>
+      </a>
+      <div class="relative -top-3 flex flex-col items-center justify-center">
+        <a class="w-12 h-12 rounded-full bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white shadow-[0_0_20px_rgba(128,131,255,0.4)] active:scale-95 transition-all" href="clip.html">
+          <span class="material-symbols-outlined text-[24px]">auto_videocam</span>
+        </a>
+        <span class="text-[10px] font-mono mt-1 text-primary">Clip</span>
+      </div>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="features.html">
+        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+        <span class="text-[10px] font-mono">Features</span>
+      </a>
+      <a class="flex flex-col items-center justify-center min-w-[44px] min-h-[44px] text-on-surface-variant hover:text-on-surface transition-colors" href="pricing.html">
+        <span class="material-symbols-outlined text-[20px]">payments</span>
+        <span class="text-[10px] font-mono">Pricing</span>
+      </a>
+    </div>
+  </nav>
+
+  <script src="shared.js"></script>
+  <script>
+    function filterTemplates(cat, btn) {
+      document.querySelectorAll('#template-filters button').forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-white';
+      });
+      btn.className = 'px-3 py-1.5 rounded-lg bg-primary-container text-white font-semibold';
+
+      const cards = document.querySelectorAll('.template-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.classList.contains(cat)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      showToast(`Showing ${cat.toUpperCase()} templates`, 'info');
+    }
+  </script>
+</body>
+</html>
