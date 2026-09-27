@@ -33,9 +33,6 @@ export default function AuthPage() {
   // Google Modal Simulation State
   const [showGoogleModal, setShowGoogleModal] = useState(false);
 
-  // Password reset specific
-  const [newPassword, setNewPassword] = useState('');
-
   // Sync email when pendingEmail changes
   useEffect(() => {
     if (pendingEmail) {
@@ -62,7 +59,7 @@ export default function AuthPage() {
 
   // Password strength calculation
   const getPasswordStrength = (pass) => {
-    if (!pass) return { score: 0, label: 'None', color: 'bg-zinc-700' };
+    if (!pass) return { score: 0, label: 'None', color: 'bg-slate-200' };
     let score = 0;
     if (pass.length >= 8) score += 1;
     if (/[A-Z]/.test(pass)) score += 1;
@@ -71,20 +68,18 @@ export default function AuthPage() {
 
     if (score <= 1) return { score: 25, label: 'Weak', color: 'bg-red-500' };
     if (score === 2) return { score: 50, label: 'Fair', color: 'bg-amber-500' };
-    if (score === 3) return { score: 75, label: 'Good', color: 'bg-blue-500' };
-    return { score: 100, label: 'Strong', color: 'bg-emerald-400' };
+    if (score === 3) return { score: 75, label: 'Good', color: 'bg-indigo-500' };
+    return { score: 100, label: 'Strong', color: 'bg-emerald-500' };
   };
 
   const strength = getPasswordStrength(password);
 
   // OTP box change handler with auto-advance
   const handleOtpChange = (index, value) => {
-    // Only accept numeric digit
     const cleaned = value.replace(/\D/g, '');
     const newDigits = [...otpDigits];
 
     if (cleaned.length > 1) {
-      // Paste detected on single box
       const pasteArray = cleaned.slice(0, 6).split('');
       pasteArray.forEach((char, i) => {
         if (i < 6) newDigits[i] = char;
@@ -98,7 +93,6 @@ export default function AuthPage() {
     newDigits[index] = cleaned;
     setOtpDigits(newDigits);
 
-    // Auto-advance to next input
     if (cleaned && index < 5) {
       otpInputRefs.current[index + 1]?.focus();
     }
@@ -145,7 +139,6 @@ export default function AuthPage() {
         addToast(data.error || 'Failed to send OTP code.', 'error');
       }
     } catch (err) {
-      // Fallback offline mock code
       const mockOtp = '742918';
       setPendingEmail(targetEmail);
       setDemoOtp(mockOtp);
@@ -186,7 +179,6 @@ export default function AuthPage() {
         addToast(data.error || 'Invalid credentials', 'error');
       }
     } catch (err) {
-      // Offline fallback
       loginUser({
         id: `usr_${Date.now()}`,
         name: email.split('@')[0].replace('.', ' ').toUpperCase(),
@@ -221,7 +213,6 @@ export default function AuthPage() {
       return;
     }
 
-    // Direct user to email OTP verification first
     await triggerSendOtp(email, 'verification');
   };
 
@@ -243,7 +234,6 @@ export default function AuthPage() {
       });
       const data = await res.json();
       if (data.success) {
-        // Complete account signup or verification
         const signupRes = await fetch('http://127.0.0.1:8888/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -266,7 +256,6 @@ export default function AuthPage() {
         addToast(data.error || 'Invalid verification code', 'error');
       }
     } catch (err) {
-      // Offline fallback
       loginUser({
         id: `usr_${Date.now()}`,
         name: fullName || (pendingEmail || email).split('@')[0],
@@ -325,74 +314,69 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 md:p-8 relative overflow-hidden bg-[#111319]">
-      {/* Background ambient decorative light orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#8083ff]/15 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#4cd7f6]/10 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#571bc1]/10 rounded-full blur-[160px] pointer-events-none"></div>
-
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 md:p-8 relative bg-slate-50 text-slate-900">
       {/* Main Container */}
-      <div className="w-full max-w-5xl rounded-3xl bg-[#191b22]/90 border border-[#33343b] shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12 overflow-hidden z-10 my-8">
+      <div className="w-full max-w-5xl rounded-3xl bg-white border border-slate-200 shadow-xl grid grid-cols-1 lg:grid-cols-12 overflow-hidden z-10 my-8">
         
         {/* Left Column: Brand, Social Proof & Features (Desktop) */}
-        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-[#1d1f26] via-[#161820] to-[#0c0e14] p-10 flex-col justify-between border-r border-[#33343b] relative">
+        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-10 flex-col justify-between relative">
           <div className="flex flex-col gap-8">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#571bc1] via-[#8083ff] to-[#4cd7f6] flex items-center justify-center text-white shadow-[0_0_20px_rgba(128,131,255,0.4)]">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-indigo-400 to-sky-400 flex items-center justify-center text-white shadow-md">
                 <span className="material-symbols-outlined text-[24px]">auto_awesome</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-tight text-white">ClipForge AI</span>
-                <span className="text-xs text-[#8083ff] font-mono font-medium">Smart Viral Video Studio</span>
+                <span className="text-xs text-indigo-300 font-mono font-medium">Smart Viral Video Studio</span>
               </div>
             </div>
 
             {/* Value Proposition */}
             <div className="flex flex-col gap-3">
               <h2 className="text-2xl font-extrabold text-white leading-tight">
-                Turn 1 Long Video Into <span className="bg-gradient-to-r from-[#c0c1ff] via-[#8083ff] to-[#4cd7f6] bg-clip-text text-transparent">10 Viral Shorts</span> In Seconds.
+                Turn 1 Long Video Into <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-sky-300 bg-clip-text text-transparent">10 Viral Shorts</span> In Seconds.
               </h2>
-              <p className="text-sm text-[#c7c4d7] leading-relaxed">
+              <p className="text-sm text-slate-300 leading-relaxed">
                 Join 140,000+ creators and agencies saving 20+ hours every week with automatic 9:16 re-framing, dynamic captions, and AI virality prediction.
               </p>
             </div>
 
             {/* Testimonial / Social Card */}
-            <div className="p-4 rounded-2xl bg-[#191b22]/80 border border-[#33343b] flex flex-col gap-3 shadow-lg">
+            <div className="p-4 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md flex flex-col gap-3 shadow-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <img
                     src="https://avatars.githubusercontent.com/u/47955645?v=4"
                     alt="Sonu Sharma"
-                    className="w-9 h-9 rounded-full border border-[#8083ff]/40 object-cover"
+                    className="w-9 h-9 rounded-full border border-indigo-400 object-cover"
                   />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold text-white">Sonu Sharma</span>
-                    <span className="text-[10px] text-[#908fa0]">Top Tech Creator • 850k+ Followers</span>
+                    <span className="text-[10px] text-slate-300">Top Tech Creator • 850k+ Followers</span>
                   </div>
                 </div>
-                <div className="flex text-amber-400 text-xs">
+                <div className="flex text-amber-300 text-xs">
                   {'★'.repeat(5)}
                 </div>
               </div>
-              <p className="text-xs text-[#c7c4d7] italic">
+              <p className="text-xs text-slate-200 italic">
                 "ClipForge cut my editing team's turnaround time from 2 days to 3 minutes. The smart multi-segment slicing picked the exact peak moments that went viral."
               </p>
             </div>
           </div>
 
           {/* Feature Badges */}
-          <div className="flex flex-col gap-3 pt-6 border-t border-[#33343b]/60">
-            <div className="flex items-center gap-3 text-xs text-[#c7c4d7]">
+          <div className="flex flex-col gap-3 pt-6 border-t border-white/10 text-xs text-slate-300">
+            <div className="flex items-center gap-2.5">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px]">✓</span>
               <span>60 Free GPU Processing Minutes Included</span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-[#c7c4d7]">
+            <div className="flex items-center gap-2.5">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px]">✓</span>
               <span>Ultra-fast 9:16 Vertical Video Crop & Subtitles</span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-[#c7c4d7]">
+            <div className="flex items-center gap-2.5">
               <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px]">✓</span>
               <span>No Watermark & Instant HD Export</span>
             </div>
@@ -400,18 +384,18 @@ export default function AuthPage() {
         </div>
 
         {/* Right Column: Interactive Form & Screens */}
-        <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+        <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center bg-white">
 
           {/* Mode Switch Tabs (Only shown on Login and SignUp views) */}
           {(authMode === 'login' || authMode === 'signup') && (
-            <div className="flex rounded-xl bg-[#111319] p-1 border border-[#33343b] mb-8 max-w-sm mx-auto w-full">
+            <div className="flex rounded-xl bg-slate-100 p-1 border border-slate-200 mb-8 max-w-sm mx-auto w-full">
               <button
                 type="button"
                 onClick={() => setAuthMode('login')}
-                className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
                   authMode === 'login'
-                    ? 'bg-[#8083ff] text-white shadow-md'
-                    : 'text-[#c7c4d7] hover:text-white'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Sign In
@@ -419,10 +403,10 @@ export default function AuthPage() {
               <button
                 type="button"
                 onClick={() => setAuthMode('signup')}
-                className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
                   authMode === 'signup'
-                    ? 'bg-[#8083ff] text-white shadow-md'
-                    : 'text-[#c7c4d7] hover:text-white'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 Create Account
@@ -437,9 +421,8 @@ export default function AuthPage() {
               <button
                 type="button"
                 onClick={() => setShowGoogleModal(true)}
-                className="w-full h-12 rounded-xl bg-white hover:bg-neutral-100 text-[#1f1f1f] font-semibold text-sm flex items-center justify-center gap-3 transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-[0.99] border border-neutral-300"
+                className="w-full h-12 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-semibold text-sm flex items-center justify-center gap-3 transition-all border border-slate-300 shadow-xs hover:shadow-sm active:scale-[0.99]"
               >
-                {/* Official Google SVG Icon */}
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -461,7 +444,7 @@ export default function AuthPage() {
                 <span>Continue with Google</span>
               </button>
 
-              {/* GitHub Alternative */}
+              {/* GitHub & Apple Alternatives */}
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -472,9 +455,9 @@ export default function AuthPage() {
                       avatar: 'https://avatars.githubusercontent.com/u/47955645?v=4'
                     });
                   }}
-                  className="h-11 rounded-xl bg-[#282a30] hover:bg-[#33343b] text-[#e2e2ea] font-medium text-xs flex items-center justify-center gap-2 border border-[#33343b] transition-colors"
+                  className="h-11 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs flex items-center justify-center gap-2 border border-slate-300 transition-colors shadow-xs"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 fill-current text-slate-800" viewBox="0 0 24 24">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                   </svg>
                   <span>GitHub</span>
@@ -489,9 +472,9 @@ export default function AuthPage() {
                       avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=apple'
                     });
                   }}
-                  className="h-11 rounded-xl bg-[#282a30] hover:bg-[#33343b] text-[#e2e2ea] font-medium text-xs flex items-center justify-center gap-2 border border-[#33343b] transition-colors"
+                  className="h-11 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs flex items-center justify-center gap-2 border border-slate-300 transition-colors shadow-xs"
                 >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 fill-current text-slate-800" viewBox="0 0 24 24">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 5.16c.63-.77 1.06-1.84.94-2.91-.91.04-2.02.61-2.67 1.37-.58.67-1.09 1.76-.95 2.8.01 0 .04.01.07.01 1.02 0 2-1.27 2.61-1.27z" />
                   </svg>
                   <span>Apple</span>
@@ -500,8 +483,8 @@ export default function AuthPage() {
 
               {/* Or Divider */}
               <div className="relative flex items-center justify-center my-2">
-                <div className="border-t border-[#33343b] w-full"></div>
-                <span className="bg-[#191b22] px-3 text-[11px] font-mono uppercase text-[#908fa0] tracking-wider absolute">
+                <div className="border-t border-slate-200 w-full"></div>
+                <span className="bg-white px-3 text-[11px] font-mono uppercase text-slate-400 tracking-wider absolute">
                   Or continue with email
                 </span>
               </div>
@@ -512,9 +495,9 @@ export default function AuthPage() {
           {authMode === 'login' && (
             <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#c7c4d7]">Email Address</label>
+                <label className="text-xs font-bold text-slate-700">Email Address</label>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-[#908fa0] text-[20px]">
+                  <span className="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">
                     mail
                   </span>
                   <input
@@ -523,27 +506,27 @@ export default function AuthPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="creator@domain.com"
                     required
-                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] transition-all"
+                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[#c7c4d7]">Password</label>
+                  <label className="text-xs font-bold text-slate-700">Password</label>
                   <button
                     type="button"
                     onClick={() => {
                       setPendingEmail(email);
                       setAuthMode('forgot');
                     }}
-                    className="text-xs text-[#8083ff] hover:underline"
+                    className="text-xs text-indigo-600 font-semibold hover:underline"
                   >
                     Forgot password?
                   </button>
                 </div>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-[#908fa0] text-[20px]">
+                  <span className="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">
                     lock
                   </span>
                   <input
@@ -552,12 +535,12 @@ export default function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
                     required
-                    className="w-full h-11 pl-11 pr-11 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] transition-all"
+                    className="w-full h-11 pl-11 pr-11 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 text-[#908fa0] hover:text-white"
+                    className="absolute right-3.5 text-slate-400 hover:text-slate-700"
                   >
                     <span className="material-symbols-outlined text-[20px]">
                       {showPassword ? 'visibility_off' : 'visibility'}
@@ -567,12 +550,12 @@ export default function AuthPage() {
               </div>
 
               <div className="flex items-center justify-between mt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-[#c7c4d7]">
+                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-600">
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-[#111319] border-[#33343b] text-[#8083ff] focus:ring-0"
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   <span>Remember me on this device</span>
                 </label>
@@ -581,7 +564,7 @@ export default function AuthPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 mt-2 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(128,131,255,0.3)] hover:opacity-95 transition-all disabled:opacity-50"
+                className="w-full h-12 mt-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50"
               >
                 {loading ? (
                   <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
@@ -593,12 +576,12 @@ export default function AuthPage() {
                 )}
               </button>
 
-              <div className="text-center text-xs text-[#908fa0] mt-3">
+              <div className="text-center text-xs text-slate-500 mt-3">
                 Don't have an account?{' '}
                 <button
                   type="button"
                   onClick={() => setAuthMode('signup')}
-                  className="text-[#8083ff] font-semibold hover:underline"
+                  className="text-indigo-600 font-bold hover:underline"
                 >
                   Create one free
                 </button>
@@ -606,13 +589,13 @@ export default function AuthPage() {
             </form>
           )}
 
-          {/* VIEW 2: SIGN UP WITH EMAIL VERIFICATION & OTP PREVIEW */}
+          {/* VIEW 2: SIGN UP */}
           {authMode === 'signup' && (
             <form onSubmit={handleSignUpSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#c7c4d7]">Full Name</label>
+                <label className="text-xs font-bold text-slate-700">Full Name</label>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-[#908fa0] text-[20px]">
+                  <span className="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">
                     person
                   </span>
                   <input
@@ -621,15 +604,15 @@ export default function AuthPage() {
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Sonu Sharma"
                     required
-                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] transition-all"
+                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#c7c4d7]">Work or Personal Email</label>
+                <label className="text-xs font-bold text-slate-700">Work or Personal Email</label>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-[#908fa0] text-[20px]">
+                  <span className="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">
                     mail
                   </span>
                   <input
@@ -638,15 +621,15 @@ export default function AuthPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="creator@domain.com"
                     required
-                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] transition-all"
+                    className="w-full h-11 pl-11 pr-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#c7c4d7]">Create Password</label>
+                <label className="text-xs font-bold text-slate-700">Create Password</label>
                 <div className="relative flex items-center">
-                  <span className="material-symbols-outlined absolute left-3.5 text-[#908fa0] text-[20px]">
+                  <span className="material-symbols-outlined absolute left-3.5 text-slate-400 text-[20px]">
                     lock
                   </span>
                   <input
@@ -655,12 +638,12 @@ export default function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
                     required
-                    className="w-full h-11 pl-11 pr-11 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] transition-all"
+                    className="w-full h-11 pl-11 pr-11 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 text-[#908fa0] hover:text-white"
+                    className="absolute right-3.5 text-slate-400 hover:text-slate-700"
                   >
                     <span className="material-symbols-outlined text-[20px]">
                       {showPassword ? 'visibility_off' : 'visibility'}
@@ -672,10 +655,10 @@ export default function AuthPage() {
                 {password && (
                   <div className="flex flex-col gap-1.5 mt-1">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-[#908fa0]">Password strength:</span>
-                      <span className="font-semibold text-white">{strength.label}</span>
+                      <span className="text-slate-500">Password strength:</span>
+                      <span className="font-bold text-slate-900">{strength.label}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-[#111319] rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-300 ${strength.color}`}
                         style={{ width: `${strength.score}%` }}
@@ -686,25 +669,25 @@ export default function AuthPage() {
               </div>
 
               {/* Terms Checkbox */}
-              <label className="flex items-start gap-2.5 cursor-pointer text-xs text-[#c7c4d7] mt-1">
+              <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600 mt-1">
                 <input
                   type="checkbox"
                   checked={agreedTerms}
                   onChange={(e) => setAgreedTerms(e.target.checked)}
                   required
-                  className="mt-0.5 rounded bg-[#111319] border-[#33343b] text-[#8083ff] focus:ring-0"
+                  className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                 />
                 <span>
                   I agree to the{' '}
-                  <span className="text-[#8083ff] hover:underline">Terms of Service</span> and{' '}
-                  <span className="text-[#8083ff] hover:underline">Privacy Policy</span>.
+                  <span className="text-indigo-600 font-semibold hover:underline">Terms of Service</span> and{' '}
+                  <span className="text-indigo-600 font-semibold hover:underline">Privacy Policy</span>.
                 </span>
               </label>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 mt-2 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(128,131,255,0.3)] hover:opacity-95 transition-all disabled:opacity-50"
+                className="w-full h-12 mt-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50"
               >
                 {loading ? (
                   <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
@@ -716,12 +699,12 @@ export default function AuthPage() {
                 )}
               </button>
 
-              <div className="text-center text-xs text-[#908fa0] mt-3">
+              <div className="text-center text-xs text-slate-500 mt-3">
                 Already have an account?{' '}
                 <button
                   type="button"
                   onClick={() => setAuthMode('login')}
-                  className="text-[#8083ff] font-semibold hover:underline"
+                  className="text-indigo-600 font-bold hover:underline"
                 >
                   Sign in
                 </button>
@@ -729,26 +712,25 @@ export default function AuthPage() {
             </form>
           )}
 
-          {/* VIEW 3: PROPER EMAIL VERIFICATION & 6-DIGIT OTP SCREEN */}
+          {/* VIEW 3: OTP VERIFICATION */}
           {authMode === 'otp' && (
             <div className="flex flex-col items-center text-center animate-fadeIn">
-              {/* Header Icon */}
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#571bc1]/30 via-[#8083ff]/20 to-[#4cd7f6]/20 border border-[#8083ff]/40 flex items-center justify-center text-[#c0c1ff] shadow-[0_0_30px_rgba(128,131,255,0.3)] mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 shadow-sm mb-4">
                 <span className="material-symbols-outlined text-[32px]">mark_email_read</span>
               </div>
 
-              <h3 className="text-2xl font-bold text-white mb-2">Check Your Email</h3>
-              <p className="text-sm text-[#c7c4d7] max-w-sm mb-1">
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">Check Your Email</h3>
+              <p className="text-sm text-slate-600 max-w-sm mb-1">
                 We've sent a 6-digit confirmation code to:
               </p>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-sm font-semibold text-[#8083ff] font-mono bg-[#111319] px-3 py-1 rounded-lg border border-[#33343b]">
+                <span className="text-sm font-bold text-indigo-600 font-mono bg-indigo-50 px-3 py-1 rounded-lg border border-indigo-200">
                   {pendingEmail || email}
                 </span>
                 <button
                   type="button"
                   onClick={() => setAuthMode('signup')}
-                  className="text-xs text-[#908fa0] hover:text-white underline"
+                  className="text-xs text-slate-500 hover:text-slate-900 underline"
                 >
                   Change
                 </button>
@@ -766,21 +748,21 @@ export default function AuthPage() {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:outline-none focus:border-[#8083ff] focus:ring-2 focus:ring-[#8083ff]/40 transition-all shadow-inner"
+                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-bold font-mono rounded-xl bg-slate-50 border-2 border-slate-200 text-slate-900 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all shadow-inner"
                   />
                 ))}
               </div>
 
               {/* Demo Helper auto-fill chip */}
-              <div className="mb-6 p-2.5 rounded-xl bg-[#282a30]/80 border border-[#8083ff]/30 flex items-center gap-3 text-xs">
-                <span className="material-symbols-outlined text-[#4cd7f6] text-[18px]">verified</span>
-                <span className="text-[#c7c4d7]">
-                  Instant Test Code: <strong className="text-white font-mono">{demoOtp || '386036'}</strong>
+              <div className="mb-6 p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-200 flex items-center gap-3 text-xs">
+                <span className="material-symbols-outlined text-indigo-600 text-[18px]">verified</span>
+                <span className="text-slate-700">
+                  Instant Test Code: <strong className="text-indigo-900 font-mono font-bold">{demoOtp || '386036'}</strong>
                 </span>
                 <button
                   type="button"
                   onClick={handleAutoFillDemoOtp}
-                  className="ml-auto px-2.5 py-1 rounded-lg bg-[#8083ff] hover:bg-[#6c70ff] text-white font-semibold text-[11px] transition-colors"
+                  className="ml-auto px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-[11px] transition-colors"
                 >
                   Auto-Fill
                 </button>
@@ -791,7 +773,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={handleVerifyOtpSubmit}
                 disabled={loading || otpDigits.join('').length < 6}
-                className="w-full max-w-sm h-12 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(128,131,255,0.3)] hover:opacity-95 transition-all disabled:opacity-50 mb-4"
+                className="w-full max-w-sm h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 mb-4"
               >
                 {loading ? (
                   <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
@@ -804,21 +786,21 @@ export default function AuthPage() {
               </button>
 
               {/* Resend Timer */}
-              <div className="text-xs text-[#908fa0]">
+              <div className="text-xs text-slate-500">
                 {canResend ? (
                   <div className="flex items-center gap-1 justify-center">
                     <span>Didn't receive code?</span>
                     <button
                       type="button"
                       onClick={() => triggerSendOtp(pendingEmail || email)}
-                      className="text-[#8083ff] font-semibold hover:underline"
+                      className="text-indigo-600 font-bold hover:underline"
                     >
                       Resend Code
                     </button>
                   </div>
                 ) : (
                   <span>
-                    Resend code in <strong className="text-white font-mono">00:{countdown < 10 ? `0${countdown}` : countdown}</strong>
+                    Resend code in <strong className="text-slate-800 font-mono">00:{countdown < 10 ? `0${countdown}` : countdown}</strong>
                   </span>
                 )}
               </div>
@@ -832,25 +814,25 @@ export default function AuthPage() {
                 <button
                   type="button"
                   onClick={() => setAuthMode('login')}
-                  className="w-8 h-8 rounded-lg bg-[#111319] border border-[#33343b] flex items-center justify-center text-[#c7c4d7] hover:text-white"
+                  className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-slate-900"
                 >
                   <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                 </button>
                 <div className="flex flex-col">
-                  <h3 className="text-lg font-bold text-white">Reset Password</h3>
-                  <p className="text-xs text-[#908fa0]">We'll send an OTP code to reset your account password</p>
+                  <h3 className="text-lg font-bold text-slate-900">Reset Password</h3>
+                  <p className="text-xs text-slate-500">We'll send an OTP code to reset your account password</p>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#c7c4d7]">Registered Email</label>
+                <label className="text-xs font-bold text-slate-700">Registered Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="creator@domain.com"
                   required
-                  className="w-full h-11 px-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"
+                  className="w-full h-11 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-indigo-600 focus:bg-white"
                 />
               </div>
 
@@ -858,7 +840,7 @@ export default function AuthPage() {
                 type="button"
                 onClick={() => triggerSendOtp(email, 'reset')}
                 disabled={loading || !email}
-                className="w-full h-12 mt-2 rounded-xl bg-[#8083ff] hover:bg-[#6c70ff] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
+                className="w-full h-12 mt-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
               >
                 <span>Send Reset Code</span>
                 <span className="material-symbols-outlined text-[18px]">send</span>
@@ -870,10 +852,9 @@ export default function AuthPage() {
 
       {/* GOOGLE AUTH POPUP SIMULATOR MODAL */}
       {showGoogleModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="w-full max-w-md rounded-2xl bg-white text-neutral-900 shadow-2xl overflow-hidden border border-neutral-200">
-            {/* Modal Header */}
-            <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="w-full max-w-md rounded-2xl bg-white text-slate-900 shadow-2xl overflow-hidden border border-slate-200">
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <svg className="w-6 h-6" viewBox="0 0 24 24">
                   <path
@@ -894,26 +875,24 @@ export default function AuthPage() {
                   />
                 </svg>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-base leading-tight">Sign in with Google</span>
-                  <span className="text-xs text-neutral-500">to continue to ClipForge AI Studio</span>
+                  <span className="font-bold text-base leading-tight text-slate-900">Sign in with Google</span>
+                  <span className="text-xs text-slate-500">to continue to ClipForge AI Studio</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowGoogleModal(false)}
-                className="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center text-neutral-400 hover:text-neutral-700"
+                className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700"
               >
                 ✕
               </button>
             </div>
 
-            {/* Account List */}
             <div className="p-4 flex flex-col gap-2">
-              <span className="text-xs font-semibold text-neutral-500 px-3 uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-500 px-3 uppercase tracking-wider">
                 Choose an account
               </span>
 
-              {/* Account 1: User's Account */}
               <button
                 type="button"
                 onClick={() =>
@@ -923,44 +902,22 @@ export default function AuthPage() {
                     avatar: 'https://avatars.githubusercontent.com/u/47955645?v=4'
                   })
                 }
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-neutral-100 transition-colors text-left"
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors text-left border border-slate-100"
               >
                 <img
                   src="https://avatars.githubusercontent.com/u/47955645?v=4"
                   alt="Sonu Sharma"
-                  className="w-10 h-10 rounded-full border border-neutral-300 object-cover"
+                  className="w-10 h-10 rounded-full border border-slate-300 object-cover"
                 />
                 <div className="flex flex-col flex-1">
-                  <span className="text-sm font-semibold text-neutral-900">Sonu Sharma</span>
-                  <span className="text-xs text-neutral-500">sonu.sharma0624@gmail.com</span>
+                  <span className="text-sm font-bold text-slate-900">Sonu Sharma</span>
+                  <span className="text-xs text-slate-500">sonu.sharma0624@gmail.com</span>
                 </div>
-                <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Active</span>
-              </button>
-
-              {/* Account 2: Studio Demo Team Account */}
-              <button
-                type="button"
-                onClick={() =>
-                  executeGoogleAuth({
-                    name: 'ClipForge Studio Pro',
-                    email: 'creator.pro@clipforge.ai',
-                    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-w7wMnJainoYTirpv9tnRm6ZuHNSze7RVnlm0wVZGeEierfeyaf3ck0tZa4Kyv0XSh8rtjo8OCMAQMHLEXyepyrZYnYjkQcEm6zeWTdBP6tTRdBKsawPYgsEsDcbTgtQ_tmhSWXNjlRy0q48G2i57WHclrzSQ8qtbpBqaMhoFwIMc2_zN-BJSvqrN2BXwfO9PknNuAMjWoZMbZecd7V_FvtP8OyIu6njkjLoPfwE'
-                  })
-                }
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-neutral-100 transition-colors text-left"
-              >
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white font-bold text-sm">
-                  CP
-                </div>
-                <div className="flex flex-col flex-1">
-                  <span className="text-sm font-semibold text-neutral-900">ClipForge Studio Pro</span>
-                  <span className="text-xs text-neutral-500">creator.pro@clipforge.ai</span>
-                </div>
+                <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">Active</span>
               </button>
             </div>
 
-            {/* Modal Footer */}
-            <div className="p-4 bg-neutral-50 border-t border-neutral-100 text-[11px] text-neutral-500 text-center">
+            <div className="p-4 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 text-center">
               To continue, Google will share your name, email address, and profile picture with ClipForge AI.
             </div>
           </div>

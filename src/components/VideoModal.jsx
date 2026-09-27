@@ -45,26 +45,26 @@ export default function VideoModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fadeIn">
-      <div className="relative w-full max-w-sm rounded-2xl bg-[#181b22] border border-[#232733] overflow-hidden shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fadeIn">
+      <div className="relative w-full max-w-sm rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-3 border-b border-[#232733] bg-[#111319]">
+        <div className="flex items-center justify-between p-3.5 border-b border-slate-200 bg-slate-50/80">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[18px] text-[#4cd7f6]">movie</span>
-            <span className="text-sm font-semibold text-[#e2e2ea] truncate max-w-[200px]">
+            <span className="material-symbols-outlined text-[18px] text-indigo-600">movie</span>
+            <span className="text-sm font-semibold text-slate-900 truncate max-w-[200px]">
               {modalVideo.title}
             </span>
           </div>
           <button
             onClick={closeVideo}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#908fa0] hover:text-white hover:bg-[#282a30] transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors"
           >
             <span className="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
 
         {/* 9:16 Video Player Container */}
-        <div className="relative w-full aspect-[9/16] max-h-[500px] bg-black flex items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-[9/16] max-h-[500px] bg-slate-950 flex items-center justify-center overflow-hidden">
           <video
             ref={videoRef}
             src={modalVideo.videoUrl || '/generated_shorts/viral_blueprint_master.mp4'}
@@ -77,21 +77,21 @@ export default function VideoModal() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
 
           {/* Viral Score Badge */}
-          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-[#0c0e14]/90 backdrop-blur-md flex items-center gap-1.5 text-xs text-[#4cd7f6] font-mono border border-[#4cd7f6]/30 shadow-lg pointer-events-none">
+          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-900/90 backdrop-blur-md flex items-center gap-1.5 text-xs text-cyan-300 font-mono border border-cyan-400/30 shadow-lg pointer-events-none">
             <span className="material-symbols-outlined text-[14px]">trending_up</span>
             <span>Score: {modalVideo.score}</span>
           </div>
 
           {/* Face Tracking Bounding Box Overlay */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-44 h-44 border-2 border-dashed border-[#4cd7f6]/70 rounded-xl pointer-events-none animate-pulse flex items-start justify-end p-1">
-            <span className="text-[9px] font-mono bg-[#4cd7f6] text-[#003640] px-1 rounded font-bold">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-44 h-44 border-2 border-dashed border-cyan-400/80 rounded-xl pointer-events-none animate-pulse flex items-start justify-end p-1">
+            <span className="text-[9px] font-mono bg-cyan-400 text-slate-900 px-1 rounded font-bold">
               FACE TRACK 99.4%
             </span>
           </div>
 
           {/* Kinetic Caption Overlay */}
           <div className="absolute bottom-14 left-4 right-4 text-center pointer-events-none">
-            <span className="inline-block bg-[#8083ff] text-white font-black text-sm px-3 py-1.5 rounded-lg uppercase tracking-tight shadow-xl">
+            <span className="inline-block bg-indigo-600 text-white font-black text-sm px-3 py-1.5 rounded-lg uppercase tracking-tight shadow-xl">
               "{modalVideo.caption}"
             </span>
           </div>
@@ -107,19 +107,19 @@ export default function VideoModal() {
           </button>
 
           {/* Progress Bar */}
-          <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[#282a30]">
+          <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-800">
             <div
-              className="h-full bg-gradient-to-r from-[#8083ff] to-[#4cd7f6] transition-all duration-150"
+              className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-150"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="p-3 bg-[#111319] border-t border-[#232733] flex flex-col gap-2">
-          <div className="flex items-center justify-between text-xs text-[#908fa0]">
-            <span>Preset: <strong className="text-[#e2e2ea]">{modalVideo.style}</strong></span>
-            <span className="text-[#4cd7f6]">{modalVideo.estViews}</span>
+        <div className="p-3.5 bg-white border-t border-slate-200 flex flex-col gap-2.5">
+          <div className="flex items-center justify-between text-xs text-slate-500">
+            <span>Preset: <strong className="text-slate-800">{modalVideo.style}</strong></span>
+            <span className="text-indigo-600 font-semibold">{modalVideo.estViews}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 mt-1">
             <button
@@ -127,14 +127,14 @@ export default function VideoModal() {
                 loadClipToStudio(modalVideo);
                 closeVideo();
               }}
-              className="h-9 rounded-lg bg-[#282a30] hover:bg-[#33343b] text-[#e2e2ea] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+              className="h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors border border-slate-200"
             >
               <span className="material-symbols-outlined text-[16px]">tune</span>
               Open in Studio
             </button>
             <button
               onClick={downloadClip}
-              className="h-9 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all"
+              className="h-9 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
             >
               <span className="material-symbols-outlined text-[16px]">download</span>
               Download MP4

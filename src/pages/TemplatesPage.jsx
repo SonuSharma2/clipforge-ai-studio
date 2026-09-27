@@ -124,22 +124,22 @@ export default function TemplatesPage() {
   return (
     <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-28 space-y-8">
       {/* HEADER INTRO */}
-      <div className="flex flex-col space-y-2 text-center items-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-tertiary text-xs font-mono border border-surface-container-highest">
-          <span className="material-symbols-outlined text-[14px]">dashboard_customize</span>
+      <div className="flex flex-col space-y-3 text-center items-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
+          <span className="material-symbols-outlined text-[15px]">dashboard_customize</span>
           <span>Curated Viral Video Presets</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
           Viral Shorts Templates Library
         </h1>
-        <p className="text-xs sm:text-sm text-on-surface-variant max-w-lg">
+        <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed">
           Pre-configured animation styles, typography combinations, sound stings, and active speaker layout presets inspired by the top 0.1% creators.
         </p>
       </div>
 
       {/* FILTER BAR */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface-container-low border border-surface-container-highest">
-        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2 font-sans text-xs">
           {[
             { id: 'all', label: 'All Templates (6)' },
             { id: 'podcast', label: 'Podcasts' },
@@ -153,15 +153,15 @@ export default function TemplatesPage() {
                 setActiveCategory(cat.id);
                 addToast(`Filtered: ${cat.label}`, 'info');
               }}
-              className={`px-3 py-1.5 rounded-lg transition-colors ${activeCategory === cat.id ? 'bg-primary-container text-white font-semibold' : 'bg-surface-container text-outline hover:text-white'}`}
+              className={`px-3.5 py-1.5 rounded-xl font-medium transition-colors ${activeCategory === cat.id ? 'bg-indigo-600 text-white font-semibold shadow-sm' : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
             >
               {cat.label}
             </button>
           ))}
         </div>
 
-        <div className="relative w-full sm:w-60">
-          <span className="material-symbols-outlined text-[16px] text-outline absolute left-2.5 top-2.5">
+        <div className="relative w-full sm:w-64">
+          <span className="material-symbols-outlined text-[18px] text-slate-400 absolute left-3 top-2.5">
             search
           </span>
           <input
@@ -169,7 +169,7 @@ export default function TemplatesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search templates..."
-            className="w-full bg-surface-container-lowest text-xs font-mono pl-8 pr-3 py-2 rounded-lg border border-surface-container focus:outline-none focus:border-primary text-white"
+            className="w-full bg-slate-50 text-xs font-sans pl-9 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 placeholder:text-slate-400"
           />
         </div>
       </div>
@@ -179,12 +179,12 @@ export default function TemplatesPage() {
         {filteredTemplates.map((tpl) => (
           <div
             key={tpl.id}
-            className="p-3 rounded-2xl bg-surface-container-low border border-surface-container-highest shadow-xl flex flex-col justify-between space-y-3 group hover:border-primary/50 transition-all"
+            className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300 flex flex-col justify-between space-y-3 group transition-all"
           >
             {/* Thumbnail */}
             <div
               onClick={() => openVideo(tpl)}
-              className="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-black cursor-pointer"
+              className="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-slate-950 cursor-pointer"
             >
               <img
                 src={tpl.image}
@@ -193,7 +193,7 @@ export default function TemplatesPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
 
-              <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-tertiary">
+              <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md text-[10px] font-mono text-cyan-300 border border-cyan-400/20">
                 {tpl.badge}
               </div>
 
@@ -206,19 +206,19 @@ export default function TemplatesPage() {
 
             {/* Info */}
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-white">{tpl.templateName}</h3>
-              <p className="text-xs text-outline leading-relaxed">{tpl.desc}</p>
+              <h3 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{tpl.templateName}</h3>
+              <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">{tpl.desc}</p>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] font-mono text-on-surface-variant pt-1 border-t border-surface-container-highest">
-              <span>{tpl.format}</span>
-              <span className="text-tertiary">{tpl.retention}</span>
+            <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-100">
+              <span className="font-sans font-medium text-slate-700">{tpl.format}</span>
+              <span className="text-indigo-600 font-bold">{tpl.retention}</span>
             </div>
 
             {/* Action */}
             <button
               onClick={() => loadClipToStudio(tpl)}
-              className="w-full h-9 rounded-lg bg-surface-container-high hover:bg-primary-container hover:text-white text-xs font-mono font-semibold transition-colors flex items-center justify-center gap-1.5"
+              className="w-full h-9 rounded-xl bg-slate-100 hover:bg-indigo-600 hover:text-white text-slate-700 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 border border-slate-200 hover:border-indigo-600"
             >
               <span className="material-symbols-outlined text-[16px]">tune</span>
               <span>Use in Studio</span>

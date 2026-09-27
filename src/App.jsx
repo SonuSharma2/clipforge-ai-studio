@@ -17,7 +17,7 @@ export default function App() {
   const { currentPage } = useApp();
 
   return (
-    <div className="bg-surface text-on-surface font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container relative">
+    <div className="bg-white text-slate-900 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white relative">
       {/* Global Header (shown on all pages except Studio, which has its full-bleed suite toolbar) */}
       {currentPage !== 'studio' && <Header />}
 

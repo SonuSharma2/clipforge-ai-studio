@@ -54,21 +54,21 @@ export default function PricingPage() {
   return (
     <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-28 space-y-12">
       {/* PRICING HEADER */}
-      <div className="flex flex-col space-y-2 text-center items-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-primary text-xs font-mono border border-surface-container-highest">
-          <span className="material-symbols-outlined text-[14px]">payments</span>
+      <div className="flex flex-col space-y-3 text-center items-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
+          <span className="material-symbols-outlined text-[15px]">payments</span>
           <span>Transparent Cloud Pricing</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
           Start Free. Upgrade As You Go Viral.
         </h1>
-        <p className="text-xs sm:text-sm text-on-surface-variant max-w-lg leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed">
           No surprise overage fees. Unlimited cloud renders on all tiers. Switch plans or cancel anytime with 1-click.
         </p>
 
         {/* Monthly / Annual Switcher */}
         <div className="flex items-center justify-center gap-3 pt-3">
-          <span className={`text-xs font-mono transition-colors ${!isAnnual ? 'text-white font-semibold' : 'text-outline'}`}>
+          <span className={`text-xs font-sans transition-colors ${!isAnnual ? 'text-slate-900 font-bold' : 'text-slate-500'}`}>
             Monthly
           </span>
           <button
@@ -76,85 +76,85 @@ export default function PricingPage() {
               setIsAnnual(!isAnnual);
               addToast(isAnnual ? 'Switched to Monthly billing' : 'Switched to Annual billing (25% off!)', 'info');
             }}
-            className="w-12 h-6 rounded-full bg-surface-container-highest p-0.5 transition-colors relative flex items-center"
+            className="w-12 h-6 rounded-full bg-slate-200 p-0.5 transition-colors relative flex items-center"
           >
             <div
-              className={`w-5 h-5 rounded-full bg-primary transition-transform duration-200 ${isAnnual ? 'translate-x-6' : 'translate-x-0'}`}
+              className={`w-5 h-5 rounded-full bg-indigo-600 shadow-sm transition-transform duration-200 ${isAnnual ? 'translate-x-6' : 'translate-x-0'}`}
             ></div>
           </button>
-          <span className={`text-xs font-mono flex items-center gap-1.5 transition-colors ${isAnnual ? 'text-white font-semibold' : 'text-outline'}`}>
-            Annual <span className="px-1.5 py-0.5 rounded bg-tertiary/20 text-tertiary text-[10px] font-bold">SAVE 25%</span>
+          <span className={`text-xs font-sans flex items-center gap-1.5 transition-colors ${isAnnual ? 'text-slate-900 font-bold' : 'text-slate-500'}`}>
+            Annual <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">SAVE 25%</span>
           </span>
         </div>
       </div>
 
       {/* 3 TIERS STACK */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Starter Tier */}
-        <div className="p-6 rounded-2xl bg-surface-container border border-surface-container-highest flex flex-col justify-between space-y-4 shadow-md">
+        <div className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between space-y-5 shadow-sm hover:shadow-md transition-all">
           <div>
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-bold text-on-surface">Starter</h3>
-                <p className="text-xs text-on-surface-variant">For new creators exploring AI shorts</p>
+                <h3 className="text-lg font-bold text-slate-900">Starter</h3>
+                <p className="text-xs text-slate-500 mt-0.5">For new creators exploring AI shorts</p>
               </div>
-              <span className="text-3xl font-bold text-white font-mono">$0</span>
+              <span className="text-3xl font-extrabold text-slate-900 font-sans">$0</span>
             </div>
 
-            <div className="h-[1px] bg-surface-container-highest my-4"></div>
+            <div className="h-[1px] bg-slate-100 my-4"></div>
 
-            <ul className="flex flex-col gap-3 text-xs text-on-surface-variant">
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> 60 Processing Minutes / mo</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> 720p HD Exports</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Standard Kinetic Captions</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> 1 Concurrent Render</li>
-              <li className="flex items-center gap-2 text-outline"><span className="material-symbols-outlined text-[16px] text-outline">close</span> ClipForge Watermark</li>
+            <ul className="flex flex-col gap-3 text-xs text-slate-600">
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> 60 Processing Minutes / mo</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> 720p HD Exports</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Standard Kinetic Captions</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> 1 Concurrent Render</li>
+              <li className="flex items-center gap-2 text-slate-400"><span className="material-symbols-outlined text-[16px]">close</span> ClipForge Watermark</li>
             </ul>
           </div>
 
           <button
             onClick={() => setCurrentPage('clip')}
-            className="w-full h-11 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface text-xs font-mono font-semibold transition-colors flex items-center justify-center"
+            className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors flex items-center justify-center border border-slate-200"
           >
             Get Started Free
           </button>
         </div>
 
         {/* Creator Pro (Most Popular) */}
-        <div className="relative p-6 rounded-2xl bg-surface-container-low border-2 border-primary-container flex flex-col justify-between space-y-4 shadow-2xl">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-mono text-[10px] font-bold tracking-wider uppercase shadow-lg">
+        <div className="relative p-6 sm:p-7 rounded-2xl bg-white border-2 border-indigo-600 flex flex-col justify-between space-y-5 shadow-xl ring-4 ring-indigo-50">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-indigo-600 text-white font-sans text-[11px] font-bold tracking-wider uppercase shadow-md">
             Most Popular
           </div>
 
           <div>
             <div className="flex justify-between items-start pt-1">
               <div>
-                <h3 className="text-lg font-bold text-white">Creator Pro</h3>
-                <p className="text-xs text-on-surface-variant">For consistent multi-platform uploaders</p>
+                <h3 className="text-lg font-bold text-slate-900">Creator Pro</h3>
+                <p className="text-xs text-slate-500 mt-0.5">For consistent multi-platform uploaders</p>
               </div>
               <div className="text-right">
-                <span className="text-3xl font-bold text-white font-mono">
+                <span className="text-3xl font-extrabold text-slate-900 font-sans">
                   ${isAnnual ? '14' : '19'}
                 </span>
-                <span className="text-[10px] text-outline block">/ month</span>
+                <span className="text-[11px] text-slate-500 block">/ month</span>
               </div>
             </div>
 
-            <div className="h-[1px] bg-surface-container-highest my-4"></div>
+            <div className="h-[1px] bg-slate-100 my-4"></div>
 
-            <ul className="flex flex-col gap-3 text-xs text-on-surface-variant">
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> 300 Processing Minutes / mo</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> 1080p 60FPS Ultra HD Exports</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> All Kinetic Caption Presets</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> Active Face Tracking 9:16 Reframe</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> No Watermark</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-primary">check</span> 3 Concurrent Renders</li>
+            <ul className="flex flex-col gap-3 text-xs text-slate-700">
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 300 Processing Minutes / mo</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 1080p 60FPS Ultra HD Exports</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> All Kinetic Caption Presets</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> Active Face Tracking 9:16 Reframe</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> No Watermark</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 3 Concurrent Renders</li>
             </ul>
           </div>
 
           <button
             onClick={() => openCheckout('Creator Pro', 19)}
-            className="w-full h-11 rounded-xl bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white text-xs font-mono font-bold shadow-[0_0_16px_rgba(128,131,255,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
           >
             <span>Upgrade to Pro</span>
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -162,36 +162,36 @@ export default function PricingPage() {
         </div>
 
         {/* Studio Scale */}
-        <div className="p-6 rounded-2xl bg-surface-container border border-surface-container-highest flex flex-col justify-between space-y-4 shadow-md">
+        <div className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between space-y-5 shadow-sm hover:shadow-md transition-all">
           <div>
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-bold text-on-surface">Studio Scale</h3>
-                <p className="text-xs text-on-surface-variant">For agencies, media teams & networks</p>
+                <h3 className="text-lg font-bold text-slate-900">Studio Scale</h3>
+                <p className="text-xs text-slate-500 mt-0.5">For agencies, media teams & networks</p>
               </div>
               <div className="text-right">
-                <span className="text-3xl font-bold text-white font-mono">
+                <span className="text-3xl font-extrabold text-slate-900 font-sans">
                   ${isAnnual ? '37' : '49'}
                 </span>
-                <span className="text-[10px] text-outline block">/ month</span>
+                <span className="text-[11px] text-slate-500 block">/ month</span>
               </div>
             </div>
 
-            <div className="h-[1px] bg-surface-container-highest my-4"></div>
+            <div className="h-[1px] bg-slate-100 my-4"></div>
 
-            <ul className="flex flex-col gap-3 text-xs text-on-surface-variant">
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Unlimited GPU Processing</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> 4K Ultra-HD Export Stream</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Custom Brand Typography & Colors</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Direct Auto-Posting to TikTok / Shorts</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Dedicated Priority GPU Node</li>
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-tertiary">check</span> Multi-user Workspace Access</li>
+            <ul className="flex flex-col gap-3 text-xs text-slate-600">
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Unlimited GPU Processing</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> 4K Ultra-HD Export Stream</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Custom Brand Typography & Colors</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Direct Auto-Posting to TikTok / Shorts</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Dedicated Priority GPU Node</li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Multi-user Workspace Access</li>
             </ul>
           </div>
 
           <button
             onClick={() => openCheckout('Studio Scale', 49)}
-            className="w-full h-11 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface text-xs font-mono font-semibold transition-colors flex items-center justify-center"
+            className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors flex items-center justify-center border border-slate-200"
           >
             Get Studio Scale
           </button>
@@ -199,17 +199,17 @@ export default function PricingPage() {
       </div>
 
       {/* INTERACTIVE ROI & SAVINGS CALCULATOR */}
-      <section className="rounded-2xl bg-surface-container-low border border-surface-container-highest p-5 sm:p-6 shadow-xl space-y-5">
-        <div className="border-b border-surface-container-highest pb-4">
-          <span className="text-xs font-mono text-tertiary uppercase tracking-widest">ROI Calculator</span>
-          <h2 className="text-xl sm:text-2xl font-bold text-white">How Much Time & Money Will You Save?</h2>
+      <section className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="border-b border-slate-100 pb-4">
+          <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest">ROI Calculator</span>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">How Much Time & Money Will You Save?</h2>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-mono">
-              <span className="text-outline">Shorts Produced Per Week:</span>
-              <span className="text-tertiary font-bold text-sm">{weeklyShorts} Shorts / Week</span>
+            <div className="flex justify-between text-xs font-medium">
+              <span className="text-slate-600">Shorts Produced Per Week:</span>
+              <span className="text-indigo-600 font-bold text-sm font-mono">{weeklyShorts} Shorts / Week</span>
             </div>
             <input
               type="range"
@@ -217,86 +217,86 @@ export default function PricingPage() {
               max="25"
               value={weeklyShorts}
               onChange={(e) => setWeeklyShorts(Number(e.target.value))}
-              className="w-full accent-tertiary"
+              className="w-full accent-indigo-600"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <div className="p-4 rounded-xl bg-surface-container-lowest border border-surface-container-highest flex flex-col items-center text-center">
-              <span className="text-3xl font-bold text-primary font-mono">{roi.hours} hrs</span>
-              <span className="text-xs text-white mt-1">Editing Hours Saved</span>
-              <span className="text-[10px] text-outline">Per month</span>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center text-center">
+              <span className="text-3xl sm:text-4xl font-extrabold text-indigo-600 font-mono">{roi.hours} hrs</span>
+              <span className="text-xs font-semibold text-slate-800 mt-1">Editing Hours Saved</span>
+              <span className="text-[11px] text-slate-500">Per month</span>
             </div>
-            <div className="p-4 rounded-xl bg-surface-container-lowest border border-surface-container-highest flex flex-col items-center text-center">
-              <span className="text-3xl font-bold text-tertiary font-mono">${roi.dollars}</span>
-              <span className="text-xs text-white mt-1">Saved on Freelance Editors</span>
-              <span className="text-[10px] text-outline">Per month</span>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center text-center">
+              <span className="text-3xl sm:text-4xl font-extrabold text-emerald-600 font-mono">${roi.dollars}</span>
+              <span className="text-xs font-semibold text-slate-800 mt-1">Saved on Freelance Editors</span>
+              <span className="text-[11px] text-slate-500">Per month</span>
             </div>
-            <div className="p-4 rounded-xl bg-surface-container-lowest border border-surface-container-highest flex flex-col items-center text-center">
-              <span className="text-3xl font-bold text-white font-mono">{roi.views}</span>
-              <span className="text-xs text-white mt-1">Estimated Monthly Reach</span>
-              <span className="text-[10px] text-tertiary">+450% Average Lift</span>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col items-center text-center">
+              <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-mono">{roi.views}</span>
+              <span className="text-xs font-semibold text-slate-800 mt-1">Estimated Monthly Reach</span>
+              <span className="text-[11px] text-indigo-600 font-bold">+450% Average Lift</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* FEATURE COMPARISON TABLE */}
-      <section className="rounded-2xl bg-surface-container-low border border-surface-container-highest p-5 sm:p-6 shadow-xl space-y-4 overflow-x-auto">
-        <h2 className="text-xl font-bold text-white mb-2">Detailed Feature Matrix</h2>
-        <table className="w-full text-left text-xs font-mono">
+      <section className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 overflow-x-auto">
+        <h2 className="text-xl font-extrabold text-slate-900 mb-2">Detailed Feature Matrix</h2>
+        <table className="w-full text-left text-xs font-sans">
           <thead>
-            <tr className="border-b border-surface-container-highest text-outline">
-              <th className="pb-3 text-on-surface">Feature</th>
+            <tr className="border-b border-slate-200 text-slate-500">
+              <th className="pb-3 text-slate-900 font-bold">Feature</th>
               <th className="pb-3 text-center">Starter ($0)</th>
-              <th className="pb-3 text-center text-primary">Creator Pro (${isAnnual ? '14' : '19'})</th>
-              <th className="pb-3 text-center text-tertiary">Studio Scale (${isAnnual ? '37' : '49'})</th>
+              <th className="pb-3 text-center text-indigo-600 font-bold">Creator Pro (${isAnnual ? '14' : '19'})</th>
+              <th className="pb-3 text-center text-slate-900 font-bold">Studio Scale (${isAnnual ? '37' : '49'})</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-surface-container-highest text-on-surface-variant">
+          <tbody className="divide-y divide-slate-100 text-slate-600">
             <tr>
-              <td className="py-3 text-white">Monthly Processing Minutes</td>
-              <td className="py-3 text-center">60 Mins</td>
-              <td className="py-3 text-center text-primary">300 Mins</td>
-              <td className="py-3 text-center text-tertiary">Unlimited</td>
+              <td className="py-3.5 font-medium text-slate-900">Monthly Processing Minutes</td>
+              <td className="py-3.5 text-center">60 Mins</td>
+              <td className="py-3.5 text-center text-indigo-600 font-semibold">300 Mins</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">Unlimited</td>
             </tr>
             <tr>
-              <td className="py-3 text-white">Export Resolution</td>
-              <td className="py-3 text-center">720p</td>
-              <td className="py-3 text-center text-primary">1080p 60fps</td>
-              <td className="py-3 text-center text-tertiary">4K Ultra-HD</td>
+              <td className="py-3.5 font-medium text-slate-900">Export Resolution</td>
+              <td className="py-3.5 text-center">720p</td>
+              <td className="py-3.5 text-center text-indigo-600 font-semibold">1080p 60fps</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">4K Ultra-HD</td>
             </tr>
             <tr>
-              <td className="py-3 text-white">Active Speaker Neural Tracking</td>
-              <td className="py-3 text-center text-outline">Basic</td>
-              <td className="py-3 text-center text-primary">✓ Advanced Dual-Host</td>
-              <td className="py-3 text-center text-tertiary">✓ Custom Keyframes</td>
+              <td className="py-3.5 font-medium text-slate-900">Active Speaker Neural Tracking</td>
+              <td className="py-3.5 text-center text-slate-400">Basic</td>
+              <td className="py-3.5 text-center text-indigo-600 font-semibold">✓ Advanced Dual-Host</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">✓ Custom Keyframes</td>
             </tr>
             <tr>
-              <td className="py-3 text-white">Kinetic Subtitle Styles</td>
-              <td className="py-3 text-center">1 Style</td>
-              <td className="py-3 text-center text-primary">All 4 Presets</td>
-              <td className="py-3 text-center text-tertiary">Unlimited Custom</td>
+              <td className="py-3.5 font-medium text-slate-900">Kinetic Subtitle Styles</td>
+              <td className="py-3.5 text-center">1 Style</td>
+              <td className="py-3.5 text-center text-indigo-600 font-semibold">All 4 Presets</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">Unlimited Custom</td>
             </tr>
             <tr>
-              <td className="py-3 text-white">Watermark Free</td>
-              <td className="py-3 text-center text-outline">No</td>
-              <td className="py-3 text-center text-primary">✓ Yes</td>
-              <td className="py-3 text-center text-tertiary">✓ Yes</td>
+              <td className="py-3.5 font-medium text-slate-900">Watermark Free</td>
+              <td className="py-3.5 text-center text-slate-400">No</td>
+              <td className="py-3.5 text-center text-indigo-600 font-semibold">✓ Yes</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">✓ Yes</td>
             </tr>
             <tr>
-              <td className="py-3 text-white">Direct Social Media Auto-Post</td>
-              <td className="py-3 text-center text-outline">No</td>
-              <td className="py-3 text-center text-outline">No</td>
-              <td className="py-3 text-center text-tertiary">✓ Full Schedule Suite</td>
+              <td className="py-3.5 font-medium text-slate-900">Direct Social Media Auto-Post</td>
+              <td className="py-3.5 text-center text-slate-400">No</td>
+              <td className="py-3.5 text-center text-slate-400">No</td>
+              <td className="py-3.5 text-center text-slate-900 font-semibold">✓ Full Schedule Suite</td>
             </tr>
           </tbody>
         </table>
       </section>
 
       {/* FAQ ACCORDION */}
-      <section className="rounded-2xl bg-surface-container-low border border-surface-container-highest p-5 sm:p-6 shadow-xl space-y-4">
-        <h2 className="text-xl font-bold text-white mb-2">Frequently Asked Questions</h2>
+      <section className="rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
+        <h2 className="text-xl font-extrabold text-slate-900 mb-2">Frequently Asked Questions</h2>
         <div className="space-y-3">
           {[
             {
@@ -318,17 +318,17 @@ export default function PricingPage() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-xl bg-surface-container border border-surface-container-highest cursor-pointer transition-colors"
+              className="p-4 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100/70 transition-colors"
               onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
             >
-              <div className="flex items-center justify-between text-sm font-semibold text-white">
+              <div className="flex items-center justify-between text-sm font-semibold text-slate-900">
                 <span>{item.q}</span>
-                <span className="material-symbols-outlined text-[18px] text-tertiary transition-transform duration-200" style={{ transform: activeFaq === idx ? 'rotate(180deg)' : 'none' }}>
+                <span className="material-symbols-outlined text-[18px] text-indigo-600 transition-transform duration-200" style={{ transform: activeFaq === idx ? 'rotate(180deg)' : 'none' }}>
                   expand_more
                 </span>
               </div>
               {activeFaq === idx && (
-                <p className="mt-2 text-xs text-on-surface-variant leading-relaxed">
+                <p className="mt-2.5 text-xs text-slate-600 leading-relaxed">
                   {item.a}
                 </p>
               )}
@@ -339,48 +339,48 @@ export default function PricingPage() {
 
       {/* CHECKOUT MODAL */}
       {checkoutPlan && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl bg-surface-container border border-surface-container-highest shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 shadow-2xl p-6 sm:p-7 space-y-4 animate-scaleUp">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[22px]">shopping_cart_checkout</span>
-                <h3 className="font-bold text-base text-white">Complete Upgrade</h3>
+                <span className="material-symbols-outlined text-indigo-600 text-[22px]">shopping_cart_checkout</span>
+                <h3 className="font-bold text-base text-slate-900">Complete Upgrade</h3>
               </div>
               <button
                 onClick={() => setCheckoutPlan(null)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               >
                 <span className="material-symbols-outlined text-[18px]">close</span>
               </button>
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-container-lowest border border-surface-container-highest flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
               <div>
-                <span className="text-sm font-bold text-white block">{checkoutPlan.name} Plan</span>
-                <span className="text-[11px] text-outline font-mono">Billed {isAnnual ? 'Annually' : 'Monthly'}</span>
+                <span className="text-sm font-bold text-slate-900 block">{checkoutPlan.name} Plan</span>
+                <span className="text-[11px] text-slate-500 font-medium">Billed {isAnnual ? 'Annually' : 'Monthly'}</span>
               </div>
-              <div className="text-right font-mono">
-                <span className="text-xl font-bold text-tertiary">
+              <div className="text-right">
+                <span className="text-2xl font-extrabold text-indigo-600 font-mono">
                   ${Math.max(0, checkoutPlan.price - discount)}
                 </span>
-                <span className="text-[10px] text-outline block">/ mo</span>
+                <span className="text-[11px] text-slate-500 block">/ mo</span>
               </div>
             </div>
 
             {/* Coupon Code input */}
             <div className="space-y-1.5">
-              <label className="text-xs font-mono text-outline">Promo Code (Try: VIRAL2026)</label>
+              <label className="text-xs font-semibold text-slate-700">Promo Code (Try: VIRAL2026)</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
                   placeholder="Enter coupon..."
-                  className="flex-1 p-2 rounded-lg bg-surface-container-lowest border border-surface-container text-xs font-mono text-white focus:outline-none uppercase"
+                  className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:bg-white focus:border-indigo-600 uppercase"
                 />
                 <button
                   onClick={applyCoupon}
-                  className="px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors"
+                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 border border-slate-200 transition-colors"
                 >
                   Apply
                 </button>
@@ -388,17 +388,17 @@ export default function PricingPage() {
             </div>
 
             {/* Simulated Payment */}
-            <div className="space-y-2 pt-2 border-t border-surface-container-highest">
-              <label className="text-xs font-mono text-outline">Card Information</label>
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <label className="text-xs font-semibold text-slate-700">Card Information</label>
               <input
                 type="text"
                 readOnly
                 value="•••• •••• •••• 4242 (Test Card)"
-                className="w-full p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container text-xs font-mono text-white"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-800"
               />
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <input type="text" readOnly value="12 / 28" className="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container text-white" />
-                <input type="text" readOnly value="CVC: 888" className="p-2.5 rounded-lg bg-surface-container-lowest border border-surface-container text-white" />
+                <input type="text" readOnly value="12 / 28" className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800" />
+                <input type="text" readOnly value="CVC: 888" className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-800" />
               </div>
             </div>
 
@@ -406,14 +406,14 @@ export default function PricingPage() {
               <button
                 disabled={isCheckingOut}
                 onClick={() => setCheckoutPlan(null)}
-                className="flex-1 h-11 rounded-lg bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-on-surface transition-colors"
+                className="flex-1 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition-colors border border-slate-200"
               >
                 Cancel
               </button>
               <button
                 disabled={isCheckingOut}
                 onClick={handleCompleteCheckout}
-                className="flex-1 h-11 rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
+                className="flex-1 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all"
               >
                 {isCheckingOut ? (
                   <>

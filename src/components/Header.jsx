@@ -18,32 +18,32 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 pt-safe glass-nav">
+      <header className="fixed top-0 w-full z-50 pt-safe bg-white/90 backdrop-blur-md border-b border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
         <div className="max-w-7xl mx-auto h-16 px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}
           <button
             onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-2 group focus:outline-none"
+            className="flex items-center gap-2.5 group focus:outline-none"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#571bc1] via-[#8083ff] to-[#4cd7f6] flex items-center justify-center text-white shadow-[0_0_12px_rgba(128,131,255,0.4)] group-hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 via-indigo-500 to-sky-400 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
+              <span className="material-symbols-outlined text-[19px]">auto_awesome</span>
             </div>
-            <span className="text-lg font-semibold tracking-tight text-[#e2e2ea]">ClipForge</span>
-            <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded bg-[#282a30] text-[#4cd7f6] border border-[#33343b]">
+            <span className="text-lg font-bold tracking-tight text-slate-900">ClipForge</span>
+            <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/60 font-semibold">
               AI Studio
             </span>
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <nav className="hidden md:flex items-center gap-1.5 text-sm font-medium">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
-                className={`flex items-center gap-1.5 transition-colors focus:outline-none ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all focus:outline-none ${
                   currentPage === item.id
-                    ? 'text-[#c0c1ff] font-semibold'
-                    : 'text-[#c7c4d7] hover:text-white'
+                    ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 <span className="material-symbols-outlined text-[16px]">{item.icon}</span>
@@ -53,36 +53,36 @@ export default function Header() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-3 relative">
+          <div className="flex items-center gap-2.5 relative">
             {/* Notification Bell */}
             <button
               onClick={() => setShowNotif(!showNotif)}
-              className="w-9 h-9 flex items-center justify-center rounded-lg text-[#c7c4d7] hover:text-[#e2e2ea] hover:bg-[#282a30] transition-colors relative"
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors relative border border-slate-200/60"
               title="Notifications"
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#4cd7f6] animate-pulse"></span>
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
             </button>
 
             {/* Notifications Dropdown */}
             {showNotif && (
-              <div className="absolute top-12 right-0 w-80 rounded-xl bg-[#1d1f26] border border-[#33343b] shadow-2xl p-3 z-50 flex flex-col gap-2 animate-fadeIn">
-                <div className="flex items-center justify-between pb-2 border-b border-[#33343b]">
-                  <span className="text-xs font-semibold text-[#e2e2ea] uppercase tracking-wider">AI Notifications</span>
-                  <span className="text-[10px] text-[#4cd7f6] font-mono">2 New</span>
+              <div className="absolute top-12 right-0 w-80 rounded-2xl bg-white border border-slate-200 shadow-2xl p-3 z-50 flex flex-col gap-2 animate-fadeIn text-slate-900">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">AI Notifications</span>
+                  <span className="text-[10px] text-indigo-600 font-mono font-bold bg-indigo-50 px-2 py-0.5 rounded">2 New</span>
                 </div>
                 <div
                   onClick={() => {
                     setCurrentPage('studio');
                     setShowNotif(false);
                   }}
-                  className="flex items-start gap-2.5 p-2 rounded-lg bg-[#191b22] hover:bg-[#282a30] transition-colors cursor-pointer"
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-100"
                 >
-                  <span className="material-symbols-outlined text-[#c0c1ff] text-[18px] mt-0.5">check_circle</span>
+                  <span className="material-symbols-outlined text-indigo-600 text-[18px] mt-0.5">check_circle</span>
                   <div className="flex flex-col text-xs">
-                    <span className="font-medium text-white">Episode_42_Cut_01 Ready</span>
-                    <span className="text-[11px] text-[#c7c4d7]">3 viral clips auto-framed with 98% score.</span>
-                    <span className="text-[9px] text-[#908fa0] mt-1 font-mono">2 mins ago</span>
+                    <span className="font-semibold text-slate-900">Episode_42_Cut_01 Ready</span>
+                    <span className="text-[11px] text-slate-500">3 viral clips auto-framed with 98% score.</span>
+                    <span className="text-[9px] text-slate-400 mt-1 font-mono">2 mins ago</span>
                   </div>
                 </div>
                 <div
@@ -90,13 +90,13 @@ export default function Header() {
                     setCurrentPage('pricing');
                     setShowNotif(false);
                   }}
-                  className="flex items-start gap-2.5 p-2 rounded-lg bg-[#191b22] hover:bg-[#282a30] transition-colors cursor-pointer"
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-100"
                 >
-                  <span className="material-symbols-outlined text-[#4cd7f6] text-[18px] mt-0.5">bolt</span>
+                  <span className="material-symbols-outlined text-sky-600 text-[18px] mt-0.5">bolt</span>
                   <div className="flex flex-col text-xs">
-                    <span className="font-medium text-white">GPU Cluster Priority Active</span>
-                    <span className="text-[11px] text-[#c7c4d7]">FFmpeg v7.1 and H100 acceleration online.</span>
-                    <span className="text-[9px] text-[#908fa0] mt-1 font-mono">1 hour ago</span>
+                    <span className="font-semibold text-slate-900">GPU Cluster Priority Active</span>
+                    <span className="text-[11px] text-slate-500">FFmpeg v7.1 and H100 acceleration online.</span>
+                    <span className="text-[9px] text-slate-400 mt-1 font-mono">1 hour ago</span>
                   </div>
                 </div>
               </div>
@@ -107,48 +107,48 @@ export default function Header() {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-full hover:bg-[#282a30] transition-colors border border-[#33343b] focus:outline-none"
+                  className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-full hover:bg-slate-100 transition-colors border border-slate-200 focus:outline-none bg-white shadow-xs"
                 >
                   <img
                     alt={user.name || 'User'}
-                    className="w-7 h-7 rounded-full object-cover border border-[#8083ff]/40"
+                    className="w-7 h-7 rounded-full object-cover border border-indigo-200"
                     src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
                   />
-                  <span className="text-xs font-medium text-white max-w-[100px] truncate hidden sm:inline-block">
+                  <span className="text-xs font-semibold text-slate-800 max-w-[100px] truncate hidden sm:inline-block">
                     {user.name?.split(' ')[0] || 'Creator'}
                   </span>
-                  <span className="material-symbols-outlined text-[16px] text-[#908fa0]">
+                  <span className="material-symbols-outlined text-[16px] text-slate-500">
                     expand_more
                   </span>
                 </button>
 
                 {/* User Dropdown Menu */}
                 {showUserMenu && (
-                  <div className="absolute top-12 right-0 w-64 rounded-xl bg-[#1d1f26] border border-[#33343b] shadow-2xl p-3 z-50 flex flex-col gap-2 animate-fadeIn">
-                    <div className="flex items-center gap-2.5 p-2 pb-3 border-b border-[#33343b]">
+                  <div className="absolute top-12 right-0 w-64 rounded-2xl bg-white border border-slate-200 shadow-2xl p-3 z-50 flex flex-col gap-2 animate-fadeIn text-slate-900">
+                    <div className="flex items-center gap-2.5 p-2 pb-3 border-b border-slate-100">
                       <img
                         src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
                         alt=""
-                        className="w-9 h-9 rounded-full object-cover border border-[#8083ff]/40"
+                        className="w-9 h-9 rounded-full object-cover border border-indigo-200"
                       />
                       <div className="flex flex-col min-w-0">
-                        <span className="text-xs font-semibold text-white truncate">{user.name || 'Creator'}</span>
-                        <span className="text-[10px] text-[#908fa0] truncate">{user.email}</span>
-                        <span className="text-[9px] font-mono text-[#8083ff] mt-0.5 font-semibold">
+                        <span className="text-xs font-bold text-slate-900 truncate">{user.name || 'Creator'}</span>
+                        <span className="text-[10px] text-slate-500 truncate">{user.email}</span>
+                        <span className="text-[10px] font-mono text-indigo-600 mt-0.5 font-bold">
                           {user.plan || 'Pro Studio'}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 py-1 text-xs">
+                    <div className="flex flex-col gap-1 py-1 text-xs font-medium">
                       <button
                         onClick={() => {
                           setCurrentPage('studio');
                           setShowUserMenu(false);
                         }}
-                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[18px]">movie_edit</span>
+                        <span className="material-symbols-outlined text-[18px] text-indigo-600">movie_edit</span>
                         <span>Video Studio</span>
                       </button>
                       <button
@@ -156,9 +156,9 @@ export default function Header() {
                           setCurrentPage('clip');
                           setShowUserMenu(false);
                         }}
-                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[18px]">auto_videocam</span>
+                        <span className="material-symbols-outlined text-[18px] text-sky-600">auto_videocam</span>
                         <span>My Generated Shorts</span>
                       </button>
                       <button
@@ -166,20 +166,20 @@ export default function Header() {
                           setCurrentPage('pricing');
                           setShowUserMenu(false);
                         }}
-                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
+                        <span className="material-symbols-outlined text-[18px] text-violet-600">workspace_premium</span>
                         <span>Manage Subscription</span>
                       </button>
                     </div>
 
-                    <div className="pt-2 border-t border-[#33343b]">
+                    <div className="pt-2 border-t border-slate-100">
                       <button
                         onClick={() => {
                           logoutUser();
                           setShowUserMenu(false);
                         }}
-                        className="w-full flex items-center gap-2 p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors text-xs text-left font-medium"
+                        className="w-full flex items-center gap-2 p-2 rounded-xl text-red-600 hover:bg-red-50 transition-colors text-xs text-left font-semibold"
                       >
                         <span className="material-symbols-outlined text-[18px]">logout</span>
                         <span>Sign Out</span>
@@ -192,13 +192,13 @@ export default function Header() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigateToAuth('login')}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => navigateToAuth('signup')}
-                  className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white text-xs font-semibold shadow-md hover:opacity-95 transition-opacity hidden sm:flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-semibold shadow-sm hover:opacity-95 transition-opacity hidden sm:flex items-center gap-1.5"
                 >
                   <span className="material-symbols-outlined text-[15px]">bolt</span>
                   <span>Get Started</span>
@@ -209,7 +209,7 @@ export default function Header() {
             {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setShowDrawer(true)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors"
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors border border-slate-200"
               title="Open Navigation Menu"
             >
               <span className="material-symbols-outlined text-[20px]">menu</span>
@@ -220,19 +220,19 @@ export default function Header() {
 
       {/* Mobile Slide-Out Drawer */}
       {showDrawer && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex justify-end animate-fadeIn">
-          <div className="w-72 h-full bg-[#191b22] border-l border-[#33343b] p-5 flex flex-col justify-between shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex justify-end animate-fadeIn">
+          <div className="w-72 h-full bg-white border-l border-slate-200 p-5 flex flex-col justify-between shadow-2xl text-slate-900">
             <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between pb-4 border-b border-[#33343b]">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#571bc1] to-[#8083ff] flex items-center justify-center text-white">
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white">
                     <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
                   </div>
-                  <span className="font-bold text-base text-white">ClipForge AI</span>
+                  <span className="font-bold text-base text-slate-900">ClipForge AI</span>
                 </div>
                 <button
                   onClick={() => setShowDrawer(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[#908fa0] hover:text-white"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700"
                 >
                   <span className="material-symbols-outlined">close</span>
                 </button>
@@ -240,15 +240,15 @@ export default function Header() {
 
               {/* User info if logged in */}
               {user && (
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#111319] border border-[#33343b]">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <img
                     src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
                     alt=""
-                    className="w-10 h-10 rounded-full object-cover border border-[#8083ff]/40"
+                    className="w-10 h-10 rounded-full object-cover border border-indigo-200"
                   />
                   <div className="flex flex-col min-w-0">
-                    <span className="text-xs font-semibold text-white truncate">{user.name}</span>
-                    <span className="text-[10px] text-[#908fa0] truncate">{user.email}</span>
+                    <span className="text-xs font-bold text-slate-900 truncate">{user.name}</span>
+                    <span className="text-[10px] text-slate-500 truncate">{user.email}</span>
                   </div>
                 </div>
               )}
@@ -261,10 +261,10 @@ export default function Header() {
                       setCurrentPage(item.id);
                       setShowDrawer(false);
                     }}
-                    className={`flex items-center gap-3 p-2.5 rounded-lg transition-colors text-left ${
+                    className={`flex items-center gap-3 p-2.5 rounded-xl transition-colors text-left ${
                       currentPage === item.id
-                        ? 'bg-[#1d1f26] text-[#c0c1ff] font-semibold'
-                        : 'hover:bg-[#1d1f26] text-[#e2e2ea]'
+                        ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                        : 'hover:bg-slate-50 text-slate-700'
                     }`}
                   >
                     <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
@@ -274,14 +274,14 @@ export default function Header() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 pt-6 border-t border-[#33343b]">
+            <div className="flex flex-col gap-3 pt-6 border-t border-slate-100">
               {user ? (
                 <button
                   onClick={() => {
                     logoutUser();
                     setShowDrawer(false);
                   }}
-                  className="w-full h-11 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 font-semibold flex items-center justify-center gap-2 text-sm"
+                  className="w-full h-11 rounded-xl bg-red-50 text-red-600 border border-red-200 font-semibold flex items-center justify-center gap-2 text-sm"
                 >
                   <span className="material-symbols-outlined text-[18px]">logout</span>
                   <span>Sign Out</span>
@@ -293,7 +293,7 @@ export default function Header() {
                       navigateToAuth('login');
                       setShowDrawer(false);
                     }}
-                    className="w-full h-11 rounded-lg bg-[#282a30] text-white font-semibold flex items-center justify-center gap-2 text-sm"
+                    className="w-full h-11 rounded-xl bg-slate-100 text-slate-800 font-semibold flex items-center justify-center gap-2 text-sm border border-slate-200"
                   >
                     <span>Sign In</span>
                   </button>
@@ -302,7 +302,7 @@ export default function Header() {
                       navigateToAuth('signup');
                       setShowDrawer(false);
                     }}
-                    className="w-full h-11 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold flex items-center justify-center gap-2 shadow-lg text-sm"
+                    className="w-full h-11 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md text-sm"
                   >
                     <span className="material-symbols-outlined text-[18px]">bolt</span>
                     <span>Create Account Free</span>

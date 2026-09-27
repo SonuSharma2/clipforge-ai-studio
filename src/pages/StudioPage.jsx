@@ -191,54 +191,54 @@ export default function StudioPage() {
   };
 
   return (
-    <div className="bg-surface text-on-surface font-sans h-screen flex flex-col overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+    <div className="bg-white text-slate-900 font-sans h-screen flex flex-col overflow-hidden selection:bg-indigo-100 selection:text-indigo-900">
       
       {/* TOP STUDIO TOOLBAR */}
-      <header className="h-14 border-b border-surface-container-highest bg-[#111319] px-4 flex items-center justify-between shrink-0 z-40">
+      <header className="h-14 border-b border-slate-200 bg-white px-4 flex items-center justify-between shrink-0 z-40 shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setCurrentPage('home')}
-            className="flex items-center gap-1.5 text-outline hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 transition-colors"
             title="Back to Home"
           >
-            <span className="material-symbols-outlined text-[20px] text-tertiary">arrow_back</span>
-            <div className="w-7 h-7 rounded-md bg-gradient-to-tr from-secondary-container via-primary-container to-tertiary flex items-center justify-center text-white">
+            <span className="material-symbols-outlined text-[20px] text-slate-500">arrow_back</span>
+            <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-sm">
               <span className="material-symbols-outlined text-[16px]">movie_edit</span>
             </div>
           </button>
 
-          <div className="h-5 w-[1px] bg-surface-container-highest hidden sm:block"></div>
+          <div className="h-5 w-[1px] bg-slate-200 hidden sm:block"></div>
 
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={projectTitle}
               onChange={(e) => setProjectTitle(e.target.value)}
-              className="bg-transparent font-mono text-xs sm:text-sm font-semibold text-white focus:bg-surface-container px-2 py-1 rounded border border-transparent focus:border-surface-container-highest transition-colors max-w-[140px] sm:max-w-none"
+              className="bg-transparent font-sans text-xs sm:text-sm font-semibold text-slate-900 focus:bg-slate-100 px-2 py-1 rounded-lg border border-transparent focus:border-slate-300 transition-colors max-w-[140px] sm:max-w-none"
             />
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-container-high text-tertiary border border-tertiary/20 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 1080x1920 60FPS
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span> 1080x1920 60FPS
             </span>
           </div>
         </div>
 
         {/* Center Aspect Ratio Switcher */}
-        <div className="hidden md:flex items-center bg-surface-container-lowest p-1 rounded-lg border border-surface-container-highest font-mono text-xs">
+        <div className="hidden md:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 font-sans text-xs">
           <button
             onClick={() => { setAspectRatio('9:16'); addToast('Aspect ratio: 9:16 Shorts', 'info'); }}
-            className={`px-2.5 py-1 rounded font-medium transition-all ${aspectRatio === '9:16' ? 'bg-primary-container text-white shadow-sm' : 'text-outline hover:text-white'}`}
+            className={`px-3 py-1 rounded-lg font-medium transition-all ${aspectRatio === '9:16' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
           >
             9:16 Shorts
           </button>
           <button
             onClick={() => { setAspectRatio('16:9'); addToast('Aspect ratio: 16:9 Wide', 'info'); }}
-            className={`px-2.5 py-1 rounded font-medium transition-all ${aspectRatio === '16:9' ? 'bg-primary-container text-white shadow-sm' : 'text-outline hover:text-white'}`}
+            className={`px-3 py-1 rounded-lg font-medium transition-all ${aspectRatio === '16:9' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
           >
             16:9 Wide
           </button>
           <button
             onClick={() => { setAspectRatio('1:1'); addToast('Aspect ratio: 1:1 Square', 'info'); }}
-            className={`px-2.5 py-1 rounded font-medium transition-all ${aspectRatio === '1:1' ? 'bg-primary-container text-white shadow-sm' : 'text-outline hover:text-white'}`}
+            className={`px-3 py-1 rounded-lg font-medium transition-all ${aspectRatio === '1:1' ? 'bg-white text-slate-900 shadow-sm font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
           >
             1:1 Square
           </button>
@@ -246,21 +246,21 @@ export default function StudioPage() {
 
         {/* Right Controls */}
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center text-xs font-mono text-outline gap-1 mr-2">
-            <span className="material-symbols-outlined text-[16px] text-tertiary">cloud_done</span>
+          <div className="hidden sm:flex items-center text-xs font-sans text-slate-500 gap-1 mr-2">
+            <span className="material-symbols-outlined text-[16px] text-emerald-600">cloud_done</span>
             <span>Auto-saved</span>
           </div>
 
           <button
             onClick={() => addToast('Undo action', 'info')}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
             title="Undo"
           >
             <span className="material-symbols-outlined text-[18px]">undo</span>
           </button>
           <button
             onClick={() => addToast('Redo action', 'info')}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-white hover:bg-surface-container transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
             title="Redo"
           >
             <span className="material-symbols-outlined text-[18px]">redo</span>
@@ -268,7 +268,7 @@ export default function StudioPage() {
 
           <button
             onClick={() => setIsExportOpen(true)}
-            className="h-9 px-4 rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white font-semibold text-xs flex items-center gap-1.5 shadow-[0_0_16px_rgba(128,131,255,0.4)] hover:brightness-110 active:scale-95 transition-all"
+            className="h-9 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined text-[16px]">file_download</span>
             <span>Export</span>
@@ -280,24 +280,24 @@ export default function StudioPage() {
       <div className="flex-1 flex overflow-hidden">
         
         {/* LEFT PANEL: MEDIA & PRESET DOCK */}
-        <aside className="w-64 border-r border-surface-container-highest bg-[#12141a] hidden lg:flex flex-col shrink-0">
+        <aside className="w-64 border-r border-slate-200 bg-white hidden lg:flex flex-col shrink-0">
           {/* Tab Headers */}
-          <div className="flex border-b border-surface-container-highest font-mono text-xs">
+          <div className="flex border-b border-slate-200 font-sans text-xs">
             <button
               onClick={() => setLeftTab('clips')}
-              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'clips' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'clips' ? 'text-indigo-600 border-b-2 border-indigo-600 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}
             >
               Clips
             </button>
             <button
               onClick={() => setLeftTab('styles')}
-              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'styles' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'styles' ? 'text-indigo-600 border-b-2 border-indigo-600 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}
             >
               Presets
             </button>
             <button
               onClick={() => setLeftTab('audio')}
-              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'audio' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-2.5 text-center font-medium transition-colors ${leftTab === 'audio' ? 'text-indigo-600 border-b-2 border-indigo-600 font-semibold' : 'text-slate-500 hover:text-slate-800'}`}
             >
               Sound FX
             </button>
@@ -307,9 +307,9 @@ export default function StudioPage() {
           <div className="flex-1 p-3 overflow-y-auto space-y-3">
             {leftTab === 'clips' && (
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-outline font-mono mb-1">
+                <div className="flex items-center justify-between text-xs text-slate-500 font-sans mb-1">
                   <span>AI Generated Clips ({generatedClips?.length || 3})</span>
-                  <span className="text-tertiary text-[10px]">Real 9:16 MP4</span>
+                  <span className="text-indigo-600 font-semibold text-[10px]">Real 9:16 MP4</span>
                 </div>
 
                 {(generatedClips && generatedClips.length > 0 ? generatedClips : [
@@ -352,21 +352,21 @@ export default function StudioPage() {
                       setCaptionText(clip.caption);
                       addToast(`Loaded "${clip.headline || clip.title}" into Studio`, 'info');
                     }}
-                    className={`p-2 rounded-xl cursor-pointer flex items-center gap-2.5 transition-all ${
+                    className={`p-2.5 rounded-xl cursor-pointer flex items-center gap-2.5 transition-all ${
                       activeStudioClip?.title === (clip.headline || clip.title) || activeStudioClip?.title === clip.title
-                        ? 'bg-surface-container border border-primary/60'
-                        : 'bg-surface-container-low border border-surface-container-highest hover:bg-surface-container-high'
+                        ? 'bg-indigo-50 border-2 border-indigo-600 shadow-sm'
+                        : 'bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                     }`}
                   >
                     <img
                       src={clip.thumbnail || clip.image}
-                      className="w-12 h-16 rounded object-cover"
+                      className="w-12 h-16 rounded-lg object-cover"
                       alt={clip.headline || clip.title}
                     />
                     <div className="flex flex-col overflow-hidden">
-                      <span className="text-xs font-semibold text-white truncate">{clip.headline || clip.title}</span>
-                      <span className="text-[10px] font-mono text-tertiary">Score: {clip.score} • {clip.duration}</span>
-                      <span className="text-[10px] text-outline truncate">"{clip.caption}"</span>
+                      <span className="text-xs font-bold text-slate-900 truncate">{clip.headline || clip.title}</span>
+                      <span className="text-[10px] font-mono text-indigo-600 font-semibold">Score: {clip.score} • {clip.duration}</span>
+                      <span className="text-[10px] text-slate-500 truncate">"{clip.caption}"</span>
                     </div>
                   </div>
                 ))}
@@ -375,61 +375,61 @@ export default function StudioPage() {
 
             {leftTab === 'styles' && (
               <div className="space-y-2">
-                <span className="text-xs text-outline font-mono">1-Click Caption Styles</span>
+                <span className="text-xs text-slate-500 font-medium">1-Click Caption Styles</span>
                 <button
                   onClick={() => applyPreset('hormozi')}
-                  className="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-primary transition-all"
+                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-indigo-500 hover:bg-white transition-all shadow-sm"
                 >
                   <span className="caption-hormozi text-[11px] block w-fit mb-1">HORMOZI PUNCH</span>
-                  <span className="text-[10px] text-outline">Yellow box, all-caps, heavy drop shadow</span>
+                  <span className="text-[10px] text-slate-500">Yellow box, all-caps, heavy drop shadow</span>
                 </button>
                 <button
                   onClick={() => applyPreset('mrbeast')}
-                  className="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-tertiary transition-all"
+                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-indigo-500 hover:bg-white transition-all shadow-sm"
                 >
                   <span className="caption-mrbeast text-[11px] block w-fit mb-1">MRBEAST GLOW</span>
-                  <span className="text-[10px] text-outline">Cyan pill highlight with black stroke outline</span>
+                  <span className="text-[10px] text-slate-500">Cyan pill highlight with black stroke outline</span>
                 </button>
                 <button
                   onClick={() => applyPreset('cyber')}
-                  className="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-tertiary transition-all"
+                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-indigo-500 hover:bg-white transition-all shadow-sm"
                 >
                   <span className="caption-cyber text-[11px] block w-fit mb-1">CYBERPUNK NEON</span>
-                  <span className="text-[10px] text-outline">JetBrains mono, cyan stroke, terminal glow</span>
+                  <span className="text-[10px] text-slate-500">JetBrains mono, cyan stroke, terminal glow</span>
                 </button>
                 <button
                   onClick={() => applyPreset('minimal')}
-                  className="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-left hover:border-white transition-all"
+                  className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-indigo-500 hover:bg-white transition-all shadow-sm"
                 >
                   <span className="caption-minimal text-[11px] block w-fit mb-1">MINIMAL CLEAN</span>
-                  <span className="text-[10px] text-outline">Semi-translucent frosted glass pill</span>
+                  <span className="text-[10px] text-slate-500">Semi-translucent frosted glass pill</span>
                 </button>
               </div>
             )}
 
             {leftTab === 'audio' && (
               <div className="space-y-2">
-                <span className="text-xs text-outline font-mono">Viral Sound FX Stings</span>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+                <span className="text-xs text-slate-500 font-medium">Viral Sound FX Stings</span>
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
-                    <span className="text-xs text-white">Cinematic Whoosh</span>
+                    <span className="material-symbols-outlined text-[16px] text-indigo-600">volume_up</span>
+                    <span className="text-xs font-medium text-slate-800">Cinematic Whoosh</span>
                   </div>
-                  <button onClick={() => addToast('Inserted Cinematic Whoosh at playhead!', 'success')} className="text-xs text-primary font-mono hover:underline">+ Add</button>
+                  <button onClick={() => addToast('Inserted Cinematic Whoosh at playhead!', 'success')} className="text-xs text-indigo-600 font-semibold hover:underline">+ Add</button>
                 </div>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
-                    <span className="text-xs text-white">Bass Drop Impact</span>
+                    <span className="material-symbols-outlined text-[16px] text-indigo-600">volume_up</span>
+                    <span className="text-xs font-medium text-slate-800">Bass Drop Impact</span>
                   </div>
-                  <button onClick={() => addToast('Inserted Bass Drop Impact at 00:08 Hook!', 'success')} className="text-xs text-primary font-mono hover:underline">+ Add</button>
+                  <button onClick={() => addToast('Inserted Bass Drop Impact at 00:08 Hook!', 'success')} className="text-xs text-indigo-600 font-semibold hover:underline">+ Add</button>
                 </div>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-surface-container">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[16px] text-tertiary">volume_up</span>
-                    <span className="text-xs text-white">Cash Register Ka-ching</span>
+                    <span className="material-symbols-outlined text-[16px] text-indigo-600">volume_up</span>
+                    <span className="text-xs font-medium text-slate-800">Cash Register Ka-ching</span>
                   </div>
-                  <button onClick={() => addToast('Inserted Cash Register at playhead!', 'success')} className="text-xs text-primary font-mono hover:underline">+ Add</button>
+                  <button onClick={() => addToast('Inserted Cash Register at playhead!', 'success')} className="text-xs text-indigo-600 font-semibold hover:underline">+ Add</button>
                 </div>
               </div>
             )}
@@ -437,14 +437,14 @@ export default function StudioPage() {
         </aside>
 
         {/* CENTER VIEWPORT: VIDEO CANVAS & PLAYBACK */}
-        <main className="flex-1 flex flex-col bg-[#0b0c10] overflow-hidden relative">
+        <main className="flex-1 flex flex-col bg-slate-100/70 overflow-hidden relative">
           
           {/* Video Stage Area */}
           <div className="flex-1 flex items-center justify-center p-3 sm:p-6 overflow-hidden relative">
             
             {/* Aspect Ratio Box */}
             <div
-              className={`relative bg-black rounded-2xl border border-surface-container-highest shadow-2xl overflow-hidden flex items-center justify-center group transition-all duration-300 ${
+              className={`relative bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex items-center justify-center group transition-all duration-300 ${
                 aspectRatio === '9:16'
                   ? 'aspect-[9/16] h-full max-h-[540px]'
                   : aspectRatio === '16:9'
@@ -467,24 +467,24 @@ export default function StudioPage() {
 
               {/* Face Tracking Bounding Box */}
               {showFaceBox && (
-                <div className="absolute top-[20%] left-[22%] w-[56%] h-[34%] border-2 border-dashed border-[#4cd7f6] rounded-xl pointer-events-none flex flex-col justify-between p-1.5 animate-pulse transition-opacity duration-300">
+                <div className="absolute top-[20%] left-[22%] w-[56%] h-[34%] border-2 border-dashed border-cyan-400 rounded-xl pointer-events-none flex flex-col justify-between p-1.5 animate-pulse transition-opacity duration-300">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono bg-[#4cd7f6] text-[#003640] px-1 rounded font-bold">FACE TRACK 99.4%</span>
-                    <span className="w-2 h-2 rounded-full bg-[#4cd7f6]"></span>
+                    <span className="text-[9px] font-mono bg-cyan-400 text-slate-900 px-1 rounded font-bold">FACE TRACK 99.4%</span>
+                    <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
                   </div>
-                  <span className="text-[8px] font-mono text-[#4cd7f6]/90 self-end">ACTIVE SPEAKER</span>
+                  <span className="text-[8px] font-mono text-cyan-300 self-end">ACTIVE SPEAKER</span>
                 </div>
               )}
 
               {/* Watermark */}
               {showWatermark && (
-                <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-[10px] font-mono text-outline border border-white/10 pointer-events-none flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[12px] text-tertiary">auto_awesome</span> ClipForge AI
+                <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-[10px] font-mono text-white/80 border border-white/10 pointer-events-none flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[12px] text-cyan-300">auto_awesome</span> ClipForge AI
                 </div>
               )}
 
               {/* Viral Hook Badge on Canvas */}
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#0c0e14]/90 backdrop-blur-md flex items-center gap-1.5 text-xs text-[#4cd7f6] font-mono border border-[#4cd7f6]/30 shadow-lg pointer-events-none">
+              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-slate-900/90 backdrop-blur-md flex items-center gap-1.5 text-xs text-cyan-300 font-mono border border-cyan-400/30 shadow-lg pointer-events-none">
                 <span className="material-symbols-outlined text-[14px]">trending_up</span>
                 <span>Score: {activeStudioClip?.score || '98/100'}</span>
               </div>
@@ -516,17 +516,17 @@ export default function StudioPage() {
             </div>
 
             {/* Floating Quick Toggles */}
-            <div className="absolute top-4 right-4 hidden sm:flex items-center gap-2 bg-surface-container-low/80 backdrop-blur-md p-1.5 rounded-lg border border-surface-container-highest text-xs font-mono">
+            <div className="absolute top-4 right-4 hidden sm:flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-200 shadow-sm text-xs font-sans">
               <button
                 onClick={() => setShowFaceBox(!showFaceBox)}
-                className={`px-2 py-1 rounded flex items-center gap-1 transition-colors ${showFaceBox ? 'text-tertiary bg-surface-container' : 'text-outline hover:text-white'}`}
+                className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${showFaceBox ? 'text-indigo-600 bg-indigo-50 font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                <span className="material-symbols-outlined text-[14px]">face</span> Face Box
+                <span className="material-symbols-outlined text-[15px]">face</span> Face Box
               </button>
-              <span className="text-surface-container-highest">|</span>
+              <span className="text-slate-200">|</span>
               <button
                 onClick={() => setShowWatermark(!showWatermark)}
-                className={`px-2 py-1 rounded flex items-center gap-1 transition-colors ${showWatermark ? 'text-primary bg-surface-container' : 'text-outline hover:text-white'}`}
+                className={`px-2.5 py-1 rounded-lg flex items-center gap-1 transition-colors ${showWatermark ? 'text-indigo-600 bg-indigo-50 font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
               >
                 Watermark
               </button>
@@ -534,33 +534,33 @@ export default function StudioPage() {
           </div>
 
           {/* PLAYBACK CONTROL DOCK */}
-          <div className="h-12 bg-[#12141a] border-t border-surface-container-highest px-4 flex items-center justify-between shrink-0">
+          <div className="h-12 bg-white border-t border-slate-200 px-4 flex items-center justify-between shrink-0 shadow-sm">
             {/* Timecode */}
-            <div className="flex items-center gap-2 font-mono text-xs text-outline">
-              <span className="text-white font-semibold">{formatTime(currentSeconds)}</span>
+            <div className="flex items-center gap-2 font-mono text-xs text-slate-500">
+              <span className="text-slate-900 font-bold">{formatTime(currentSeconds)}</span>
               <span>/</span>
               <span>{formatTime(totalSeconds)}</span>
             </div>
 
             {/* Play/Pause/Seek */}
             <div className="flex items-center gap-3">
-              <button onClick={() => seekRelative(-5)} className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container" title="Rewind 5s">
+              <button onClick={() => seekRelative(-5)} className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100" title="Rewind 5s">
                 <span className="material-symbols-outlined text-[18px]">replay_5</span>
               </button>
               <button
                 onClick={togglePlay}
-                className="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center shadow-[0_0_12px_rgba(128,131,255,0.4)] active:scale-95 transition-transform"
+                className="w-9 h-9 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-sm active:scale-95 transition-transform"
               >
-                <span className="material-symbols-outlined text-[24px]">
+                <span className="material-symbols-outlined text-[22px]">
                   {isPlaying ? 'pause' : 'play_arrow'}
                 </span>
               </button>
-              <button onClick={() => seekRelative(5)} className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white hover:bg-surface-container" title="Forward 5s">
+              <button onClick={() => seekRelative(5)} className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100" title="Forward 5s">
                 <span className="material-symbols-outlined text-[18px]">forward_5</span>
               </button>
               <button
                 onClick={() => { setIsLooping(!isLooping); addToast(`Looping ${!isLooping ? 'enabled' : 'disabled'}`, 'info'); }}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${isLooping ? 'text-tertiary' : 'text-outline hover:text-white'}`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${isLooping ? 'text-indigo-600 bg-indigo-50' : 'text-slate-500 hover:text-slate-800'}`}
                 title="Toggle Loop"
               >
                 <span className="material-symbols-outlined text-[18px]">repeat</span>
@@ -568,11 +568,11 @@ export default function StudioPage() {
             </div>
 
             {/* Speed & Volume */}
-            <div className="flex items-center gap-3 text-xs font-mono text-outline">
-              <button onClick={cycleSpeed} className="px-2 py-0.5 rounded hover:bg-surface-container text-tertiary">
+            <div className="flex items-center gap-3 text-xs font-sans text-slate-600">
+              <button onClick={cycleSpeed} className="px-2 py-0.5 rounded-lg hover:bg-slate-100 text-indigo-600 font-bold font-mono">
                 {playbackSpeed}x
               </button>
-              <button onClick={toggleMute} className="hover:text-white">
+              <button onClick={toggleMute} className="hover:text-slate-900">
                 <span className="material-symbols-outlined text-[18px]">
                   {isMuted ? 'volume_off' : 'volume_up'}
                 </span>
@@ -581,25 +581,25 @@ export default function StudioPage() {
           </div>
 
           {/* BOTTOM TIMELINE SUITE */}
-          <div className="h-44 bg-[#181b22] border-t border-surface-container-highest flex flex-col shrink-0">
+          <div className="h-44 bg-slate-50 border-t border-slate-200 flex flex-col shrink-0">
             {/* Tool Strip */}
-            <div className="h-9 px-4 border-b border-surface-container-highest flex items-center justify-between text-xs font-mono text-outline">
+            <div className="h-9 px-4 border-b border-slate-200 bg-white flex items-center justify-between text-xs font-sans text-slate-500">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => addToast(`Split clip at ${formatTime(currentSeconds)}`, 'info')}
-                  className="px-2 py-1 rounded bg-surface-container hover:text-white flex items-center gap-1 border border-surface-container-highest"
+                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1 border border-slate-200 font-medium"
                 >
                   <span className="material-symbols-outlined text-[14px]">content_cut</span> Split (S)
                 </button>
                 <button
                   onClick={() => addToast('AI Hook auto-snapped to nearest silence gap', 'success')}
-                  className="px-2 py-1 rounded bg-surface-container hover:text-white flex items-center gap-1 border border-surface-container-highest"
+                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1 border border-slate-200 font-medium"
                 >
                   <span className="material-symbols-outlined text-[14px]">auto_fix_high</span> Auto-Trim Silence
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] text-tertiary">Live Playhead Sync</span>
+                <span className="text-[11px] text-indigo-600 font-semibold">Live Playhead Sync</span>
               </div>
             </div>
 
@@ -610,64 +610,64 @@ export default function StudioPage() {
             >
               {/* Playhead Needle */}
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-tertiary z-30 shadow-[0_0_8px_#4cd7f6] pointer-events-none transition-all duration-75"
+                className="absolute top-0 bottom-0 w-0.5 bg-indigo-600 z-30 shadow-[0_0_8px_rgba(79,70,229,0.4)] pointer-events-none transition-all duration-75"
                 style={{ left: `${totalSeconds > 0 ? (currentSeconds / totalSeconds) * 100 : 0}%` }}
               >
-                <div className="w-3 h-3 -ml-[5px] bg-tertiary rotate-45 -mt-1 shadow-md"></div>
+                <div className="w-3 h-3 -ml-[5px] bg-indigo-600 rotate-45 -mt-1 shadow-md"></div>
               </div>
 
               {/* Track 1: Subtitle Kinetic Blocks */}
-              <div className="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest">
-                <span className="absolute left-2 text-outline text-[9px] uppercase pointer-events-none">Subtitles</span>
-                <div className="ml-16 h-5 rounded bg-primary-container/80 text-white flex items-center px-2 font-bold truncate border border-primary">
+              <div className="h-7 w-full rounded-lg bg-white flex items-center px-2 relative text-[10px] font-sans border border-slate-200">
+                <span className="absolute left-2 text-slate-400 text-[9px] uppercase font-bold pointer-events-none">Subtitles</span>
+                <div className="ml-16 h-5 rounded-md bg-indigo-600 text-white flex items-center px-2 font-bold truncate">
                   "{captionText}"
                 </div>
-                <div className="ml-2 h-5 rounded bg-surface-container-high text-on-surface-variant flex items-center px-2 truncate">
+                <div className="ml-2 h-5 rounded-md bg-slate-100 text-slate-600 flex items-center px-2 truncate border border-slate-200">
                   [Host: "...just two steps to scale..."]
                 </div>
               </div>
 
               {/* Track 2: B-Roll & Visual Inserts */}
-              <div className="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest">
-                <span className="absolute left-2 text-outline text-[9px] uppercase pointer-events-none">B-Roll Cut</span>
-                <div className="ml-24 h-5 rounded bg-secondary-container text-on-secondary-container flex items-center px-2 font-medium border border-secondary/50">
+              <div className="h-7 w-full rounded-lg bg-white flex items-center px-2 relative text-[10px] font-sans border border-slate-200">
+                <span className="absolute left-2 text-slate-400 text-[9px] uppercase font-bold pointer-events-none">B-Roll Cut</span>
+                <div className="ml-24 h-5 rounded-md bg-amber-50 text-amber-800 flex items-center px-2 font-medium border border-amber-200">
                   ⚡ Studio Keylight Cutaway (00:08)
                 </div>
               </div>
 
               {/* Track 3: Video Stream & Face Track */}
-              <div className="h-7 w-full rounded bg-surface-container flex items-center px-2 relative text-[10px] font-mono border border-surface-container-highest overflow-hidden">
-                <span className="absolute left-2 text-outline text-[9px] uppercase pointer-events-none z-10">Video 9:16</span>
-                <div className="ml-16 w-full h-full bg-gradient-to-r from-surface-container-highest via-[#282a30] to-surface-container-highest flex items-center pl-2 text-outline text-[10px]">
+              <div className="h-7 w-full rounded-lg bg-white flex items-center px-2 relative text-[10px] font-sans border border-slate-200 overflow-hidden">
+                <span className="absolute left-2 text-slate-400 text-[9px] uppercase font-bold pointer-events-none z-10">Video 9:16</span>
+                <div className="ml-16 w-full h-full bg-slate-50 flex items-center pl-2 text-slate-600 text-[10px]">
                   Active Speaker Framing: Host (Primary) • 1080x1920 60fps
                 </div>
               </div>
 
               {/* Track 4: Audio Waveform with Viral Hook Markers */}
-              <div className="h-8 w-full rounded bg-surface-container-lowest flex items-center px-2 relative border border-surface-container-highest">
-                <span className="absolute left-2 text-outline text-[9px] uppercase pointer-events-none z-10">Audio</span>
+              <div className="h-8 w-full rounded-lg bg-white flex items-center px-2 relative border border-slate-200">
+                <span className="absolute left-2 text-slate-400 text-[9px] uppercase font-bold pointer-events-none z-10">Audio</span>
                 <div className="ml-16 flex-1 h-6 flex items-center gap-1 opacity-75">
-                  <div className="w-1 h-2 bg-outline rounded"></div>
-                  <div className="w-1 h-4 bg-outline rounded"></div>
-                  <div className="w-1 h-3 bg-outline rounded"></div>
-                  <div className="w-1 h-6 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
-                  <div className="w-1 h-7 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
-                  <div className="w-1 h-5 bg-tertiary rounded shadow-[0_0_4px_#4cd7f6]"></div>
-                  <div className="w-1 h-3 bg-outline rounded"></div>
-                  <div className="w-1 h-4 bg-outline rounded"></div>
-                  <div className="w-1 h-2 bg-outline rounded"></div>
-                  <div className="w-1 h-5 bg-primary rounded"></div>
-                  <div className="w-1 h-7 bg-primary rounded"></div>
-                  <div className="w-1 h-6 bg-primary rounded"></div>
-                  <div className="w-1 h-4 bg-outline rounded"></div>
-                  <div className="w-1 h-2 bg-outline rounded"></div>
-                  <div className="w-1 h-5 bg-outline rounded"></div>
-                  <div className="w-1 h-6 bg-outline rounded"></div>
-                  <div className="w-1 h-3 bg-outline rounded"></div>
+                  <div className="w-1 h-2 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-4 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-3 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-6 bg-indigo-600 rounded"></div>
+                  <div className="w-1 h-7 bg-indigo-600 rounded"></div>
+                  <div className="w-1 h-5 bg-indigo-600 rounded"></div>
+                  <div className="w-1 h-3 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-4 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-2 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-5 bg-indigo-500 rounded"></div>
+                  <div className="w-1 h-7 bg-indigo-500 rounded"></div>
+                  <div className="w-1 h-6 bg-indigo-500 rounded"></div>
+                  <div className="w-1 h-4 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-2 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-5 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-6 bg-slate-300 rounded"></div>
+                  <div className="w-1 h-3 bg-slate-300 rounded"></div>
                 </div>
                 {/* Viral Hook Marker badge */}
-                <div className="absolute left-[24%] top-1 px-1.5 py-0.5 rounded bg-tertiary text-black text-[9px] font-mono font-bold flex items-center gap-0.5 shadow-md">
-                  <span className="w-1 h-1 rounded-full bg-black"></span> Viral Hook (00:08)
+                <div className="absolute left-[24%] top-1 px-1.5 py-0.5 rounded-md bg-indigo-600 text-white text-[9px] font-mono font-bold flex items-center gap-0.5 shadow-sm">
+                  <span className="w-1 h-1 rounded-full bg-white"></span> Viral Hook (00:08)
                 </div>
               </div>
             </div>
@@ -675,24 +675,24 @@ export default function StudioPage() {
         </main>
 
         {/* RIGHT PANEL: AI INSPECTOR */}
-        <aside className="w-80 border-l border-surface-container-highest bg-[#12141a] hidden xl:flex flex-col shrink-0 overflow-y-auto">
+        <aside className="w-80 border-l border-slate-200 bg-white hidden xl:flex flex-col shrink-0 overflow-y-auto">
           {/* Tabs */}
-          <div className="flex border-b border-surface-container-highest font-mono text-xs">
+          <div className="flex border-b border-slate-200 font-sans text-xs">
             <button
               onClick={() => setRightTab('captions')}
-              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'captions' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'captions' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
               Captions
             </button>
             <button
               onClick={() => setRightTab('tracking')}
-              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'tracking' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'tracking' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
               Tracking
             </button>
             <button
               onClick={() => setRightTab('hooks')}
-              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'hooks' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+              className={`flex-1 py-3 text-center font-semibold transition-colors ${rightTab === 'hooks' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
               AI Hooks
             </button>
@@ -702,21 +702,21 @@ export default function StudioPage() {
           {rightTab === 'captions' && (
             <div className="p-4 space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-mono text-outline">Active Subtitle Text</label>
+                <label className="text-xs font-semibold text-slate-700">Active Subtitle Text</label>
                 <textarea
                   rows="2"
                   value={captionText}
                   onChange={(e) => setCaptionText(e.target.value.toUpperCase())}
-                  className="w-full p-2.5 rounded-lg bg-surface-container border border-surface-container-highest text-xs font-bold text-white focus:outline-none focus:border-primary uppercase transition-colors"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:bg-white focus:outline-none focus:border-indigo-600 uppercase transition-colors"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-mono text-outline">Typography</label>
+                <label className="text-xs font-semibold text-slate-700">Typography</label>
                 <select
                   value={captionFont}
                   onChange={(e) => setCaptionFont(e.target.value)}
-                  className="w-full p-2 rounded-lg bg-surface-container border border-surface-container-highest text-xs text-white focus:outline-none font-mono"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-indigo-600 font-sans"
                 >
                   <option value="Geist">Geist (Modern Sans)</option>
                   <option value="JetBrains Mono">JetBrains Mono (Cyber)</option>
@@ -726,11 +726,11 @@ export default function StudioPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-mono text-outline">Highlight Color Accent</label>
+                <label className="text-xs font-semibold text-slate-700">Highlight Color Accent</label>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => { setCaptionBgColor('#FFE600'); setCaptionTextColor('#000000'); addToast('Selected Hormozi Yellow', 'info'); }}
-                    className="w-7 h-7 rounded-full bg-[#FFE600] border-2 border-white shadow-sm hover:scale-110 transition-transform"
+                    className="w-7 h-7 rounded-full bg-[#FFE600] border-2 border-slate-300 shadow-sm hover:scale-110 transition-transform"
                     title="Hormozi Yellow"
                   />
                   <button
@@ -744,9 +744,9 @@ export default function StudioPage() {
                     title="Neon Magenta"
                   />
                   <button
-                    onClick={() => { setCaptionBgColor('#8083ff'); setCaptionTextColor('#FFFFFF'); addToast('Selected Purple Primary', 'info'); }}
-                    className="w-7 h-7 rounded-full bg-[#8083ff] hover:scale-110 transition-transform"
-                    title="ClipForge Purple"
+                    onClick={() => { setCaptionBgColor('#4f46e5'); setCaptionTextColor('#FFFFFF'); addToast('Selected Indigo Primary', 'info'); }}
+                    className="w-7 h-7 rounded-full bg-indigo-600 hover:scale-110 transition-transform"
+                    title="Indigo Primary"
                   />
                   <button
                     onClick={() => { setCaptionBgColor('#00FF66'); setCaptionTextColor('#000000'); addToast('Selected Electric Green', 'info'); }}
@@ -757,9 +757,9 @@ export default function StudioPage() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono text-outline">
+                <div className="flex justify-between text-xs font-sans text-slate-600">
                   <span>Font Size</span>
-                  <span>{captionFontSize}px</span>
+                  <span className="font-bold">{captionFontSize}px</span>
                 </div>
                 <input
                   type="range"
@@ -767,28 +767,28 @@ export default function StudioPage() {
                   max="28"
                   value={captionFontSize}
                   onChange={(e) => setCaptionFontSize(Number(e.target.value))}
-                  className="w-full accent-primary"
+                  className="w-full accent-indigo-600"
                 />
               </div>
 
-              <div className="space-y-1.5 pt-2 border-t border-surface-container-highest">
-                <label className="text-xs font-mono text-outline">Vertical Position</label>
-                <div className="flex gap-2 text-xs font-mono">
+              <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                <label className="text-xs font-semibold text-slate-700">Vertical Position</label>
+                <div className="flex gap-2 text-xs font-sans">
                   <button
                     onClick={() => setCaptionPosition('bottom-8')}
-                    className={`flex-1 py-1.5 rounded transition-colors ${captionPosition === 'bottom-8' ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-white'}`}
+                    className={`flex-1 py-1.5 rounded-xl transition-colors font-medium ${captionPosition === 'bottom-8' ? 'bg-indigo-600 text-white font-semibold' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                   >
                     Low
                   </button>
                   <button
                     onClick={() => setCaptionPosition('bottom-14')}
-                    className={`flex-1 py-1.5 rounded transition-colors ${captionPosition === 'bottom-14' ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-white'}`}
+                    className={`flex-1 py-1.5 rounded-xl transition-colors font-medium ${captionPosition === 'bottom-14' ? 'bg-indigo-600 text-white font-semibold' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                   >
                     Mid
                   </button>
                   <button
                     onClick={() => setCaptionPosition('top-16')}
-                    className={`flex-1 py-1.5 rounded transition-colors ${captionPosition === 'top-16' ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-white'}`}
+                    className={`flex-1 py-1.5 rounded-xl transition-colors font-medium ${captionPosition === 'top-16' ? 'bg-indigo-600 text-white font-semibold' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
                   >
                     High
                   </button>
@@ -800,39 +800,39 @@ export default function StudioPage() {
           {/* Tab 2: Tracking */}
           {rightTab === 'tracking' && (
             <div className="p-4 space-y-4">
-              <span className="text-xs font-mono text-tertiary uppercase tracking-wider">Neural Speaker Tracking</span>
+              <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Neural Speaker Tracking</span>
               
               <div className="space-y-2">
-                <label className="text-xs font-medium text-white">Reframing Mode</label>
+                <label className="text-xs font-bold text-slate-900">Reframing Mode</label>
                 <div className="space-y-2">
                   <label
                     onClick={() => { setReframeMode('single'); addToast('Single speaker auto-follow active', 'info'); }}
-                    className={`flex items-center gap-2 p-2 rounded text-xs cursor-pointer ${reframeMode === 'single' ? 'bg-surface-container border border-primary/50 text-white' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}`}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl text-xs cursor-pointer transition-colors ${reframeMode === 'single' ? 'bg-indigo-50 border border-indigo-200 text-indigo-900 font-semibold' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'}`}
                   >
-                    <input type="radio" checked={reframeMode === 'single'} readOnly className="accent-primary" />
+                    <input type="radio" checked={reframeMode === 'single'} readOnly className="accent-indigo-600" />
                     <span>Auto-Follow Active Speaker (Single 9:16)</span>
                   </label>
                   <label
                     onClick={() => { setReframeMode('split'); addToast('Split-screen dual host active', 'info'); }}
-                    className={`flex items-center gap-2 p-2 rounded text-xs cursor-pointer ${reframeMode === 'split' ? 'bg-surface-container border border-primary/50 text-white' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}`}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl text-xs cursor-pointer transition-colors ${reframeMode === 'split' ? 'bg-indigo-50 border border-indigo-200 text-indigo-900 font-semibold' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'}`}
                   >
-                    <input type="radio" checked={reframeMode === 'split'} readOnly className="accent-primary" />
+                    <input type="radio" checked={reframeMode === 'split'} readOnly className="accent-indigo-600" />
                     <span>Split-Screen Stack (Dual Hosts)</span>
                   </label>
                   <label
                     onClick={() => { setReframeMode('pan'); addToast('Cinematic pan & scan active', 'info'); }}
-                    className={`flex items-center gap-2 p-2 rounded text-xs cursor-pointer ${reframeMode === 'pan' ? 'bg-surface-container border border-primary/50 text-white' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}`}
+                    className={`flex items-center gap-2 p-2.5 rounded-xl text-xs cursor-pointer transition-colors ${reframeMode === 'pan' ? 'bg-indigo-50 border border-indigo-200 text-indigo-900 font-semibold' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'}`}
                   >
-                    <input type="radio" checked={reframeMode === 'pan'} readOnly className="accent-primary" />
+                    <input type="radio" checked={reframeMode === 'pan'} readOnly className="accent-indigo-600" />
                     <span>Cinematic Pan & Scan (Smoothed)</span>
                   </label>
                 </div>
               </div>
 
               <div className="space-y-1.5 pt-2">
-                <div className="flex justify-between text-xs font-mono text-outline">
+                <div className="flex justify-between text-xs font-sans text-slate-600">
                   <span>Camera Smoothness</span>
-                  <span>{smoothness}%</span>
+                  <span className="font-bold text-indigo-600">{smoothness}%</span>
                 </div>
                 <input
                   type="range"
@@ -840,13 +840,13 @@ export default function StudioPage() {
                   max="100"
                   value={smoothness}
                   onChange={(e) => setSmoothness(Number(e.target.value))}
-                  className="w-full accent-tertiary"
+                  className="w-full accent-indigo-600"
                 />
               </div>
 
-              <div className="p-3 rounded-lg bg-surface-container border border-surface-container-highest text-xs text-outline leading-relaxed">
-                <span className="text-white font-semibold flex items-center gap-1 mb-1">
-                  <span className="material-symbols-outlined text-tertiary text-[16px]">visibility</span>
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                <span className="text-slate-900 font-semibold flex items-center gap-1 mb-1">
+                  <span className="material-symbols-outlined text-indigo-600 text-[16px]">visibility</span>
                   Speaker Isolation Active
                 </span>
                 The neural net automatically pans the 9:16 crop window when audio decibels shift between speakers.
@@ -857,50 +857,50 @@ export default function StudioPage() {
           {/* Tab 3: Hooks */}
           {rightTab === 'hooks' && (
             <div className="p-4 space-y-3">
-              <span className="text-xs font-mono text-primary uppercase tracking-wider">AI Detected Hook Highlights</span>
+              <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">AI Detected Hook Highlights</span>
               
-              <div className="p-3 rounded-xl bg-surface-container border border-primary/60 flex flex-col gap-2">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-tertiary"></span> Hook Peak
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Hook Peak
                   </span>
-                  <span className="text-xs font-mono text-tertiary font-bold">98% Viral Prob</span>
+                  <span className="text-xs font-mono text-indigo-600 font-bold">98% Viral Prob</span>
                 </div>
-                <span className="text-[11px] text-on-surface-variant">"The exact blueprint why most creators burn out..."</span>
+                <span className="text-[11px] text-slate-600">"The exact blueprint why most creators burn out..."</span>
                 <div className="flex gap-2 mt-1">
                   <button
                     onClick={() => seekTo(8)}
-                    className="flex-1 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors"
+                    className="flex-1 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition-colors border border-slate-200"
                   >
                     Jump to 00:08
                   </button>
                   <button
                     onClick={() => addToast('Trimmed clip to Hook duration (0:34)', 'success')}
-                    className="px-2.5 py-1 rounded bg-primary-container text-white text-xs font-mono"
+                    className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700"
                   >
                     Trim
                   </button>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface-container-low border border-surface-container-highest flex flex-col gap-2">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-secondary"></span> Key Punchline
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-amber-500"></span> Key Punchline
                   </span>
-                  <span className="text-xs font-mono text-secondary font-bold">93% Viral Prob</span>
+                  <span className="text-xs font-mono text-indigo-600 font-bold">93% Viral Prob</span>
                 </div>
-                <span className="text-[11px] text-on-surface-variant">"Stop doing this today if you want to grow in 2026..."</span>
+                <span className="text-[11px] text-slate-600">"Stop doing this today if you want to grow in 2026..."</span>
                 <div className="flex gap-2 mt-1">
                   <button
                     onClick={() => seekTo(24)}
-                    className="flex-1 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white transition-colors"
+                    className="flex-1 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition-colors border border-slate-200"
                   >
                     Jump to 00:24
                   </button>
                   <button
                     onClick={() => addToast('Trimmed clip to Punchline duration', 'success')}
-                    className="px-2.5 py-1 rounded bg-surface-container-high text-white text-xs font-mono"
+                    className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700"
                   >
                     Trim
                   </button>
@@ -913,27 +913,27 @@ export default function StudioPage() {
 
       {/* EXPORT RENDER MODAL */}
       {isExportOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl bg-surface-container border border-surface-container-highest shadow-2xl p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 shadow-2xl p-6 space-y-4 animate-scaleUp">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[22px]">rocket_launch</span>
-                <h3 className="font-bold text-base text-white">Render & Export Short</h3>
+                <span className="material-symbols-outlined text-indigo-600 text-[22px]">rocket_launch</span>
+                <h3 className="font-bold text-base text-slate-900">Render & Export Short</h3>
               </div>
-              <button onClick={() => !isRendering && setIsExportOpen(false)} className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-white">
+              <button onClick={() => !isRendering && setIsExportOpen(false)} className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100">
                 <span className="material-symbols-outlined text-[18px]">close</span>
               </button>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-mono text-outline block mb-1">Export Resolution</label>
-                <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+                <label className="text-xs font-semibold text-slate-700 block mb-1.5">Export Resolution</label>
+                <div className="grid grid-cols-3 gap-2 text-xs font-sans">
                   {['1080p', '4k', '720p'].map((res) => (
                     <button
                       key={res}
                       onClick={() => setExportRes(res)}
-                      className={`p-2 rounded-lg text-center font-semibold transition-all ${exportRes === res ? 'bg-primary-container text-white border border-primary' : 'bg-surface-container-high text-outline hover:text-white'}`}
+                      className={`p-2.5 rounded-xl text-center font-semibold transition-all border ${exportRes === res ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
                     >
                       {res === '1080p' ? '1080p 60fps' : res === '4k' ? '4K Ultra-HD' : '720p Fast'}
                     </button>
@@ -942,32 +942,32 @@ export default function StudioPage() {
               </div>
 
               <div>
-                <label className="text-xs font-mono text-outline block mb-1">Direct Platform Format</label>
-                <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                  <label className="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
-                    <input type="checkbox" defaultChecked className="accent-primary" /> TikTok
+                <label className="text-xs font-semibold text-slate-700 block mb-1.5">Direct Platform Format</label>
+                <div className="grid grid-cols-3 gap-2 text-xs font-sans">
+                  <label className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer text-slate-800 font-medium">
+                    <input type="checkbox" defaultChecked className="accent-indigo-600" /> TikTok
                   </label>
-                  <label className="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
-                    <input type="checkbox" defaultChecked className="accent-primary" /> Shorts
+                  <label className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer text-slate-800 font-medium">
+                    <input type="checkbox" defaultChecked className="accent-indigo-600" /> Shorts
                   </label>
-                  <label className="p-2 rounded bg-surface-container-high flex items-center justify-center gap-1.5 cursor-pointer text-white">
-                    <input type="checkbox" defaultChecked className="accent-primary" /> Reels
+                  <label className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center gap-1.5 cursor-pointer text-slate-800 font-medium">
+                    <input type="checkbox" defaultChecked className="accent-indigo-600" /> Reels
                   </label>
                 </div>
               </div>
 
               {/* Progress Bar when rendering */}
               {isRendering && (
-                <div className="flex flex-col gap-2 p-3 rounded-xl bg-surface-container-lowest border border-surface-container-highest">
+                <div className="flex flex-col gap-2 p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-tertiary flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+                    <span className="text-cyan-400 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
                       {renderStepText}
                     </span>
                     <span className="text-white font-bold">{renderProgress}%</span>
                   </div>
-                  <div className="w-full h-2 bg-surface-container rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-primary-container to-tertiary rounded-full transition-all duration-300" style={{ width: `${renderProgress}%` }}></div>
+                  <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-300" style={{ width: `${renderProgress}%` }}></div>
                   </div>
                 </div>
               )}
@@ -977,14 +977,14 @@ export default function StudioPage() {
               <button
                 disabled={isRendering}
                 onClick={() => setIsExportOpen(false)}
-                className="flex-1 h-11 rounded-lg bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-on-surface transition-colors disabled:opacity-50"
+                className="flex-1 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition-colors border border-slate-200 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 disabled={isRendering}
                 onClick={handleStartRender}
-                className="flex-1 h-11 rounded-lg bg-gradient-to-r from-primary-container via-secondary-container to-tertiary text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all disabled:opacity-50"
+                className="flex-1 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all disabled:opacity-50"
               >
                 <span className="material-symbols-outlined text-[18px]">download</span>
                 <span>Download MP4</span>

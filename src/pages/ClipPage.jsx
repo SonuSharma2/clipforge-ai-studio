@@ -210,32 +210,32 @@ export default function ClipPage() {
   return (
     <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-28 space-y-8">
       {/* PAGE TITLE */}
-      <div className="flex flex-col space-y-2 text-center items-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-tertiary text-xs font-mono border border-surface-container-highest">
-          <span className="material-symbols-outlined text-[14px]">auto_videocam</span>
+      <div className="flex flex-col space-y-3 text-center items-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold border border-indigo-100">
+          <span className="material-symbols-outlined text-[15px]">auto_videocam</span>
           <span>Multimodal Neural Ingestion Engine</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
           Generate Viral Shorts From Any Video
         </h1>
-        <p className="text-xs sm:text-sm text-on-surface-variant max-w-lg">
+        <p className="text-xs sm:text-sm text-slate-600 max-w-lg leading-relaxed">
           Input podcasts, long interviews, webinars, or Twitch streams. Our AI will isolate hooks, crop speakers in 9:16, and generate ready-to-post clips.
         </p>
       </div>
 
       {/* INGESTION CONSOLE CARD */}
-      <div className="rounded-2xl bg-surface-container-low border border-surface-container-highest p-5 sm:p-6 shadow-2xl space-y-6">
+      <div className="rounded-2xl bg-white border border-slate-200 p-5 sm:p-7 shadow-sm space-y-6">
         {/* Source Selector Tabs */}
-        <div className="flex border-b border-surface-container-highest font-mono text-xs">
+        <div className="flex border-b border-slate-200 font-sans text-xs">
           <button
             onClick={() => setSourceTab('url')}
-            className={`pb-3 px-4 font-semibold flex items-center gap-1.5 transition-colors ${sourceTab === 'url' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+            className={`pb-3 px-4 font-semibold flex items-center gap-1.5 transition-colors ${sourceTab === 'url' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
           >
             <span className="material-symbols-outlined text-[16px]">link</span> Video URL
           </button>
           <button
             onClick={() => setSourceTab('upload')}
-            className={`pb-3 px-4 font-semibold flex items-center gap-1.5 transition-colors ${sourceTab === 'upload' ? 'text-primary border-b-2 border-primary' : 'text-outline hover:text-white'}`}
+            className={`pb-3 px-4 font-semibold flex items-center gap-1.5 transition-colors ${sourceTab === 'upload' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
           >
             <span className="material-symbols-outlined text-[16px]">upload_file</span> Upload Local Video
           </button>
@@ -245,40 +245,40 @@ export default function ClipPage() {
         {sourceTab === 'url' ? (
           <div className="space-y-4">
             <div className="relative flex items-center">
-              <span className="material-symbols-outlined text-[20px] text-tertiary absolute left-3.5">play_circle</span>
+              <span className="material-symbols-outlined text-[20px] text-indigo-600 absolute left-3.5">play_circle</span>
               <input
                 type="text"
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="Paste YouTube, Twitch, Vimeo or podcast link..."
-                className="w-full bg-surface-container-lowest text-on-surface font-mono text-xs sm:text-sm pl-11 pr-24 py-3.5 rounded-xl border border-surface-container focus:border-primary-container focus:outline-none transition-colors"
+                className="w-full bg-slate-50 text-slate-900 font-mono text-xs sm:text-sm pl-11 pr-24 py-3.5 rounded-xl border border-slate-200 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none transition-all placeholder:text-slate-400"
               />
               <button
                 onClick={() => setVideoUrl('')}
-                className="absolute right-3 px-2 py-1 rounded bg-surface-container text-xs font-mono text-outline hover:text-white"
+                className="absolute right-3 px-2.5 py-1 rounded-md bg-slate-200/80 text-xs font-sans font-medium text-slate-700 hover:bg-slate-300 transition-colors"
               >
                 Clear
               </button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-outline">
-              <span>Popular presets:</span>
+            <div className="flex flex-wrap items-center gap-2 text-[11px] font-sans text-slate-500">
+              <span className="font-semibold text-slate-600">Popular presets:</span>
               <button
                 onClick={() => { setVideoUrl('https://youtube.com/watch?v=lex_huberman_ai'); addToast('Loaded Lex & Huberman Podcast', 'info'); }}
-                className="hover:text-tertiary underline"
+                className="hover:text-indigo-600 underline font-medium"
               >
                 Lex & Huberman Podcast
               </button>
               <span>•</span>
               <button
                 onClick={() => { setVideoUrl('https://youtube.com/watch?v=hormozi_scale_100m'); addToast('Loaded Alex Hormozi Scaling', 'info'); }}
-                className="hover:text-primary underline"
+                className="hover:text-indigo-600 underline font-medium"
               >
                 Alex Hormozi Scaling
               </button>
               <span>•</span>
               <button
                 onClick={() => { setVideoUrl('https://youtube.com/watch?v=altman_agi_keynote'); addToast('Loaded Sam Altman AGI Keynote', 'info'); }}
-                className="hover:text-secondary underline"
+                className="hover:text-indigo-600 underline font-medium"
               >
                 Sam Altman AGI Keynote
               </button>
@@ -292,24 +292,24 @@ export default function ClipPage() {
                 setVideoUrl('local://podcast_raw_interview_ep42.mp4');
                 addToast('Selected "podcast_raw_interview_ep42.mp4" (1.2GB)', 'info');
               }}
-              className="border-2 border-dashed border-surface-container-highest hover:border-primary/50 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors bg-surface-container-lowest"
+              className="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-colors bg-slate-50/60 hover:bg-indigo-50/30"
             >
-              <span className="material-symbols-outlined text-4xl text-tertiary mb-2">cloud_upload</span>
-              <span className="text-sm font-semibold text-white">Click or drag & drop video file here</span>
-              <span className="text-xs font-mono text-outline mt-1">MP4, MOV, MKV up to 4GB supported</span>
+              <span className="material-symbols-outlined text-4xl text-indigo-600 mb-2">cloud_upload</span>
+              <span className="text-sm font-semibold text-slate-900">Click or drag & drop video file here</span>
+              <span className="text-xs font-mono text-slate-500 mt-1">MP4, MOV, MKV up to 4GB supported</span>
             </div>
           </div>
         )}
 
         {/* Advanced Parameters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2">
           {/* Target Duration */}
-          <div className="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
-            <label className="text-[11px] font-mono text-outline uppercase">Target Clip Duration</label>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1.5">
+            <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Target Clip Duration</label>
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none"
+              className="bg-white text-xs font-medium text-slate-900 p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-600 shadow-sm"
             >
               <option value="auto">Auto (Best Hooks)</option>
               <option value="30">30s (Shorts Standard)</option>
@@ -319,12 +319,12 @@ export default function ClipPage() {
           </div>
 
           {/* Caption Preset */}
-          <div className="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
-            <label className="text-[11px] font-mono text-outline uppercase">Caption Style Preset</label>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1.5">
+            <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Caption Style Preset</label>
             <select
               value={captionPreset}
               onChange={(e) => setCaptionPreset(e.target.value)}
-              className="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none"
+              className="bg-white text-xs font-medium text-slate-900 p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-600 shadow-sm"
             >
               <option value="hormozi">Hormozi Bold (Yellow)</option>
               <option value="mrbeast">MrBeast Punch (Cyan)</option>
@@ -334,10 +334,10 @@ export default function ClipPage() {
           </div>
 
           {/* Virality Threshold */}
-          <div className="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
-            <div className="flex justify-between text-[11px] font-mono text-outline uppercase">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1.5">
+            <div className="flex justify-between text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               <span>Virality Filter</span>
-              <span className="text-tertiary font-bold">&gt; {viralityThreshold}%</span>
+              <span className="text-indigo-600 font-bold">&gt; {viralityThreshold}%</span>
             </div>
             <input
               type="range"
@@ -345,17 +345,17 @@ export default function ClipPage() {
               max="95"
               value={viralityThreshold}
               onChange={(e) => setViralityThreshold(Number(e.target.value))}
-              className="accent-tertiary mt-2"
+              className="accent-indigo-600 mt-2"
             />
           </div>
 
           {/* Subtitle Language */}
-          <div className="p-3 rounded-xl bg-surface-container border border-surface-container-highest flex flex-col gap-1.5">
-            <label className="text-[11px] font-mono text-outline uppercase">Subtitle Language</label>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-1.5">
+            <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Subtitle Language</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="bg-surface-container-lowest text-xs font-mono text-white p-2 rounded-lg border border-surface-container focus:outline-none"
+              className="bg-white text-xs font-medium text-slate-900 p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-600 shadow-sm"
             >
               <option value="auto">Auto-Detect (40+ langs)</option>
               <option value="en">English (US / UK)</option>
@@ -372,7 +372,7 @@ export default function ClipPage() {
           <button
             disabled={isProcessing}
             onClick={runAnalysis}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-secondary-container via-primary-container to-tertiary text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(128,131,255,0.4)] hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50"
+            className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-indigo-500/25 transition-all disabled:opacity-50"
           >
             {isProcessing ? (
               <>
@@ -390,25 +390,25 @@ export default function ClipPage() {
 
         {/* Active Pipeline Terminal Box */}
         {isProcessing && (
-          <div className="flex flex-col gap-3 p-4 rounded-xl bg-surface-container-lowest border border-surface-container-highest animate-fadeIn">
+          <div className="flex flex-col gap-3 p-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 animate-fadeIn">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-tertiary flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+              <span className="text-cyan-400 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 {statusText}
               </span>
               <span className="text-white font-bold">{progress}%</span>
             </div>
-            <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-primary-container via-tertiary to-secondary-container rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
 
             {/* Live Terminal Log */}
-            <div className="p-2.5 rounded-lg bg-black/60 border border-surface-container-highest font-mono text-[11px] text-outline space-y-1 h-20 overflow-y-auto">
+            <div className="p-3 rounded-lg bg-black/60 border border-slate-800 font-mono text-[11px] text-slate-400 space-y-1 h-24 overflow-y-auto">
               {terminalLogs.map((log, i) => (
-                <div key={i} className={log.includes('[SUCCESS]') || log.includes('[READY]') ? 'text-tertiary' : ''}>
+                <div key={i} className={log.includes('[SUCCESS]') || log.includes('[READY]') ? 'text-emerald-400 font-semibold' : ''}>
                   {log}
                 </div>
               ))}
@@ -421,38 +421,38 @@ export default function ClipPage() {
       <div className="space-y-4 pt-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[22px]">video_library</span>
-            <h2 className="text-xl font-bold text-white">Generated Viral Shorts ({clipsList.length})</h2>
+            <span className="material-symbols-outlined text-indigo-600 text-[22px]">video_library</span>
+            <h2 className="text-xl font-bold text-slate-900">Generated Viral Shorts ({clipsList.length})</h2>
           </div>
           
           {/* Batch Actions */}
           <div className="flex items-center gap-2">
             <button
               onClick={downloadAll}
-              className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-xs font-mono text-tertiary flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm transition-colors"
             >
-              <span className="material-symbols-outlined text-[16px]">archive</span> Download All (ZIP)
+              <span className="material-symbols-outlined text-[16px] text-indigo-600">archive</span> Download All (ZIP)
             </button>
             <button
               onClick={() => addToast('Pushed 6 clips to content scheduler queue!', 'success')}
-              className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-xs font-mono text-on-surface flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm transition-colors"
             >
-              <span className="material-symbols-outlined text-[16px]">schedule_send</span> Auto-Schedule
+              <span className="material-symbols-outlined text-[16px] text-indigo-600">schedule_send</span> Auto-Schedule
             </button>
           </div>
         </div>
 
         {/* 6 Viral Clip Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {clipsList.map((clip) => (
             <div
               key={clip.id}
-              className="rounded-xl bg-surface-container-low border border-surface-container-highest p-3 flex flex-col justify-between space-y-3 shadow-lg group hover:border-primary/50 transition-all"
+              className="rounded-2xl bg-white border border-slate-200 p-3.5 flex flex-col justify-between space-y-3 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all group"
             >
               {/* Thumbnail Container */}
               <div
                 onClick={() => openVideo(clip)}
-                className="relative w-full aspect-[9/13] rounded-lg overflow-hidden bg-black cursor-pointer"
+                className="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-slate-950 cursor-pointer"
               >
                 <img
                   src={clip.image || clip.thumbnail}
@@ -461,15 +461,15 @@ export default function ClipPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
 
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md text-[10px] font-mono text-tertiary flex items-center gap-1 border border-tertiary/20">
+                <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md text-[10px] font-mono text-cyan-300 flex items-center gap-1 border border-cyan-400/20">
                   <span className="material-symbols-outlined text-[12px]">trending_up</span> Score {clip.score}
                 </div>
-                <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono text-white">
+                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono text-white">
                   {clip.duration}
                 </div>
 
                 <div className="absolute bottom-3 left-2 right-2 text-center">
-                  <span className="inline-block bg-[#8083ff] text-white font-bold text-xs px-2.5 py-1 rounded shadow-md uppercase">
+                  <span className="inline-block bg-indigo-600 text-white font-bold text-xs px-3 py-1 rounded-lg shadow-md uppercase tracking-wide">
                     "{clip.caption}"
                   </span>
                 </div>
@@ -477,26 +477,26 @@ export default function ClipPage() {
 
               {/* Clip Info */}
               <div className="space-y-1">
-                <div className="flex justify-between text-xs font-mono text-on-surface-variant">
-                  <span>{clip.style}</span>
-                  <span className="text-tertiary">{clip.estViews}</span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-semibold text-slate-800">{clip.style}</span>
+                  <span className="text-indigo-600 font-bold font-mono">{clip.estViews}</span>
                 </div>
-                <p className="text-xs text-outline line-clamp-2">{clip.desc}</p>
+                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{clip.desc}</p>
               </div>
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   onClick={() => loadClipToStudio(clip)}
-                  className="h-8 rounded bg-surface-container-high hover:bg-surface-bright text-xs font-mono text-white flex items-center justify-center gap-1 transition-colors"
+                  className="h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 border border-slate-200 transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[14px]">tune</span> Studio
+                  <span className="material-symbols-outlined text-[16px]">tune</span> Studio
                 </button>
                 <button
                   onClick={() => downloadSingle(clip)}
-                  className="h-8 rounded bg-primary-container hover:brightness-110 text-white text-xs font-mono flex items-center justify-center gap-1 shadow-sm transition-all"
+                  className="h-9 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center justify-center gap-1 shadow-sm transition-all"
                 >
-                  <span className="material-symbols-outlined text-[14px]">download</span> Export
+                  <span className="material-symbols-outlined text-[16px]">download</span> Export
                 </button>
               </div>
             </div>
