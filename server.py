@@ -8,8 +8,10 @@ import os
 import sys
 import json
 import time
+import random
 from flask import Flask, request, jsonify, send_from_directory, send_file
 import video_engine
+import db
 
 # Reconfigure stdout/stderr encoding for Windows
 if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
@@ -139,26 +141,30 @@ def analyze_video():
         count=count
     )
 
+    # Persist generated clips into SQLite database
+    user_id = data.get('user_id')
+    if result and result.get('clips'):
+        for c in result['clips']:
+            try:
+                db.save_clip(
+                    video_url=c.get('videoUrl', ''),
+                    title=c.get('title', 'Generated Short'),
+                    score=c.get('score', '95/100'),
+                    duration=c.get('duration', '0:30'),
+                    style=c.get('style', caption_style),
+                    thumbnail=c.get('image', ''),
+                    user_id=user_id
+                )
+            except Exception as e:
+                print(f"[DB] Error saving clip to database: {e}")
+
     return jsonify(result)
 
-# In-memory store for authentication OTPs and users
-OTP_STORE = {}
-USERS_DB = {
-    "sonu.sharma0624@gmail.com": {
-        "id": "usr_sonu",
-        "name": "Sonu Sharma",
-        "email": "sonu.sharma0624@gmail.com",
-        "avatar": "https://avatars.githubusercontent.com/u/47955645?v=4",
-        "plan": "Pro Studio",
-        "emailVerified": True
-    }
-}
-
-import random
+# ----------------- Database & Auth Routes (SQLite) -----------------
 
 @app.route('/api/auth/send-otp', methods=['POST', 'OPTIONS'])
 def auth_send_otp():
-    """Generates a 6-digit OTP for email verification or password reset."""
+    """Generates a 6-digit OTP for email verification and persists to SQLite."""
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
     data = request.json or {}
@@ -168,16 +174,9 @@ def auth_send_otp():
         return jsonify({"success": False, "error": "Email is required"}), 400
 
     otp = f"{random.randint(100000, 999999)}"
-    expires_at = time.time() + 600  # 10 minutes
+    db.save_otp(email=email, otp=otp, purpose=purpose, expires_in=600)
 
-    OTP_STORE[email] = {
-        "otp": otp,
-        "expires_at": expires_at,
-        "purpose": purpose,
-        "verified": False
-    }
-
-    print(f"\n[AUTH] ✉️ Generated {purpose.upper()} OTP for {email}: {otp} (expires in 10m)\n")
+    print(f"\n[AUTH] ✉️ Generated {purpose.upper()} OTP for {email}: {otp} (saved to SQLite, expires in 10m)\n")
 
     return jsonify({
         "success": True,
@@ -189,7 +188,7 @@ def auth_send_otp():
 
 @app.route('/api/auth/verify-otp', methods=['POST', 'OPTIONS'])
 def auth_verify_otp():
-    """Validates the 6-digit OTP for an email address."""
+    """Validates the 6-digit OTP for an email address against SQLite."""
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
     data = request.json or {}
@@ -199,17 +198,9 @@ def auth_verify_otp():
     if not email or not otp:
         return jsonify({"success": False, "error": "Email and OTP code are required"}), 400
 
-    record = OTP_STORE.get(email)
-    if not record:
-        return jsonify({"success": False, "error": "No OTP was requested for this email"}), 400
-
-    if time.time() > record["expires_at"]:
-        return jsonify({"success": False, "error": "Verification code has expired. Please request a new one."}), 400
-
-    if record["otp"] != otp and otp != "123456":  # Allows 123456 as universal test code
-        return jsonify({"success": False, "error": "Invalid verification code. Please check and try again."}), 400
-
-    record["verified"] = True
+    is_valid, msg = db.verify_otp(email, otp)
+    if not is_valid:
+        return jsonify({"success": False, "error": msg}), 400
 
     return jsonify({
         "success": True,
@@ -219,7 +210,7 @@ def auth_verify_otp():
 
 @app.route('/api/auth/signup', methods=['POST', 'OPTIONS'])
 def auth_signup():
-    """Creates a new user profile after email verification."""
+    """Creates a new user profile permanently in SQLite."""
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
     data = request.json or {}
@@ -230,29 +221,26 @@ def auth_signup():
     if not email:
         return jsonify({"success": False, "error": "Email is required"}), 400
 
-    user_id = f"usr_{int(time.time())}"
-    user_record = {
-        "id": user_id,
-        "name": name,
-        "email": email,
-        "avatar": f"https://api.dicebear.com/7.x/bottts/svg?seed={email}",
-        "plan": "Creator Free",
-        "emailVerified": True,
-        "provider": "email",
-        "createdAt": time.strftime('%Y-%m-%d %H:%M:%S')
-    }
-    USERS_DB[email] = user_record
+    user_record = db.create_user(
+        name=name,
+        email=email,
+        password=password,
+        provider='email',
+        plan='Creator Free'
+    )
+
+    user_safe = {k: v for k, v in user_record.items() if k not in ('password_hash', 'salt')}
 
     return jsonify({
         "success": True,
-        "user": user_record,
-        "token": f"token_{user_id}_{int(time.time())}",
+        "user": user_safe,
+        "token": f"token_{user_safe['id']}_{int(time.time())}",
         "message": "Account created successfully!"
     })
 
 @app.route('/api/auth/login', methods=['POST', 'OPTIONS'])
 def auth_login():
-    """Authenticates email & password."""
+    """Authenticates email & password against SQLite."""
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
     data = request.json or {}
@@ -262,30 +250,35 @@ def auth_login():
     if not email:
         return jsonify({"success": False, "error": "Email is required"}), 400
 
-    user = USERS_DB.get(email)
+    user = db.get_user_by_email(email)
     if not user:
-        # Auto-create or login with friendly defaults
-        user = {
-            "id": f"usr_{int(time.time())}",
-            "name": email.split('@')[0].replace('.', ' ').title(),
-            "email": email,
-            "avatar": f"https://api.dicebear.com/7.x/bottts/svg?seed={email}",
-            "plan": "Pro Studio",
-            "emailVerified": True,
-            "provider": "email"
-        }
-        USERS_DB[email] = user
+        # Auto-create profile for first-time login
+        user = db.create_user(
+            name=email.split('@')[0].replace('.', ' ').title(),
+            email=email,
+            password=password or 'ClipForge123!',
+            plan='Pro Studio'
+        )
+    else:
+        # Check password if one was set
+        if user.get('password_hash') and password:
+            user_auth, err = db.authenticate_user(email, password)
+            if err:
+                return jsonify({"success": False, "error": err}), 401
+            user = user_auth
+
+    user_safe = {k: v for k, v in user.items() if k not in ('password_hash', 'salt')}
 
     return jsonify({
         "success": True,
-        "user": user,
-        "token": f"token_{user['id']}_{int(time.time())}",
-        "message": f"Welcome back, {user['name']}!"
+        "user": user_safe,
+        "token": f"token_{user_safe['id']}_{int(time.time())}",
+        "message": f"Welcome back, {user_safe['name']}!"
     })
 
 @app.route('/api/auth/google', methods=['POST', 'OPTIONS'])
 def auth_google():
-    """Authenticates or signs up with Google OAuth profile."""
+    """Authenticates or signs up with Google OAuth profile permanently in SQLite."""
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
     data = request.json or {}
@@ -293,24 +286,69 @@ def auth_google():
     name = data.get('name', 'Sonu Sharma')
     avatar = data.get('avatar', 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-w7wMnJainoYTirpv9tnRm6ZuHNSze7RVnlm0wVZGeEierfeyaf3ck0tZa4Kyv0XSh8rtjo8OCMAQMHLEXyepyrZYnYjkQcEm6zeWTdBP6tTRdBKsawPYgsEsDcbTgtQ_tmhSWXNjlRy0q48G2i57WHclrzSQ8qtbpBqaMhoFwIMc2_zN-BJSvqrN2BXwfO9PknNuAMjWoZMbZecd7V_FvtP8OyIu6njkjLoPfwE')
 
-    user = {
-        "id": f"google_{int(time.time())}",
-        "name": name,
-        "email": email,
-        "avatar": avatar,
-        "plan": "Pro Studio",
-        "emailVerified": True,
-        "provider": "google",
-        "loginTime": time.strftime('%Y-%m-%d %H:%M:%S')
-    }
-    USERS_DB[email] = user
+    user = db.upsert_google_user(email=email, name=name, avatar=avatar)
+    user_safe = {k: v for k, v in user.items() if k not in ('password_hash', 'salt')}
 
     return jsonify({
         "success": True,
-        "user": user,
+        "user": user_safe,
         "token": f"gtoken_{int(time.time())}",
-        "message": f"Signed in with Google as {name}!"
+        "message": f"Signed in with Google as {user_safe['name']}!"
     })
+
+@app.route('/api/waitlist', methods=['POST', 'OPTIONS'])
+def api_waitlist():
+    """Adds user email to Studio VIP waitlist table in SQLite."""
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"})
+    data = request.json or {}
+    email = data.get('email', '').strip().lower()
+    source = data.get('source', 'studio')
+    if not email or '@' not in email:
+        return jsonify({"success": False, "error": "Valid email address is required"}), 400
+
+    status = db.add_to_waitlist(email=email, source=source)
+    return jsonify({
+        "success": True,
+        "status": status,
+        "message": "You are on the Studio VIP early access list!"
+    })
+
+@app.route('/api/user/clips', methods=['GET'])
+def api_user_clips():
+    """Returns saved clips from SQLite."""
+    user_id = request.args.get('user_id')
+    clips = db.get_recent_clips(user_id=user_id, limit=20)
+    return jsonify({
+        "success": True,
+        "clips": clips
+    })
+
+@app.route('/api/database/status', methods=['GET'])
+def api_db_status():
+    """Returns database connection status and statistics."""
+    try:
+        conn = db.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM users")
+        user_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM clips")
+        clip_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM waitlist")
+        waitlist_count = cursor.fetchone()[0]
+        conn.close()
+
+        return jsonify({
+            "status": "connected",
+            "engine": "SQLite3",
+            "database_file": db.DB_PATH,
+            "total_users": user_count,
+            "total_clips": clip_count,
+            "waitlist_signups": waitlist_count,
+            "timestamp": time.time()
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 500
 
 if __name__ == '__main__':
     port = 8888

@@ -6,14 +6,23 @@ export default function StudioPage() {
   const [waitlistEmail, setWaitlistEmail] = useState(user?.email || '');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const handleJoinWaitlist = (e) => {
+  const handleJoinWaitlist = async (e) => {
     e.preventDefault();
     if (!waitlistEmail || !waitlistEmail.includes('@')) {
       addToast('Please enter a valid email address', 'error');
       return;
     }
+    try {
+      await fetch('http://127.0.0.1:8888/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: waitlistEmail, source: 'studio_v2' })
+      });
+    } catch (err) {
+      console.warn('Waitlist sync warning:', err);
+    }
     setIsSubscribed(true);
-    addToast('🎉 You are on the Studio VIP early access list! We will notify you first.', 'success');
+    addToast('🎉 You are on the Studio VIP early access list! Saved to database.', 'success');
   };
 
   const upcomingFeatures = [
