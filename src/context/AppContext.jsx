@@ -3,7 +3,21 @@ import React, { createContext, useContext, useState } from 'react';
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const [currentPage, setCurrentPage] = useState('home'); // home, studio, clip, features, pricing, templates
+  const [currentPage, setCurrentPage] = useState('home'); // home, studio, clip, features, pricing, templates, auth
+  const [authMode, setAuthMode] = useState('login'); // login, signup, otp, forgot
+  const [pendingEmail, setPendingEmail] = useState('');
+  const [demoOtp, setDemoOtp] = useState('');
+
+  // Persisted user session
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('clipforge_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
   const [generatedClips, setGeneratedClips] = useState(null);
   const [lastAnalyzedUrl, setLastAnalyzedUrl] = useState('');
   
@@ -24,6 +38,32 @@ export function AppProvider({ children }) {
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3500);
+  };
+
+  const loginUser = (userData) => {
+    setUser(userData);
+    try {
+      localStorage.setItem('clipforge_user', JSON.stringify(userData));
+    } catch (e) {
+      console.error(e);
+    }
+    addToast(`Welcome, ${userData.name || 'Creator'}!`, 'success');
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    try {
+      localStorage.removeItem('clipforge_user');
+    } catch (e) {
+      console.error(e);
+    }
+    addToast('You have been logged out.', 'info');
+  };
+
+  const navigateToAuth = (mode = 'login', email = '') => {
+    setAuthMode(mode);
+    if (email) setPendingEmail(email);
+    setCurrentPage('auth');
   };
 
   const openVideo = (clip) => {
@@ -60,6 +100,16 @@ export function AppProvider({ children }) {
       value={{
         currentPage,
         setCurrentPage,
+        authMode,
+        setAuthMode,
+        pendingEmail,
+        setPendingEmail,
+        demoOtp,
+        setDemoOtp,
+        user,
+        loginUser,
+        logoutUser,
+        navigateToAuth,
         generatedClips,
         setGeneratedClips,
         lastAnalyzedUrl,

@@ -11,6 +11,7 @@ import ClipPage from './pages/ClipPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
 import TemplatesPage from './pages/TemplatesPage';
+import AuthPage from './pages/AuthPage';
 
 export default function App() {
   const { currentPage } = useApp();
@@ -21,13 +22,14 @@ export default function App() {
       {currentPage !== 'studio' && <Header />}
 
       {/* Dynamic Module Content */}
-      <div className="flex-1 flex flex-col">
+      <div className={`flex-1 flex flex-col ${currentPage !== 'studio' ? 'pt-16' : ''}`}>
         {currentPage === 'home' && <HomePage />}
         {currentPage === 'studio' && <StudioPage />}
         {currentPage === 'clip' && <ClipPage />}
         {currentPage === 'features' && <FeaturesPage />}
         {currentPage === 'pricing' && <PricingPage />}
         {currentPage === 'templates' && <TemplatesPage />}
+        {currentPage === 'auth' && <AuthPage />}
       </div>
 
       {/* Global Real Video Modal Player */}

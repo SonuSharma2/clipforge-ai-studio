@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function BottomNav() {
-  const { currentPage, setCurrentPage } = useApp();
+  const { currentPage, setCurrentPage, user, navigateToAuth } = useApp();
 
   return (
     <nav className="md:hidden fixed bottom-0 w-full z-50 pb-safe glass-bottom-nav">
@@ -57,6 +57,30 @@ export default function BottomNav() {
         >
           <span className="material-symbols-outlined text-[20px]">payments</span>
           <span className="text-[10px] font-mono">Pricing</span>
+        </button>
+
+        <button
+          onClick={() => {
+            if (user) {
+              setCurrentPage('studio');
+            } else {
+              navigateToAuth('login');
+            }
+          }}
+          className={`flex flex-col items-center justify-center min-w-[44px] min-h-[44px] transition-colors ${
+            currentPage === 'auth' ? 'text-[#c0c1ff]' : 'text-[#c7c4d7] hover:text-[#e2e2ea]'
+          }`}
+        >
+          {user ? (
+            <img
+              src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
+              alt=""
+              className="w-5 h-5 rounded-full object-cover border border-[#8083ff]"
+            />
+          ) : (
+            <span className="material-symbols-outlined text-[20px]">account_circle</span>
+          )}
+          <span className="text-[10px] font-mono">{user ? 'Account' : 'Sign In'}</span>
         </button>
       </div>
     </nav>

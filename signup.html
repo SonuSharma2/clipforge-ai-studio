@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Sign In & Sign Up - ClipForge AI Video Studio</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111319",
+            "surface-dim": "#111319",
+            "surface-bright": "#373940",
+            "surface-container-lowest": "#0c0e14",
+            "surface-container-low": "#191b22",
+            "surface-container": "#1d1f26",
+            "surface-container-high": "#282a30",
+            "surface-container-highest": "#33343b",
+            "on-surface": "#e2e2ea",
+            "on-surface-variant": "#c7c4d7",
+            "primary": "#c0c1ff",
+            "primary-container": "#8083ff",
+            "secondary-container": "#571bc1",
+            "tertiary": "#4cd7f6"
+          },
+          fontFamily: {
+            sans: ["Geist", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/shared.css"/>
+</head>
+<body class="bg-[#111319] text-[#e2e2ea] font-sans min-h-screen flex flex-col selection:bg-[#8083ff] selection:text-white relative overflow-x-hidden">
+
+  <!-- Background decorative light orbs -->
+  <div class="fixed top-1/4 left-1/4 w-96 h-96 bg-[#8083ff]/15 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="fixed bottom-1/4 right-1/4 w-96 h-96 bg-[#4cd7f6]/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+  <!-- Header -->
+  <header class="w-full h-16 border-b border-[#33343b] px-6 flex items-center justify-between z-20 backdrop-blur-md bg-[#111319]/80 sticky top-0">
+    <a href="/" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#571bc1] via-[#8083ff] to-[#4cd7f6] flex items-center justify-center text-white shadow-[0_0_12px_rgba(128,131,255,0.4)]">
+        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+      </div>
+      <span class="text-lg font-bold tracking-tight text-white">ClipForge AI</span>
+    </a>
+    <a href="/" class="text-xs font-semibold text-[#c7c4d7] hover:text-white flex items-center gap-1">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      <span>Back to Home</span>
+    </a>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex items-center justify-center p-4 md:p-8 z-10">
+    <div class="w-full max-w-5xl rounded-3xl bg-[#191b22]/90 border border-[#33343b] shadow-2xl backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12 overflow-hidden my-6">
+      
+      <!-- Left Column: Social Proof (Desktop) -->
+      <div class="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-[#1d1f26] via-[#161820] to-[#0c0e14] p-10 flex-col justify-between border-r border-[#33343b]">
+        <div class="flex flex-col gap-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#571bc1] via-[#8083ff] to-[#4cd7f6] flex items-center justify-center text-white shadow-lg">
+              <span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-lg font-bold text-white">ClipForge AI</span>
+              <span class="text-xs text-[#8083ff] font-mono">Next-Gen Video Suite</span>
+            </div>
+          </div>
+
+          <h2 class="text-2xl font-extrabold text-white leading-tight">
+            Turn Any Long Video Into <span class="bg-gradient-to-r from-[#c0c1ff] via-[#8083ff] to-[#4cd7f6] bg-clip-text text-transparent">Viral Shorts</span> in Seconds.
+          </h2>
+
+          <div class="p-4 rounded-2xl bg-[#191b22] border border-[#33343b] flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <img src="https://avatars.githubusercontent.com/u/47955645?v=4" class="w-8 h-8 rounded-full border border-[#8083ff]/40" alt=""/>
+                <div class="flex flex-col">
+                  <span class="text-xs font-semibold text-white">Sonu Sharma</span>
+                  <span class="text-[10px] text-[#908fa0]">Top Tech Creator • 850k+ Followers</span>
+                </div>
+              </div>
+              <span class="text-amber-400 text-xs">★★★★★</span>
+            </div>
+            <p class="text-xs text-[#c7c4d7] italic">
+              "The smart multi-segment slicing picked the exact peak moments that exploded on YouTube Shorts and TikTok."
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2.5 pt-6 border-t border-[#33343b]">
+          <div class="flex items-center gap-2 text-xs text-[#c7c4d7]">
+            <span class="text-emerald-400 font-bold">✓</span>
+            <span>60 Free GPU Processing Minutes</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-[#c7c4d7]">
+            <span class="text-emerald-400 font-bold">✓</span>
+            <span>Automatic 9:16 Vertical Video Reframing</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-[#c7c4d7]">
+            <span class="text-emerald-400 font-bold">✓</span>
+            <span>Email OTP Verification & Google OAuth</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Card -->
+      <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+
+        <!-- Tabs -->
+        <div id="tabs-container" class="flex rounded-xl bg-[#111319] p-1 border border-[#33343b] mb-6 max-w-sm mx-auto w-full">
+          <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-semibold rounded-lg bg-[#8083ff] text-white shadow-md transition-all">
+            Sign In
+          </button>
+          <button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-semibold rounded-lg text-[#c7c4d7] hover:text-white transition-all">
+            Create Account
+          </button>
+        </div>
+
+        <!-- Social Buttons -->
+        <div id="social-buttons" class="flex flex-col gap-3 mb-6">
+          <button onclick="openGoogleModal()" class="w-full h-12 rounded-xl bg-white hover:bg-neutral-100 text-[#1f1f1f] font-semibold text-sm flex items-center justify-center gap-3 transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <div class="relative flex items-center justify-center my-2">
+            <div class="border-t border-[#33343b] w-full"></div>
+            <span class="bg-[#191b22] px-3 text-[11px] font-mono uppercase text-[#908fa0] tracking-wider absolute">
+              Or continue with email
+            </span>
+          </div>
+        </div>
+
+        <!-- FORM: LOGIN -->
+        <form id="form-login" onsubmit="handleStaticLogin(event)" class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-[#c7c4d7]">Email Address</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[#908fa0] text-[20px]">mail</span>
+              <input id="login-email" type="email" placeholder="creator@domain.com" required class="w-full h-11 pl-10 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"/>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-[#c7c4d7]">Password</label>
+              <a href="#" onclick="showOtpScreen('sonu.sharma0624@gmail.com', 'password reset')" class="text-xs text-[#8083ff] hover:underline">Forgot password?</a>
+            </div>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[#908fa0] text-[20px]">lock</span>
+              <input id="login-pass" type="password" placeholder="••••••••••••" required class="w-full h-11 pl-10 pr-10 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"/>
+              <button type="button" onclick="togglePassVisibility('login-pass')" class="absolute right-3 text-[#908fa0] hover:text-white">
+                <span class="material-symbols-outlined text-[20px]">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full h-12 mt-2 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:opacity-95 transition-all">
+            <span>Sign In to Studio</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- FORM: SIGN UP -->
+        <form id="form-signup" onsubmit="handleStaticSignUp(event)" class="hidden flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-[#c7c4d7]">Full Name</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[#908fa0] text-[20px]">person</span>
+              <input id="signup-name" type="text" placeholder="Sonu Sharma" required class="w-full h-11 pl-10 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"/>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-[#c7c4d7]">Work or Personal Email</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[#908fa0] text-[20px]">mail</span>
+              <input id="signup-email" type="email" placeholder="creator@domain.com" required class="w-full h-11 pl-10 pr-4 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"/>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-[#c7c4d7]">Create Password</label>
+            <div class="relative flex items-center">
+              <span class="material-symbols-outlined absolute left-3 text-[#908fa0] text-[20px]">lock</span>
+              <input id="signup-pass" type="password" placeholder="••••••••••••" required oninput="calcStrength(this.value)" class="w-full h-11 pl-10 pr-10 rounded-xl bg-[#111319] border border-[#33343b] text-white text-sm focus:outline-none focus:border-[#8083ff]"/>
+              <button type="button" onclick="togglePassVisibility('signup-pass')" class="absolute right-3 text-[#908fa0] hover:text-white">
+                <span class="material-symbols-outlined text-[20px]">visibility</span>
+              </button>
+            </div>
+            <div id="strength-container" class="hidden flex-col gap-1 mt-1">
+              <div class="flex justify-between text-[11px] text-[#908fa0]">
+                <span>Strength:</span>
+                <span id="strength-label" class="font-semibold text-white">Weak</span>
+              </div>
+              <div class="w-full h-1 bg-[#111319] rounded-full overflow-hidden">
+                <div id="strength-bar" class="h-full bg-red-500 w-1/4 transition-all"></div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full h-12 mt-2 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:opacity-95 transition-all">
+            <span>Verify Email & Create Account</span>
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+          </button>
+        </form>
+
+        <!-- SCREEN: OTP VERIFICATION -->
+        <div id="screen-otp" class="hidden flex-col items-center text-center animate-fadeIn">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#571bc1]/30 to-[#8083ff]/20 border border-[#8083ff]/40 flex items-center justify-center text-[#c0c1ff] shadow-lg mb-4">
+            <span class="material-symbols-outlined text-[32px]">mark_email_read</span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-white mb-2">Check Your Email</h3>
+          <p class="text-sm text-[#c7c4d7] mb-1">We've sent a 6-digit verification code to:</p>
+          <div class="text-sm font-semibold text-[#8083ff] font-mono bg-[#111319] px-3 py-1 rounded-lg border border-[#33343b] mb-6" id="otp-target-email">
+            sonu.sharma0624@gmail.com
+          </div>
+
+          <!-- 6 Inputs -->
+          <div class="flex items-center justify-center gap-2 sm:gap-3 mb-6">
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+            <input type="text" maxlength="1" class="otp-box w-11 h-14 text-center text-2xl font-bold font-mono rounded-xl bg-[#111319] border border-[#33343b] text-white focus:border-[#8083ff] focus:outline-none"/>
+          </div>
+
+          <!-- Demo Auto-Fill -->
+          <div class="mb-6 p-2.5 rounded-xl bg-[#282a30] border border-[#8083ff]/30 flex items-center gap-3 text-xs">
+            <span class="text-[#c7c4d7]">Instant Test Code: <strong class="text-white font-mono" id="demo-otp-val">386036</strong></span>
+            <button onclick="autoFillOtp()" class="ml-auto px-2.5 py-1 rounded-lg bg-[#8083ff] text-white font-semibold text-[11px]">Auto-Fill</button>
+          </div>
+
+          <button onclick="verifyAndRedirect()" class="w-full max-w-sm h-12 rounded-xl bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg mb-4">
+            <span>Verify & Launch Studio</span>
+            <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Google Modal Popup -->
+  <div id="google-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white text-neutral-900 shadow-2xl overflow-hidden">
+      <div class="p-6 border-b border-neutral-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <div class="flex flex-col">
+            <span class="font-semibold text-base">Sign in with Google</span>
+            <span class="text-xs text-neutral-500">to continue to ClipForge AI Studio</span>
+          </div>
+        </div>
+        <button onclick="closeGoogleModal()" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center text-neutral-400">✕</button>
+      </div>
+
+      <div class="p-4 flex flex-col gap-2">
+        <button onclick="finishGoogleLogin('Sonu Sharma', 'sonu.sharma0624@gmail.com')" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-neutral-100 transition-colors text-left">
+          <img src="https://avatars.githubusercontent.com/u/47955645?v=4" class="w-10 h-10 rounded-full border border-neutral-300 object-cover" alt=""/>
+          <div class="flex flex-col flex-1">
+            <span class="text-sm font-semibold text-neutral-900">Sonu Sharma</span>
+            <span class="text-xs text-neutral-500">sonu.sharma0624@gmail.com</span>
+          </div>
+          <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Active</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeOtp = '386036';
+
+    function switchAuthTab(tab) {
+      const loginTab = document.getElementById('tab-login');
+      const signupTab = document.getElementById('tab-signup');
+      const formLogin = document.getElementById('form-login');
+      const formSignup = document.getElementById('form-signup');
+      const social = document.getElementById('social-buttons');
+
+      if (tab === 'login') {
+        loginTab.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-[#8083ff] text-white shadow-md transition-all";
+        signupTab.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-[#c7c4d7] hover:text-white transition-all";
+        formLogin.classList.remove('hidden');
+        formSignup.classList.add('hidden');
+        formLogin.classList.add('flex');
+        formSignup.classList.remove('flex');
+      } else {
+        signupTab.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-[#8083ff] text-white shadow-md transition-all";
+        loginTab.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-[#c7c4d7] hover:text-white transition-all";
+        formSignup.classList.remove('hidden');
+        formLogin.classList.add('hidden');
+        formSignup.classList.add('flex');
+        formLogin.classList.remove('flex');
+      }
+    }
+
+    function togglePassVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function calcStrength(val) {
+      const container = document.getElementById('strength-container');
+      const bar = document.getElementById('strength-bar');
+      const label = document.getElementById('strength-label');
+      if (!val) {
+        container.classList.add('hidden');
+        return;
+      }
+      container.classList.remove('hidden');
+      container.classList.add('flex');
+      if (val.length < 6) {
+        bar.className = "h-full bg-red-500 w-1/4 transition-all";
+        label.innerText = "Weak";
+      } else if (val.length < 10) {
+        bar.className = "h-full bg-amber-500 w-2/4 transition-all";
+        label.innerText = "Fair";
+      } else {
+        bar.className = "h-full bg-emerald-400 w-full transition-all";
+        label.innerText = "Strong";
+      }
+    }
+
+    function openGoogleModal() {
+      const modal = document.getElementById('google-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeGoogleModal() {
+      const modal = document.getElementById('google-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function finishGoogleLogin(name, email) {
+      localStorage.setItem('clipforge_user', JSON.stringify({
+        name: name,
+        email: email,
+        avatar: 'https://avatars.githubusercontent.com/u/47955645?v=4',
+        plan: 'Pro Studio',
+        provider: 'google'
+      }));
+      window.location.href = '/';
+    }
+
+    function handleStaticLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      localStorage.setItem('clipforge_user', JSON.stringify({
+        name: email.split('@')[0],
+        email: email,
+        avatar: 'https://avatars.githubusercontent.com/u/47955645?v=4',
+        plan: 'Pro Studio'
+      }));
+      window.location.href = '/';
+    }
+
+    function handleStaticSignUp(e) {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value;
+      showOtpScreen(email, 'verification');
+    }
+
+    function showOtpScreen(email, purpose) {
+      document.getElementById('tabs-container').classList.add('hidden');
+      document.getElementById('social-buttons').classList.add('hidden');
+      document.getElementById('form-login').classList.add('hidden');
+      document.getElementById('form-signup').classList.add('hidden');
+      document.getElementById('otp-target-email').innerText = email;
+      const screenOtp = document.getElementById('screen-otp');
+      screenOtp.classList.remove('hidden');
+      screenOtp.classList.add('flex');
+
+      // Attempt real OTP API call
+      fetch('http://127.0.0.1:8888/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, purpose: purpose })
+      }).then(res => res.json()).then(data => {
+        if (data.demoOtp) {
+          activeOtp = data.demoOtp;
+          document.getElementById('demo-otp-val').innerText = activeOtp;
+        }
+      }).catch(() => {});
+
+      // Setup OTP inputs
+      setupOtpInputs();
+    }
+
+    function setupOtpInputs() {
+      const boxes = document.querySelectorAll('.otp-box');
+      boxes.forEach((box, idx) => {
+        box.addEventListener('input', (e) => {
+          if (box.value && idx < boxes.length - 1) {
+            boxes[idx + 1].focus();
+          }
+        });
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !box.value && idx > 0) {
+            boxes[idx - 1].focus();
+          }
+        });
+      });
+    }
+
+    function autoFillOtp() {
+      const boxes = document.querySelectorAll('.otp-box');
+      const chars = activeOtp.split('');
+      boxes.forEach((box, i) => {
+        if (chars[i]) box.value = chars[i];
+      });
+    }
+
+    function verifyAndRedirect() {
+      const email = document.getElementById('otp-target-email').innerText;
+      localStorage.setItem('clipforge_user', JSON.stringify({
+        name: email.split('@')[0],
+        email: email,
+        avatar: 'https://avatars.githubusercontent.com/u/47955645?v=4',
+        plan: 'Pro Studio'
+      }));
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>

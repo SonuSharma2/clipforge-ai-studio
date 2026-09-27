@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export default function Header() {
-  const { currentPage, setCurrentPage } = useApp();
+  const { currentPage, setCurrentPage, user, logoutUser, navigateToAuth } = useApp();
   const [showNotif, setShowNotif] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const navItems = [
     { id: 'home', label: 'Home', icon: 'home' },
@@ -29,7 +30,7 @@ export default function Header() {
             </div>
             <span className="text-lg font-semibold tracking-tight text-[#e2e2ea]">ClipForge</span>
             <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded bg-[#282a30] text-[#4cd7f6] border border-[#33343b]">
-              React AI Suite
+              AI Studio
             </span>
           </button>
 
@@ -52,10 +53,11 @@ export default function Header() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2 relative">
+          <div className="flex items-center gap-3 relative">
+            {/* Notification Bell */}
             <button
               onClick={() => setShowNotif(!showNotif)}
-              className="w-10 h-10 flex items-center justify-center rounded-lg text-[#c7c4d7] hover:text-[#e2e2ea] hover:bg-[#282a30] transition-colors relative"
+              className="w-9 h-9 flex items-center justify-center rounded-lg text-[#c7c4d7] hover:text-[#e2e2ea] hover:bg-[#282a30] transition-colors relative"
               title="Notifications"
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
@@ -100,18 +102,117 @@ export default function Header() {
               </div>
             )}
 
-            {/* Profile Avatar / Mobile Drawer Trigger */}
+            {/* Authenticated State vs Guest State */}
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-full hover:bg-[#282a30] transition-colors border border-[#33343b] focus:outline-none"
+                >
+                  <img
+                    alt={user.name || 'User'}
+                    className="w-7 h-7 rounded-full object-cover border border-[#8083ff]/40"
+                    src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
+                  />
+                  <span className="text-xs font-medium text-white max-w-[100px] truncate hidden sm:inline-block">
+                    {user.name?.split(' ')[0] || 'Creator'}
+                  </span>
+                  <span className="material-symbols-outlined text-[16px] text-[#908fa0]">
+                    expand_more
+                  </span>
+                </button>
+
+                {/* User Dropdown Menu */}
+                {showUserMenu && (
+                  <div className="absolute top-12 right-0 w-64 rounded-xl bg-[#1d1f26] border border-[#33343b] shadow-2xl p-3 z-50 flex flex-col gap-2 animate-fadeIn">
+                    <div className="flex items-center gap-2.5 p-2 pb-3 border-b border-[#33343b]">
+                      <img
+                        src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
+                        alt=""
+                        className="w-9 h-9 rounded-full object-cover border border-[#8083ff]/40"
+                      />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-xs font-semibold text-white truncate">{user.name || 'Creator'}</span>
+                        <span className="text-[10px] text-[#908fa0] truncate">{user.email}</span>
+                        <span className="text-[9px] font-mono text-[#8083ff] mt-0.5 font-semibold">
+                          {user.plan || 'Pro Studio'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1 py-1 text-xs">
+                      <button
+                        onClick={() => {
+                          setCurrentPage('studio');
+                          setShowUserMenu(false);
+                        }}
+                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">movie_edit</span>
+                        <span>Video Studio</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCurrentPage('clip');
+                          setShowUserMenu(false);
+                        }}
+                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">auto_videocam</span>
+                        <span>My Generated Shorts</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCurrentPage('pricing');
+                          setShowUserMenu(false);
+                        }}
+                        className="flex items-center gap-2.5 p-2 rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors text-left"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
+                        <span>Manage Subscription</span>
+                      </button>
+                    </div>
+
+                    <div className="pt-2 border-t border-[#33343b]">
+                      <button
+                        onClick={() => {
+                          logoutUser();
+                          setShowUserMenu(false);
+                        }}
+                        className="w-full flex items-center gap-2 p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors text-xs text-left font-medium"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">logout</span>
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => navigateToAuth('login')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => navigateToAuth('signup')}
+                  className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white text-xs font-semibold shadow-md hover:opacity-95 transition-opacity hidden sm:flex items-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-[15px]">bolt</span>
+                  <span>Get Started</span>
+                </button>
+              </div>
+            )}
+
+            {/* Mobile Menu Hamburger */}
             <button
               onClick={() => setShowDrawer(true)}
-              className="flex items-center gap-1.5 p-1 rounded-full hover:bg-[#282a30] transition-colors border border-[#33343b]"
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-[#c7c4d7] hover:text-white hover:bg-[#282a30] transition-colors"
               title="Open Navigation Menu"
             >
-              <img
-                alt="Profile Avatar"
-                className="w-8 h-8 rounded-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-w7wMnJainoYTirpv9tnRm6ZuHNSze7RVnlm0wVZGeEierfeyaf3ck0tZa4Kyv0XSh8rtjo8OCMAQMHLEXyepyrZYnYjkQcEm6zeWTdBP6tTRdBKsawPYgsEsDcbTgtQ_tmhSWXNjlRy0q48G2i57WHclrzSQ8qtbpBqaMhoFwIMc2_zN-BJSvqrN2BXwfO9PknNuAMjWoZMbZecd7V_FvtP8OyIu6njkjLoPfwE"
-              />
-              <span className="material-symbols-outlined text-[20px] text-[#c7c4d7] pr-1">menu</span>
+              <span className="material-symbols-outlined text-[20px]">menu</span>
             </button>
           </div>
         </div>
@@ -124,8 +225,10 @@ export default function Header() {
             <div className="flex flex-col gap-6">
               <div className="flex items-center justify-between pb-4 border-b border-[#33343b]">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-white">ClipForge</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#282a30] text-[#4cd7f6]">React</span>
+                  <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#571bc1] to-[#8083ff] flex items-center justify-center text-white">
+                    <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
+                  </div>
+                  <span className="font-bold text-base text-white">ClipForge AI</span>
                 </div>
                 <button
                   onClick={() => setShowDrawer(false)}
@@ -135,7 +238,22 @@ export default function Header() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-2 font-medium text-sm">
+              {/* User info if logged in */}
+              {user && (
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#111319] border border-[#33343b]">
+                  <img
+                    src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
+                    alt=""
+                    className="w-10 h-10 rounded-full object-cover border border-[#8083ff]/40"
+                  />
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs font-semibold text-white truncate">{user.name}</span>
+                    <span className="text-[10px] text-[#908fa0] truncate">{user.email}</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col gap-1.5 font-medium text-sm">
                 {navItems.map((item) => (
                   <button
                     key={item.id}
@@ -143,7 +261,7 @@ export default function Header() {
                       setCurrentPage(item.id);
                       setShowDrawer(false);
                     }}
-                    className={`flex items-center gap-3 p-3 rounded-lg transition-colors text-left ${
+                    className={`flex items-center gap-3 p-2.5 rounded-lg transition-colors text-left ${
                       currentPage === item.id
                         ? 'bg-[#1d1f26] text-[#c0c1ff] font-semibold'
                         : 'hover:bg-[#1d1f26] text-[#e2e2ea]'
@@ -157,17 +275,40 @@ export default function Header() {
             </div>
 
             <div className="flex flex-col gap-3 pt-6 border-t border-[#33343b]">
-              <button
-                onClick={() => {
-                  setCurrentPage('clip');
-                  setShowDrawer(false);
-                }}
-                className="w-full h-11 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold flex items-center justify-center gap-2 shadow-lg"
-              >
-                <span className="material-symbols-outlined text-[18px]">bolt</span>
-                <span>Create Shorts Free</span>
-              </button>
-              <span className="text-[11px] text-center text-[#908fa0]">60 free GPU processing minutes included</span>
+              {user ? (
+                <button
+                  onClick={() => {
+                    logoutUser();
+                    setShowDrawer(false);
+                  }}
+                  className="w-full h-11 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 font-semibold flex items-center justify-center gap-2 text-sm"
+                >
+                  <span className="material-symbols-outlined text-[18px]">logout</span>
+                  <span>Sign Out</span>
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      navigateToAuth('login');
+                      setShowDrawer(false);
+                    }}
+                    className="w-full h-11 rounded-lg bg-[#282a30] text-white font-semibold flex items-center justify-center gap-2 text-sm"
+                  >
+                    <span>Sign In</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigateToAuth('signup');
+                      setShowDrawer(false);
+                    }}
+                    className="w-full h-11 rounded-lg bg-gradient-to-r from-[#8083ff] to-[#571bc1] text-white font-semibold flex items-center justify-center gap-2 shadow-lg text-sm"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">bolt</span>
+                    <span>Create Account Free</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -175,3 +316,4 @@ export default function Header() {
     </>
   );
 }
+
