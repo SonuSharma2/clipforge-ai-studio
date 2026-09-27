@@ -5,7 +5,7 @@ export default function HomePage() {
   const { setCurrentPage, openVideo, loadClipToStudio, addToast, generatedClips, setGeneratedClips, setLastAnalyzedUrl } = useApp();
 
   // Generator simulation states
-  const [urlInput, setUrlInput] = useState('https://youtube.com/watch?v=k9X8fG0vQw2');
+  const [urlInput, setUrlInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('Audio Hook Extraction & Sentiment Spikes...');
@@ -28,9 +28,9 @@ export default function HomePage() {
     {
       title: 'The Exact Blueprint',
       score: '98/100',
-      duration: '0:34',
+      duration: '0:28',
       style: 'Hormozi Bold',
-      estViews: '120k+ Est.',
+      estViews: '165k+ Est.',
       caption: 'THE EXACT BLUEPRINT',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
@@ -40,7 +40,7 @@ export default function HomePage() {
       score: '94/100',
       duration: '0:48',
       style: 'Minimal Clean',
-      estViews: '85k+ Est.',
+      estViews: '124k+ Est.',
       caption: 'WHY 99% FAIL IN 2026',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
@@ -48,16 +48,16 @@ export default function HomePage() {
     {
       title: 'Stop Doing This Today',
       score: '91/100',
-      duration: '0:29',
+      duration: '0:34',
       style: 'Viral Pulse',
-      estViews: '64k+ Est.',
+      estViews: '98k+ Est.',
       caption: 'STOP DOING THIS TODAY',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
     }
   ];
 
-  const [clips, setClips] = useState(generatedClips && generatedClips.length > 0 ? generatedClips.slice(0, 3) : initialClips);
+  const [clips, setClips] = useState(generatedClips && generatedClips.length > 0 ? generatedClips.slice(0, 3) : []);
 
   const handleGenerate = async () => {
     const trimmedUrl = urlInput.trim();
@@ -113,7 +113,9 @@ export default function HomePage() {
       setProgress(100);
       setStatusText('AI Analysis Complete (Simulated Cache)');
       setBtnText('Generate Again');
-      addToast('Stream analyzed successfully!', 'success');
+      setClips(initialClips);
+      setGeneratedClips(initialClips);
+      addToast('3 clips generated with 9:16 vertical framing!', 'success');
     } finally {
       setIsGenerating(false);
     }
@@ -235,7 +237,7 @@ export default function HomePage() {
               onChange={(e) => setUrlInput(e.target.value)}
               className="w-full bg-slate-50 text-slate-900 font-mono text-xs pl-9 pr-8 py-3 rounded-xl border border-slate-300 focus:border-indigo-600 focus:bg-white focus:outline-none transition-colors"
               type="text"
-              placeholder="Paste YouTube video link..."
+              placeholder="Paste any YouTube, Podcast, or Video URL (e.g. https://youtube.com/watch?v=...)..."
             />
             {urlInput && (
               <button
@@ -279,81 +281,95 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Generated Results Grid */}
-        <div className="flex flex-col gap-3 mt-5">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <span className="material-symbols-outlined text-[18px] text-indigo-600">movie</span>
-              AI Detected Clips (3)
-            </span>
-            <span className="text-[11px] font-mono font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">
-              Auto-Framed 9:16
-            </span>
-          </div>
+        {/* Generated Results Grid - Displayed only after link is processed and video is ready */}
+        {clips && clips.length > 0 ? (
+          <div className="flex flex-col gap-3 mt-5 animate-fadeIn">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px] text-indigo-600">movie</span>
+                AI Detected Clips ({clips.length})
+              </span>
+              <span className="text-[11px] font-mono font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">
+                Auto-Framed 9:16
+              </span>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {clips.map((clip, idx) => (
-              <div
-                key={clip.id || idx}
-                className="rounded-2xl bg-white border border-slate-200 p-2.5 flex flex-col gap-2 shadow-xs group hover:shadow-md hover:border-indigo-300 transition-all"
-              >
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {clips.map((clip, idx) => (
                 <div
-                  className="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-slate-950 cursor-pointer"
-                  onClick={() => openVideo(clip)}
+                  key={clip.id || idx}
+                  className="rounded-2xl bg-white border border-slate-200 p-2.5 flex flex-col gap-2 shadow-xs group hover:shadow-md hover:border-indigo-300 transition-all"
                 >
-                  <img
-                    src={clip.image || clip.thumbnail}
-                    alt={clip.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
+                  <div
+                    className="relative w-full aspect-[9/13] rounded-xl overflow-hidden bg-slate-950 cursor-pointer"
+                    onClick={() => openVideo(clip)}
+                  >
+                    <img
+                      src={clip.image || clip.thumbnail}
+                      alt={clip.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none"></div>
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
-                    <span className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
-                      <span className="material-symbols-outlined text-[24px]">play_arrow</span>
-                    </span>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                      <span className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                        <span className="material-symbols-outlined text-[24px]">play_arrow</span>
+                      </span>
+                    </div>
+
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md flex items-center gap-1 text-[10px] font-mono text-sky-400 font-semibold">
+                      <span className="material-symbols-outlined text-[12px] text-sky-400">trending_up</span>
+                      <span>Score {clip.score}</span>
+                    </div>
+                    <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono text-white font-semibold">
+                      {clip.duration}
+                    </div>
+                    <div className="absolute bottom-3 left-2 right-2 text-center">
+                      <span className="inline-block bg-yellow-400 text-black font-extrabold text-[11px] px-2 py-1 rounded shadow-md leading-tight uppercase">
+                        "{clip.caption}"
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md flex items-center gap-1 text-[10px] font-mono text-sky-400 font-semibold">
-                    <span className="material-symbols-outlined text-[12px] text-sky-400">trending_up</span>
-                    <span>Score {clip.score}</span>
-                  </div>
-                  <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono text-white">
-                    {clip.duration}
-                  </div>
-                  <div className="absolute bottom-3 left-2 right-2 text-center">
-                    <span className="inline-block bg-yellow-400 text-black font-extrabold text-[11px] px-2 py-1 rounded shadow-md leading-tight uppercase">
-                      "{clip.caption}"
-                    </span>
+                  <div className="flex flex-col gap-1 px-1">
+                    <div className="flex items-center justify-between text-xs font-mono text-slate-500">
+                      <span>{clip.style}</span>
+                      <span className="text-sky-600 flex items-center gap-0.5 font-medium">
+                        <span className="material-symbols-outlined text-[12px]">visibility</span> {clip.estViews}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5 pt-1">
+                      <button
+                        onClick={() => loadClipToStudio(clip)}
+                        className="h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">tune</span> Studio
+                      </button>
+                      <button
+                        onClick={() => downloadClipDirect(clip.title, clip.videoUrl)}
+                        className="h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-transform"
+                      >
+                        <span className="material-symbols-outlined text-[14px]">download</span> Save
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex flex-col gap-1 px-1">
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-500">
-                    <span>{clip.style}</span>
-                    <span className="text-sky-600 flex items-center gap-0.5 font-medium">
-                      <span className="material-symbols-outlined text-[12px]">visibility</span> {clip.estViews}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1.5 pt-1">
-                    <button
-                      onClick={() => loadClipToStudio(clip)}
-                      className="h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-[14px]">tune</span> Studio
-                    </button>
-                    <button
-                      onClick={() => downloadClipDirect(clip.title, clip.videoUrl)}
-                      className="h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-transform"
-                    >
-                      <span className="material-symbols-outlined text-[14px]">download</span> Save
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mt-4 p-8 rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 flex flex-col items-center justify-center text-center gap-2.5 transition-all">
+            <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-2xs">
+              <span className="material-symbols-outlined text-[22px]">video_library</span>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-bold text-slate-800">No Clips Generated Yet</p>
+              <p className="text-[11px] text-slate-500 max-w-md mx-auto leading-relaxed">
+                Paste any YouTube, Podcast, or Video URL above and click <span className="font-semibold text-indigo-600">Generate Shorts</span>. The AI will detect, re-frame, and display 3 distinct high-retention clips of different lengths together.
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* SOCIAL PROOF STATS */}

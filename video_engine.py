@@ -368,25 +368,32 @@ def download_and_create_multi_shorts(url, caption_style="Hormozi Bold", target_d
 
     display_title = video_title if len(video_title) <= 26 else video_title[:24] + "..."
 
-    # Calculate 3 distinct timestamp segments
-    if total_duration <= 30:
+    # Calculate 3 distinct timestamp segments across different parts of video with varied lengths
+    if total_duration <= 45:
         starts = [
             0,
-            max(4, int(total_duration * 0.35)),
-            max(8, int(total_duration * 0.70))
+            max(3, int(total_duration * 0.30)),
+            max(8, int(total_duration * 0.65))
         ]
         clip_durations = [
-            min(target_duration, max(6, int(total_duration * 0.35))),
-            min(target_duration, max(6, int(total_duration * 0.35))),
-            min(target_duration, max(6, total_duration - starts[2]))
+            max(6, min(18, int(total_duration * 0.28))),
+            max(10, min(total_duration - starts[1], int(total_duration * 0.45))),
+            max(8, min(total_duration - starts[2], total_duration - starts[2]))
         ]
     else:
-        starts = [
-            5,
-            max(20, int(total_duration * 0.35)),
-            max(45, int(total_duration * 0.65))
-        ]
-        clip_durations = [target_duration, target_duration, target_duration]
+        # Separate into 3 distinct sections of the video:
+        # Clip 1 (Hook): Starts near beginning (5s), duration ~28s
+        # Clip 2 (Breakthrough Insight): Starts in the middle (~35% in), duration ~48s
+        # Clip 3 (Actionable Climax): Starts near climax (~68% in), duration ~34s
+        s1 = 5
+        s2 = max(28, int(total_duration * 0.35))
+        s3 = max(65, int(total_duration * 0.68))
+        starts = [s1, s2, s3]
+
+        d1 = max(15, min(total_duration - s1, 28))
+        d2 = max(25, min(total_duration - s2, 48))
+        d3 = max(20, min(total_duration - s3, 34))
+        clip_durations = [d1, d2, d3]
 
     timestamp_id = int(time.time() * 1000) % 100000000
 
@@ -403,7 +410,7 @@ def download_and_create_multi_shorts(url, caption_style="Hormozi Bold", target_d
 
         # Fallback to master if stream cut failed
         if not rendered or not os.path.exists(final_output) or os.path.getsize(final_output) < 1000:
-            rendered = create_real_short_from_master(final_output, start_sec=(start_sec + idx * 7) % 15, duration=clip_dur)
+            rendered = create_real_short_from_master(final_output, start_sec=(idx * 2) % 4, duration=clip_dur)
 
         # Direct copy if master cut failed
         if not rendered or not os.path.exists(final_output) or os.path.getsize(final_output) < 1000:
@@ -495,6 +502,8 @@ def download_and_create_multi_shorts(url, caption_style="Hormozi Bold", target_d
         end_tot = seg['start_sec'] + seg['duration']
         end_min = end_tot // 60
         end_sec_rem = end_tot % 60
+        dur_min = seg['duration'] // 60
+        dur_sec = seg['duration'] % 60
 
         all_clips.append({
             "id": f"clip_real_{i+1}",
@@ -502,7 +511,7 @@ def download_and_create_multi_shorts(url, caption_style="Hormozi Bold", target_d
             "headline": meta["headline"],
             "startTime": f"{start_min:02d}:{start_sec_rem:02d}",
             "endTime": f"{end_min:02d}:{end_sec_rem:02d}",
-            "duration": f"0:{seg['duration']:02d}",
+            "duration": f"{dur_min}:{dur_sec:02d}",
             "score": meta["score"],
             "caption": meta["caption"],
             "style": meta["style"],
