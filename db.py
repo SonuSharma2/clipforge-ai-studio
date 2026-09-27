@@ -105,6 +105,35 @@ def init_db():
         )
     ''')
 
+    # 5. Payments & Billing History Table (Stripe)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS payments (
+            id TEXT PRIMARY KEY,
+            user_id TEXT,
+            email TEXT NOT NULL,
+            amount_cents INTEGER NOT NULL,
+            currency TEXT DEFAULT 'usd',
+            plan TEXT NOT NULL,
+            billing_interval TEXT DEFAULT 'month',
+            status TEXT DEFAULT 'completed',
+            stripe_session_id TEXT,
+            created_at TEXT,
+            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+        )
+    ''')
+
+    # Safe migration: add Stripe fields to users table if not present
+    user_columns = [
+        ("stripe_customer_id", "TEXT"),
+        ("stripe_subscription_id", "TEXT"),
+        ("billing_interval", "TEXT DEFAULT 'month'")
+    ]
+    for col_name, col_def in user_columns:
+        try:
+            cursor.execute(f"ALTER TABLE users ADD COLUMN {col_name} {col_def}")
+        except sqlite3.OperationalError:
+            pass  # column already exists
+
     conn.commit()
 
     # Pre-seed default demo account if not exists
@@ -342,6 +371,73 @@ def get_recent_clips(user_id: str = None, limit: int = 12):
         cursor.execute("SELECT * FROM clips WHERE user_id = ? ORDER BY created_at DESC LIMIT ?", (user_id, limit))
     else:
         cursor.execute("SELECT * FROM clips ORDER BY created_at DESC LIMIT ?", (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+# ----------------- Stripe Payments & Subscriptions -----------------
+
+def upgrade_user_subscription(email: str, plan: str, credits_to_add: int = 500, stripe_customer_id: str = None, stripe_sub_id: str = None, billing_interval: str = 'month'):
+    """Upgrades a user's subscription tier and adds processing credits."""
+    email_clean = email.strip().lower()
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Get current credits
+    cursor.execute("SELECT credits FROM users WHERE email = ?", (email_clean,))
+    row = cursor.fetchone()
+    current_credits = row['credits'] if row else 10
+    new_credits = current_credits + credits_to_add
+
+    cursor.execute('''
+        UPDATE users
+        SET plan = ?,
+            credits = ?,
+            stripe_customer_id = COALESCE(?, stripe_customer_id),
+            stripe_subscription_id = COALESCE(?, stripe_subscription_id),
+            billing_interval = ?
+        WHERE email = ?
+    ''', (plan, new_credits, stripe_customer_id, stripe_sub_id, billing_interval, email_clean))
+    conn.commit()
+
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email_clean,))
+    updated_user = cursor.fetchone()
+    conn.close()
+    return dict(updated_user) if updated_user else None
+
+def record_payment(email: str, amount_cents: int, plan: str, billing_interval: str = 'month', stripe_session_id: str = None, user_id: str = None, currency: str = 'usd', status: str = 'completed'):
+    """Records a verified payment transaction in SQLite."""
+    payment_id = f"pay_{int(time.time())}_{secrets.token_hex(4)}"
+    now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Resolve user_id if not passed
+    if not user_id:
+        cursor.execute("SELECT id FROM users WHERE email = ?", (email.strip().lower(),))
+        row = cursor.fetchone()
+        if row:
+            user_id = row['id']
+
+    cursor.execute('''
+        INSERT INTO payments (id, user_id, email, amount_cents, currency, plan, billing_interval, status, stripe_session_id, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (payment_id, user_id, email.strip().lower(), amount_cents, currency, plan, billing_interval, status, stripe_session_id, now))
+    conn.commit()
+    conn.close()
+    return payment_id
+
+def get_user_payments(email: str = None, user_id: str = None, limit: int = 10):
+    """Retrieves payment history for a user."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    if user_id:
+        cursor.execute("SELECT * FROM payments WHERE user_id = ? ORDER BY created_at DESC LIMIT ?", (user_id, limit))
+    elif email:
+        cursor.execute("SELECT * FROM payments WHERE email = ? ORDER BY created_at DESC LIMIT ?", (email.strip().lower(), limit))
+    else:
+        cursor.execute("SELECT * FROM payments ORDER BY created_at DESC LIMIT ?", (limit,))
     rows = cursor.fetchall()
     conn.close()
     return [dict(r) for r in rows]

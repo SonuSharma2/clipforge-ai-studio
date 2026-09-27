@@ -12,6 +12,7 @@ import random
 from flask import Flask, request, jsonify, send_from_directory, send_file
 import video_engine
 import db
+import stripe_service
 
 # Reconfigure stdout/stderr encoding for Windows
 if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
@@ -349,6 +350,100 @@ def api_db_status():
         })
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)}), 500
+
+# ----------------- Stripe Payment Endpoints -----------------
+
+@app.route('/api/stripe/config', methods=['GET'])
+def stripe_config():
+    """Returns public Stripe configuration and plan prices."""
+    return jsonify(stripe_service.get_stripe_config())
+
+@app.route('/api/stripe/create-checkout-session', methods=['POST', 'OPTIONS'])
+def stripe_create_session():
+    """Creates a Stripe Checkout Session for subscription upgrade."""
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"})
+    data = request.json or {}
+    plan_name = data.get('plan', 'Creator Pro')
+    billing_interval = data.get('interval', 'month')
+    user_email = data.get('email', '')
+    user_id = data.get('user_id', '')
+    success_url = data.get('success_url')
+    cancel_url = data.get('cancel_url')
+
+    result = stripe_service.create_checkout_session(
+        plan_name=plan_name,
+        billing_interval=billing_interval,
+        user_email=user_email,
+        user_id=user_id,
+        success_url=success_url,
+        cancel_url=cancel_url
+    )
+    return jsonify(result)
+
+@app.route('/api/stripe/verify-session', methods=['POST', 'OPTIONS'])
+def stripe_verify_session():
+    """Validates session completion and upgrades user plan in database."""
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"})
+    data = request.json or {}
+    session_id = data.get('session_id', '')
+    email = data.get('email', '')
+    plan_name = data.get('plan', 'Creator Pro')
+    billing_interval = data.get('interval', 'month')
+
+    if not email:
+        return jsonify({"success": False, "error": "User email is required to activate plan"}), 400
+
+    result = stripe_service.verify_and_upgrade_session(
+        session_id=session_id,
+        email=email,
+        plan_name=plan_name,
+        billing_interval=billing_interval
+    )
+    return jsonify(result)
+
+@app.route('/api/stripe/direct-charge', methods=['POST', 'OPTIONS'])
+def stripe_direct_charge():
+    """Simulates or processes direct card payment with live validation."""
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"})
+    data = request.json or {}
+    email = data.get('email', '')
+    card_number = data.get('cardNumber', '')
+    exp_month = data.get('expMonth', '12')
+    exp_year = data.get('expYear', '28')
+    cvc = data.get('cvc', '123')
+    plan_name = data.get('plan', 'Creator Pro')
+    billing_interval = data.get('interval', 'month')
+    discount_cents = data.get('discountCents', 0)
+
+    result, status_code = stripe_service.direct_card_charge(
+        email=email,
+        card_number=card_number,
+        exp_month=exp_month,
+        exp_year=exp_year,
+        cvc=cvc,
+        plan_name=plan_name,
+        billing_interval=billing_interval,
+        discount_cents=discount_cents
+    )
+    return jsonify(result), status_code
+
+@app.route('/api/user/billing', methods=['GET'])
+def user_billing():
+    """Fetches user billing plan and transaction history from SQLite."""
+    email = request.args.get('email', '').strip().lower()
+    user = db.get_user_by_email(email) if email else None
+    payments = db.get_user_payments(email=email, limit=10) if email else []
+
+    return jsonify({
+        "success": True,
+        "plan": user.get('plan', 'Creator Free') if user else 'Creator Free',
+        "credits": user.get('credits', 10) if user else 10,
+        "billingInterval": user.get('billing_interval', 'month') if user else 'month',
+        "payments": payments
+    })
 
 if __name__ == '__main__':
     port = 8888

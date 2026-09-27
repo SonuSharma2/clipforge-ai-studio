@@ -60,6 +60,18 @@ export function AppProvider({ children }) {
     addToast('You have been logged out.', 'info');
   };
 
+  const updateUser = (partialData) => {
+    setUser((prev) => {
+      const updated = { ...(prev || {}), ...partialData };
+      try {
+        localStorage.setItem('clipforge_user', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
+  };
+
   const navigateToAuth = (mode = 'login', email = '') => {
     setAuthMode(mode);
     if (email) setPendingEmail(email);
@@ -109,6 +121,7 @@ export function AppProvider({ children }) {
         user,
         loginUser,
         logoutUser,
+        updateUser,
         navigateToAuth,
         generatedClips,
         setGeneratedClips,
