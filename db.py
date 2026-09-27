@@ -134,6 +134,18 @@ def init_db():
         except sqlite3.OperationalError:
             pass  # column already exists
 
+    # Safe migration: add invoice fields to payments table if not present
+    payment_columns = [
+        ("invoice_number", "TEXT"),
+        ("card_last4", "TEXT DEFAULT '4242'"),
+        ("card_brand", "TEXT DEFAULT 'Visa'")
+    ]
+    for col_name, col_def in payment_columns:
+        try:
+            cursor.execute(f"ALTER TABLE payments ADD COLUMN {col_name} {col_def}")
+        except sqlite3.OperationalError:
+            pass  # column already exists
+
     conn.commit()
 
     # Pre-seed default demo account if not exists
@@ -405,9 +417,11 @@ def upgrade_user_subscription(email: str, plan: str, credits_to_add: int = 500, 
     conn.close()
     return dict(updated_user) if updated_user else None
 
-def record_payment(email: str, amount_cents: int, plan: str, billing_interval: str = 'month', stripe_session_id: str = None, user_id: str = None, currency: str = 'usd', status: str = 'completed'):
-    """Records a verified payment transaction in SQLite."""
+def record_payment(email: str, amount_cents: int, plan: str, billing_interval: str = 'month', stripe_session_id: str = None, user_id: str = None, currency: str = 'usd', status: str = 'completed', invoice_number: str = None, card_last4: str = '4242', card_brand: str = 'Visa'):
+    """Records a verified payment transaction with invoice number in SQLite."""
     payment_id = f"pay_{int(time.time())}_{secrets.token_hex(4)}"
+    if not invoice_number:
+        invoice_number = f"INV-2026-{int(time.time()) % 100000:05d}"
     now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
     conn = get_connection()
@@ -421,15 +435,15 @@ def record_payment(email: str, amount_cents: int, plan: str, billing_interval: s
             user_id = row['id']
 
     cursor.execute('''
-        INSERT INTO payments (id, user_id, email, amount_cents, currency, plan, billing_interval, status, stripe_session_id, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (payment_id, user_id, email.strip().lower(), amount_cents, currency, plan, billing_interval, status, stripe_session_id, now))
+        INSERT INTO payments (id, user_id, email, amount_cents, currency, plan, billing_interval, status, stripe_session_id, created_at, invoice_number, card_last4, card_brand)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (payment_id, user_id, email.strip().lower(), amount_cents, currency, plan, billing_interval, status, stripe_session_id, now, invoice_number, card_last4, card_brand))
     conn.commit()
     conn.close()
     return payment_id
 
-def get_user_payments(email: str = None, user_id: str = None, limit: int = 10):
-    """Retrieves payment history for a user."""
+def get_user_payments(email: str = None, user_id: str = None, limit: int = 15):
+    """Retrieves payment history and invoices for a user."""
     conn = get_connection()
     cursor = conn.cursor()
     if user_id:
@@ -440,7 +454,18 @@ def get_user_payments(email: str = None, user_id: str = None, limit: int = 10):
         cursor.execute("SELECT * FROM payments ORDER BY created_at DESC LIMIT ?", (limit,))
     rows = cursor.fetchall()
     conn.close()
-    return [dict(r) for r in rows]
+
+    results = []
+    for r in rows:
+        item = dict(r)
+        if not item.get('invoice_number'):
+            item['invoice_number'] = f"INV-2026-{abs(hash(item['id'])) % 100000:05d}"
+        if not item.get('card_last4'):
+            item['card_last4'] = '4242'
+        if not item.get('card_brand'):
+            item['card_brand'] = 'Visa'
+        results.append(item)
+    return results
 
 # Auto-initialize database on module import
 init_db()

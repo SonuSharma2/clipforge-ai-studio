@@ -116,7 +116,7 @@ def create_checkout_session(plan_name: str, billing_interval: str = 'month', use
         "billingInterval": billing_interval
     }
 
-def verify_and_upgrade_session(session_id: str, email: str, plan_name: str = 'Creator Pro', billing_interval: str = 'month'):
+def verify_and_upgrade_session(session_id: str, email: str, plan_name: str = 'Creator Pro', billing_interval: str = 'month', card_last4: str = '4242', card_brand: str = 'Visa'):
     """
     Verifies a completed checkout session and upgrades user plan in SQLite database.
     """
@@ -144,7 +144,9 @@ def verify_and_upgrade_session(session_id: str, email: str, plan_name: str = 'Cr
         billing_interval=billing_interval,
         stripe_session_id=session_id,
         user_id=updated_user.get('id') if updated_user else None,
-        status='completed'
+        status='completed',
+        card_last4=card_last4,
+        card_brand=card_brand
     )
 
     print(f"\n[STRIPE] ✅ Successfully upgraded {email_clean} to {plan_info['name']}! Added {credits_to_add} credits. Payment ID: {payment_id}\n")
@@ -175,6 +177,9 @@ def direct_card_charge(email: str, card_number: str, exp_month: str, exp_year: s
     base_amount = (plan_info['annual_monthly_cents'] * 12) if is_annual else plan_info['monthly_cents']
     final_amount = max(0, base_amount - discount_cents)
 
+    last4 = clean_card[-4:] if len(clean_card) >= 4 else "4242"
+    brand = "Visa" if clean_card.startswith('4') else ("Mastercard" if clean_card.startswith(('51', '52', '53', '54', '55')) else ("Amex" if clean_card.startswith(('34', '37')) else "Visa"))
+
     session_id = f"ch_direct_{secrets.token_hex(14)}"
 
     # Upgrade in database
@@ -182,7 +187,9 @@ def direct_card_charge(email: str, card_number: str, exp_month: str, exp_year: s
         session_id=session_id,
         email=email_clean,
         plan_name=plan_info['name'],
-        billing_interval=billing_interval
+        billing_interval=billing_interval,
+        card_last4=last4,
+        card_brand=brand
     )
 
     return result, 200

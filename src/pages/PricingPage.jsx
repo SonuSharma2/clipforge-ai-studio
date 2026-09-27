@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import InvoiceModal from '../components/InvoiceModal';
 
 export default function PricingPage() {
   const { setCurrentPage, addToast, user, updateUser, navigateToAuth } = useApp();
@@ -31,6 +32,7 @@ export default function PricingPage() {
   const [showBillingModal, setShowBillingModal] = useState(false);
   const [billingHistory, setBillingHistory] = useState([]);
   const [loadingBilling, setLoadingBilling] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
   // Check URL parameters for Stripe redirect return
   useEffect(() => {
@@ -836,16 +838,28 @@ export default function PricingPage() {
                   {billingHistory.map((item, idx) => (
                     <div key={idx} className="py-3 flex items-center justify-between text-xs">
                       <div>
-                        <span className="font-bold text-slate-900 block">{item.plan} Subscription</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-900 block">{item.plan} Subscription</span>
+                          <span className="font-mono text-[10px] text-slate-400 font-semibold">{item.invoice_number || `INV-2026-${idx + 101}`}</span>
+                        </div>
                         <span className="text-[11px] text-slate-500">{item.created_at || 'Recent'}</span>
                       </div>
-                      <div className="text-right">
-                        <span className="font-mono font-bold text-slate-900 block">
-                          ${(item.amount_cents / 100).toFixed(2)}
-                        </span>
-                        <span className="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded">
-                          Paid ✓
-                        </span>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <span className="font-mono font-bold text-slate-900 block">
+                            ${(item.amount_cents / 100).toFixed(2)}
+                          </span>
+                          <span className="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded">
+                            Paid ✓
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setSelectedInvoice(item)}
+                          className="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-[11px] flex items-center gap-1 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-[13px]">visibility</span>
+                          <span>Invoice</span>
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -865,7 +879,17 @@ export default function PricingPage() {
         </div>
       )}
 
+      {/* Printable Invoice Modal */}
+      {selectedInvoice && (
+        <InvoiceModal
+          invoice={selectedInvoice}
+          user={user}
+          onClose={() => setSelectedInvoice(null)}
+        />
+      )}
+
     </main>
   );
 }
+
 

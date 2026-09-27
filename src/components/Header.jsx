@@ -1,11 +1,38 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import BillingModal from './BillingModal';
 
 export default function Header() {
   const { currentPage, setCurrentPage, user, logoutUser, navigateToAuth } = useApp();
   const [showNotif, setShowNotif] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showBillingModal, setShowBillingModal] = useState(false);
+
+  const getPlanBadge = (plan, isDetailed = false) => {
+    const p = plan || 'Creator Free';
+    if (p.includes('Scale') || p.includes('Agency')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs tracking-wider uppercase">
+          <span className="material-symbols-outlined text-[11px]">workspace_premium</span>
+          <span>{isDetailed ? 'Studio Scale VIP' : 'SCALE'}</span>
+        </span>
+      );
+    }
+    if (p.includes('Pro')) {
+      return (
+        <span className="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-500 text-white shadow-xs tracking-wider uppercase">
+          <span className="material-symbols-outlined text-[11px]">bolt</span>
+          <span>{isDetailed ? 'Creator Pro' : 'PRO'}</span>
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 tracking-wider uppercase">
+        <span>FREE</span>
+      </span>
+    );
+  };
 
   const navItems = [
     { id: 'home', label: 'Home', icon: 'home' },
@@ -119,9 +146,10 @@ export default function Header() {
                     className="w-7 h-7 rounded-full object-cover border border-indigo-200"
                     src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
                   />
-                  <span className="text-xs font-semibold text-slate-800 max-w-[100px] truncate hidden sm:inline-block">
+                  <span className="text-xs font-semibold text-slate-800 max-w-[95px] truncate hidden sm:inline-block">
                     {user.name?.split(' ')[0] || 'Creator'}
                   </span>
+                  {getPlanBadge(user.plan)}
                   <span className="material-symbols-outlined text-[16px] text-slate-500">
                     expand_more
                   </span>
@@ -134,14 +162,17 @@ export default function Header() {
                       <img
                         src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
                         alt=""
-                        className="w-9 h-9 rounded-full object-cover border border-indigo-200"
+                        className="w-10 h-10 rounded-full object-cover border border-indigo-200 shadow-xs"
                       />
                       <div className="flex flex-col min-w-0">
                         <span className="text-xs font-bold text-slate-900 truncate">{user.name || 'Creator'}</span>
                         <span className="text-[10px] text-slate-500 truncate">{user.email}</span>
-                        <span className="text-[10px] font-mono text-indigo-600 mt-0.5 font-bold">
-                          {user.plan || 'Pro Studio'}
-                        </span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          {getPlanBadge(user.plan, true)}
+                          <span className="text-[10px] font-mono text-slate-500 font-semibold">
+                            {user.credits ?? 10} cr
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -165,6 +196,16 @@ export default function Header() {
                       >
                         <span className="material-symbols-outlined text-[18px] text-sky-600">auto_videocam</span>
                         <span>My Generated Shorts</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowBillingModal(true);
+                          setShowUserMenu(false);
+                        }}
+                        className="flex items-center gap-2.5 p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors text-left"
+                      >
+                        <span className="material-symbols-outlined text-[18px] text-indigo-600">receipt_long</span>
+                        <span>Billing & Invoices</span>
                       </button>
                       <button
                         onClick={() => {
@@ -245,15 +286,20 @@ export default function Header() {
 
               {/* User info if logged in */}
               {user && (
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <img
-                    src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
-                    alt=""
-                    className="w-10 h-10 rounded-full object-cover border border-indigo-200"
-                  />
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs font-bold text-slate-900 truncate">{user.name}</span>
-                    <span className="text-[10px] text-slate-500 truncate">{user.email}</span>
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <img
+                      src={user.avatar || 'https://avatars.githubusercontent.com/u/47955645?v=4'}
+                      alt=""
+                      className="w-10 h-10 rounded-full object-cover border border-indigo-200"
+                    />
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-bold text-slate-900 truncate">{user.name}</span>
+                      <span className="text-[10px] text-slate-500 truncate">{user.email}</span>
+                    </div>
+                  </div>
+                  <div>
+                    {getPlanBadge(user.plan)}
                   </div>
                 </div>
               )}
@@ -281,6 +327,20 @@ export default function Header() {
                     )}
                   </button>
                 ))}
+
+                {/* Billing & Invoices Mobile Button */}
+                {user && (
+                  <button
+                    onClick={() => {
+                      setShowBillingModal(true);
+                      setShowDrawer(false);
+                    }}
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors text-left"
+                  >
+                    <span className="material-symbols-outlined text-[20px] text-indigo-600">receipt_long</span>
+                    <span className="flex-1">Billing & Invoices</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -323,6 +383,12 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* Global Billing & Invoices Modal */}
+      <BillingModal
+        isOpen={showBillingModal}
+        onClose={() => setShowBillingModal(false)}
+      />
     </>
   );
 }
