@@ -19,11 +19,11 @@ export default function PricingPage() {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Card Form State & Validation
-  const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
-  const [cardExp, setCardExp] = useState('12/28');
-  const [cardCvc, setCardCvc] = useState('888');
-  const [cardPostal, setCardPostal] = useState('10001');
-  const [cardholderName, setCardholderName] = useState(user?.name || 'Sonu Sharma');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardExp, setCardExp] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
+  const [cardPostal, setCardPostal] = useState('');
+  const [cardholderName, setCardholderName] = useState(user?.name || '');
   const [formErrors, setFormErrors] = useState({});
   const [touchedFields, setTouchedFields] = useState({});
 
@@ -86,11 +86,11 @@ export default function PricingPage() {
     setCheckoutPlan({ name, price: finalPrice, monthlyBase: monthlyPrice });
     setDiscount(0);
     setCoupon('');
-    setCardNumber('4242 4242 4242 4242');
-    setCardExp('12/28');
-    setCardCvc('888');
-    setCardPostal('10001');
-    setCardholderName(user?.name || 'Sonu Sharma');
+    setCardNumber('');
+    setCardExp('');
+    setCardCvc('');
+    setCardPostal('');
+    setCardholderName(user?.name || '');
     setFormErrors({});
     setTouchedFields({});
   };
@@ -267,60 +267,6 @@ export default function PricingPage() {
     if (field === 'cardPostal') val = cardPostal;
     const err = validateField(field, val, cardNumber);
     setFormErrors(prev => ({ ...prev, [field]: err }));
-  };
-
-  // Test Presets for Instant QA
-  const applyPreset = (preset) => {
-    if (preset === 'valid_visa') {
-      const num = '4242 4242 4242 4242';
-      const exp = '12/28';
-      const cvc = '888';
-      const zip = '10001';
-      const name = user?.name || 'Sonu Sharma';
-      setCardNumber(num);
-      setCardExp(exp);
-      setCardCvc(cvc);
-      setCardPostal(zip);
-      setCardholderName(name);
-      setTouchedFields({ cardNumber: true, cardExp: true, cardCvc: true, cardPostal: true, cardholderName: true });
-      setFormErrors({});
-      addToast('Loaded: Valid Stripe Visa Test Card (4242)', 'info');
-    } else if (preset === 'valid_amex') {
-      const num = '3700 000000 00002';
-      const exp = '10/29';
-      const cvc = '8888';
-      const zip = '90210';
-      const name = user?.name || 'Sonu Sharma';
-      setCardNumber(num);
-      setCardExp(exp);
-      setCardCvc(cvc);
-      setCardPostal(zip);
-      setCardholderName(name);
-      setTouchedFields({ cardNumber: true, cardExp: true, cardCvc: true, cardPostal: true, cardholderName: true });
-      setFormErrors({});
-      addToast('Loaded: Valid American Express Card (3700)', 'info');
-    } else if (preset === 'invalid_num') {
-      const num = '4242 4242 4242 4243';
-      setCardNumber(num);
-      setTouchedFields(prev => ({ ...prev, cardNumber: true }));
-      setFormErrors(prev => ({ ...prev, cardNumber: 'Invalid card number (Luhn checksum failed)' }));
-      addToast('Loaded: Invalid Card Number (Checksum fails)', 'error');
-    } else if (preset === 'expired') {
-      const exp = '04/24';
-      setCardExp(exp);
-      setTouchedFields(prev => ({ ...prev, cardExp: true }));
-      setFormErrors(prev => ({ ...prev, cardExp: 'This card is expired. Please enter a valid date.' }));
-      addToast('Loaded: Expired Expiration Date (04/24)', 'error');
-    } else if (preset === 'clear') {
-      setCardNumber('');
-      setCardExp('');
-      setCardCvc('');
-      setCardPostal('');
-      setCardholderName('');
-      setTouchedFields({});
-      setFormErrors({});
-      addToast('Card form cleared for manual testing', 'info');
-    }
   };
 
   // Validate entire form prior to submission
@@ -870,56 +816,6 @@ export default function PricingPage() {
             {/* Tab 1: Direct Card Form (Stripe Elements Style with Real-time Validation) */}
             {checkoutMode === 'card' && (
               <div className="space-y-3.5 pt-1">
-                {/* Instant QA / Testing Presets */}
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[13px] text-indigo-600">tune</span>
-                      Validation Test Presets
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => applyPreset('clear')}
-                      className="text-[10px] text-slate-500 hover:text-slate-800 underline font-medium"
-                    >
-                      Clear form
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => applyPreset('valid_visa')}
-                      className="px-2 py-1 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
-                      title="Valid Visa card (4242) passing Luhn checksum"
-                    >
-                      ✓ Valid 4242
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => applyPreset('valid_amex')}
-                      className="px-2 py-1 rounded-md text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 transition-colors"
-                      title="Valid Amex card (3700) passing Luhn checksum"
-                    >
-                      ✓ Valid Amex
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => applyPreset('invalid_num')}
-                      className="px-2 py-1 rounded-md text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 transition-colors"
-                      title="Card number with wrong checksum"
-                    >
-                      ✗ Invalid Card #
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => applyPreset('expired')}
-                      className="px-2 py-1 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors"
-                      title="Card with past expiration date"
-                    >
-                      ✗ Expired Date
-                    </button>
-                  </div>
-                </div>
 
                 {/* Cardholder Name */}
                 <div className="space-y-1">
