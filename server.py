@@ -110,7 +110,10 @@ def generate_real_short():
 @app.route('/api/analyze', methods=['POST', 'OPTIONS'])
 def analyze_video():
     """
-    Extracts stream metadata and generates multiple DISTINCT 9:16 MP4 shorts from different segments.
+    Intelligent Video Highlight & Short Generator.
+    Supports:
+    - 'ai_smart': Pro AI Deep Event Scanner (Heatmap Peaks, Chapters, Virality Scoring across whole video)
+    - 'standard': Fast standard proportional multi-segment cut
     """
     if request.method == 'OPTIONS':
         return jsonify({"status": "ok"})
@@ -120,30 +123,77 @@ def analyze_video():
     if not url:
         url = "https://youtube.com/watch?v=dQw4w9WgXcQ"
 
+    mode = data.get('mode', 'ai_smart')
     caption_style = data.get('caption_style', 'Hormozi Bold')
-    
-    raw_duration = data.get('duration', 15)
-    try:
-        target_duration = int(raw_duration)
-    except (ValueError, TypeError):
-        target_duration = 15
+    user_id = data.get('user_id')
+    user_email = data.get('email')
 
-    raw_count = data.get('count', 6)
+    raw_duration = data.get('duration', 'varied')
+    if isinstance(raw_duration, (int, float)):
+        target_duration = int(raw_duration)
+    elif isinstance(raw_duration, str) and raw_duration.strip().isdigit():
+        target_duration = int(raw_duration.strip())
+    else:
+        target_duration = str(raw_duration).strip().lower() or 'varied'
+
+    raw_count = data.get('count', 3)
     try:
         count = int(raw_count)
     except (ValueError, TypeError):
-        count = 6
+        count = 3
 
-    # Generate multiple distinct real 9:16 shorts from different parts of the video
+    # Rule: Up to 30 sec is Free. Durations above 30 sec (45s, 60s, custom >30s, or varied packs) are Paid/Pro.
+    is_over_30s = False
+    if isinstance(target_duration, (int, float)):
+        is_over_30s = (int(target_duration) > 30)
+    elif str(target_duration).strip().isdigit():
+        is_over_30s = (int(str(target_duration).strip()) > 30)
+    elif str(target_duration).strip().lower() in ('varied', 'varied_60', 'varied_45'):
+        is_over_30s = True
+
+    # Gating check: >30s duration requires Pro plan or available trial credits
+    requires_pro = is_over_30s or (mode == 'ai_smart')
+
+    auth_identifier = user_email or user_id
+    user_rec = None
+    if auth_identifier:
+        user_rec = db.get_user_by_email(auth_identifier) or db.get_user_by_id(auth_identifier)
+
+    plan = user_rec.get('plan', 'Creator Free') if user_rec else ('Pro Studio' if not auth_identifier else 'Creator Free')
+    user_creds = user_rec.get('credits', 0) if user_rec else (10 if not auth_identifier else 0)
+    is_pro = (plan in ('Creator Pro', 'Pro Studio', 'Studio Scale', 'Agency Unlimited'))
+    credits_remaining = user_creds
+    deduction_msg = ""
+
+    if requires_pro and not is_pro and user_creds <= 0:
+        reason = "Durations over 30s (45s, 60s max, and custom lengths)" if is_over_30s else "AI Deep Event Scanner"
+        return jsonify({
+            "success": False,
+            "requires_upgrade": True,
+            "error": f"{reason} is a Creator Pro feature. Durations up to 30 seconds are 100% free! Please upgrade to Creator Pro or claim free trial credits.",
+            "plan": plan,
+            "credits": user_creds
+        }), 403
+
+    if requires_pro and not is_pro and user_creds > 0 and auth_identifier:
+        ok, new_creds, plan, deduction_msg = db.deduct_user_credits(auth_identifier, 1)
+        credits_remaining = new_creds
+
+    # Generate intelligent distinct 9:16 shorts from different parts of the video
     result = video_engine.download_and_create_multi_shorts(
         url,
         caption_style=caption_style,
         target_duration=target_duration,
-        count=count
+        count=count,
+        mode=mode,
+        is_pro=is_pro
     )
 
+    result['credits_remaining'] = credits_remaining
+    result['is_pro_active'] = is_pro
+    result['tier'] = 'Creator Pro (AI Deep Event Scanner)' if is_pro else 'Creator Free'
+
     # Persist generated clips into SQLite database
-    user_id = data.get('user_id')
     if result and result.get('clips'):
         for c in result['clips']:
             try:
@@ -160,6 +210,47 @@ def analyze_video():
                 print(f"[DB] Error saving clip to database: {e}")
 
     return jsonify(result)
+
+@app.route('/api/user/credits', methods=['GET'])
+def get_user_credits_api():
+    """Returns credits and plan status for a user."""
+    email = request.args.get('email', '').strip().lower()
+    user_id = request.args.get('user_id', '').strip()
+    identifier = email or user_id
+    if not identifier:
+        return jsonify({"success": True, "credits": 10, "plan": "Creator Free", "is_pro": False})
+
+    user = db.get_user_by_email(identifier) or db.get_user_by_id(identifier)
+    if user:
+        is_pro = db.is_user_pro(identifier)
+        return jsonify({
+            "success": True,
+            "credits": user.get('credits', 10),
+            "plan": user.get('plan', 'Creator Free'),
+            "is_pro": is_pro
+        })
+    return jsonify({"success": True, "credits": 10, "plan": "Creator Free", "is_pro": False})
+
+@app.route('/api/user/grant-trial', methods=['POST', 'OPTIONS'])
+def grant_user_trial():
+    """Grants 3 complimentary Pro AI Event Scanner trial credits."""
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"})
+    data = request.json or {}
+    email = data.get('email', '').strip().lower()
+    if not email:
+        return jsonify({"success": False, "error": "Email is required"}), 400
+
+    ok, new_creds = db.grant_trial_credits(email, 3)
+    user = db.get_user_by_email(email)
+    user_safe = {k: v for k, v in user.items() if k not in ('password_hash', 'salt')} if user else None
+
+    return jsonify({
+        "success": True,
+        "credits": new_creds,
+        "user": user_safe,
+        "message": "🎉 Granted 3 Free Pro AI Event Scanner trial credits!"
+    })
 
 # ----------------- Database & Auth Routes (SQLite) -----------------
 

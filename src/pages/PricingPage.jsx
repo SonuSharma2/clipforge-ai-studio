@@ -507,7 +507,11 @@ export default function PricingPage() {
             <div className="h-[1px] bg-slate-100 my-4"></div>
 
             <ul className="flex flex-col gap-3 text-xs text-slate-700">
-              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 300 Processing Minutes / mo</li>
+              <li className="flex items-center gap-2 font-semibold text-indigo-950">
+                <span className="material-symbols-outlined text-[16px] text-amber-500">auto_awesome</span>
+                <span>AI Deep Event Scanner (Whole-Video Heatmap)</span>
+              </li>
+              <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 500 AI Video Processing Credits / mo</li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> 1080p 60FPS Ultra HD Exports</li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> All Kinetic Caption Presets</li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-indigo-600">check</span> Active Face Tracking 9:16 Reframe</li>
@@ -554,6 +558,10 @@ export default function PricingPage() {
             <div className="h-[1px] bg-slate-100 my-4"></div>
 
             <ul className="flex flex-col gap-3 text-xs text-slate-600">
+              <li className="flex items-center gap-2 font-semibold text-indigo-950">
+                <span className="material-symbols-outlined text-[16px] text-amber-500">auto_awesome</span>
+                <span>Priority Multi-Hour Deep Event Scanner</span>
+              </li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Unlimited GPU Processing</li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> 4K Ultra-HD Export Stream</li>
               <li className="flex items-center gap-2"><span className="material-symbols-outlined text-[16px] text-emerald-600">check</span> Custom Brand Typography & Colors</li>

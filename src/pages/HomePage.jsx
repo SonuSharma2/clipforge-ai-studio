@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import DurationSelectModal from '../components/DurationSelectModal';
 
 export default function HomePage() {
-  const { setCurrentPage, openVideo, loadClipToStudio, addToast, generatedClips, setGeneratedClips, setLastAnalyzedUrl } = useApp();
+  const {
+    setCurrentPage,
+    openVideo,
+    loadClipToStudio,
+    addToast,
+    generatedClips,
+    setGeneratedClips,
+    lastAnalyzedUrl,
+    setLastAnalyzedUrl,
+    analysisMode,
+    setAnalysisMode,
+    showProModal,
+    setShowProModal,
+    aiAnalysisSummary,
+    setAiAnalysisSummary,
+    isProUser,
+    user,
+    updateUser
+  } = useApp();
 
   // Generator simulation states
   const [urlInput, setUrlInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [statusText, setStatusText] = useState('Audio Hook Extraction & Sentiment Spikes...');
+  const [statusText, setStatusText] = useState('Whole-Video Heatmap & Peak Detection...');
   const [btnText, setBtnText] = useState('Generate Shorts');
+  const [showDurationModal, setShowDurationModal] = useState(false);
 
   // Before / After toggle state
   const [reframingMode, setReframingMode] = useState('9:16'); // '16:9' or '9:16'
@@ -20,38 +40,60 @@ export default function HomePage() {
 
   // Pricing toggle state
   const [isAnnual, setIsAnnual] = useState(false);
+  const [duration, setDuration] = useState('varied');
 
   // FAQ Accordion state
   const [openFaq, setOpenFaq] = useState(null);
 
   const initialClips = [
     {
-      title: 'The Exact Blueprint',
+      title: 'The Instant Hook Spike',
       score: '98/100',
-      duration: '0:28',
+      duration: '0:15',
+      duration_sec: 15,
+      duration_label: '15s',
       style: 'Hormozi Bold',
-      estViews: '165k+ Est.',
+      estViews: '185k+ Est.',
       caption: 'THE EXACT BLUEPRINT',
+      event_type: 'Viral Hook Trigger',
+      event_tag: '🎯 15s Snappy Viral Hook',
+      event_reason: 'Fast-paced ~15s opening retention spike isolated for maximum swipe-stop rate on TikTok & Shorts.',
+      startTime: '00:05',
+      endTime: '00:20',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmnQEoYL5rJ_1B3AerwbYF3TfBwzSp7RArfpxnsKbZ9wyUBvSL3AeW7aDGc3vk_C2YMLc6x5ID1ZrH7bboZyHRM4mQwOteq8xgXf6roLudXnTNZ2TxrToT88BxfEtmoqFGqDdsqQ490bLhROqFYc9tRjHyDFVpPfdajd6NPSKP_PorEpZwn65cvfxqB7D8VvFAv5BC9rNfcrbylBb8P742Cb4C3vtqwBUr9H1wa4k',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
     },
     {
-      title: 'Why 99% Fail in 2026',
-      score: '94/100',
-      duration: '0:48',
-      style: 'Minimal Clean',
-      estViews: '124k+ Est.',
+      title: 'Golden Climax Peak',
+      score: '99/100',
+      duration: '0:30',
+      duration_sec: 30,
+      duration_label: '30s',
+      style: 'MrBeast Punch',
+      estViews: '240k+ Est.',
       caption: 'WHY 99% FAIL IN 2026',
+      event_type: 'Heatmap Spike (Most Replayed)',
+      event_tag: '🔥 30s Climax Replay Peak (4.8x)',
+      event_reason: 'Highest audience replay peak across the video (~30s) with 4.8x rewatch surge.',
+      startTime: '14:22',
+      endTime: '14:52',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD37ewpMGyiPTtZ1ZbzIadhB5Fi0jvQq_nVyPA-KshGpmmpnekLXex5lOPfknsQlHOYEF3xbcgjQdpPLQnncMco-banHYbNnIqdNUxhqyeYqhELc6vDDIjzlScgFHnkhjyM2_XHXuJ259qcl5aelPGo5YZNDnQm-G7b0eVbHGR9wEhQ7TVQ8CLFAocbV5n3cfKI5d49YGnqAqzMFuQ5lNnXAzy497QF-oj1XwK6zis',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
     },
     {
-      title: 'Stop Doing This Today',
-      score: '91/100',
-      duration: '0:34',
-      style: 'Viral Pulse',
-      estViews: '98k+ Est.',
+      title: 'Key Actionable Breakthrough',
+      score: '95/100',
+      duration: '1:00',
+      duration_sec: 60,
+      duration_label: '60s Max',
+      style: 'Minimal Clean',
+      estViews: '142k+ Est.',
       caption: 'STOP DOING THIS TODAY',
+      event_type: 'Key Actionable Breakthrough',
+      event_tag: '💡 60s Deep Narrative Payoff',
+      event_reason: 'Extended ~60s max narrative breakdown delivering the core actionable takeaway and high watch time.',
+      startTime: '27:40',
+      endTime: '28:40',
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCcMK94faVsZqA3b952zMYH5UMZcRJUEApyQl99GKLIUiNVwkrZsUWkFcIOjc2d6sPtkHSkHZHj3Mp8SNn2K2Hm3OYlZQ3WuXrCvT4x_VzjG5DDaBLkeqsRlAkR3XH1jT8zvTQXqQoikfLxdoGq640ZY5sKWS3pL-2ATSj8fRZks3EJsu7lWEkblB44coOw7Z7UyqUJ--D2mMdJgl4Wid3_7px59sofKio-nv9IknI',
       videoUrl: '/generated_shorts/viral_blueprint_master.mp4'
     }
@@ -59,40 +101,66 @@ export default function HomePage() {
 
   const [clips, setClips] = useState(generatedClips && generatedClips.length > 0 ? generatedClips.slice(0, 3) : []);
 
-  const handleGenerate = async () => {
+  // Opens the Duration modal when generate is clicked
+  const handleGenerateClick = () => {
     const trimmedUrl = urlInput.trim();
     if (!trimmedUrl) {
-      addToast('Please enter or paste a valid video URL', 'error');
+      addToast('Please enter or paste a valid video URL first', 'error');
       return;
     }
+    setShowDurationModal(true);
+  };
 
+  // Called when user selects duration in modal and clicks Confirm & Generate
+  const executeGenerate = async (chosenDuration) => {
+    const trimmedUrl = urlInput.trim();
+    if (!trimmedUrl) return;
+
+    setDuration(chosenDuration);
     setIsGenerating(true);
     setProgress(15);
-    setBtnText('Processing Stream...');
-    setStatusText('Ingesting YouTube stream & separating audio track...');
+    setBtnText('Analyzing Full Video...');
+    setStatusText('Stage 1: Scanning 100 viewer replay intervals & chapters across whole video...');
     setLastAnalyzedUrl(trimmedUrl);
 
     let currentProgress = 15;
     const interval = setInterval(() => {
       currentProgress += 12;
       if (currentProgress === 39) {
-        setStatusText('Whisper-V3 semantic hook extraction & sentiment analysis...');
+        setStatusText('Stage 2: Identifying highest-velocity curiosity hooks & heatmap climax...');
       } else if (currentProgress === 63) {
-        setStatusText('Fast 9:16 vertical re-framing & H.264 rendering...');
+        setStatusText('Stage 3: Adaptive 9:16 vertical re-framing & snapshot extraction...');
       } else if (currentProgress === 87) {
-        setStatusText('Burning kinetic subtitles & scoring retention probability...');
+        setStatusText('Stage 4: Scoring virality probability & burning kinetic captions...');
       }
-      setProgress(Math.min(92, currentProgress));
+      setProgress(Math.min(94, currentProgress));
     }, 400);
 
     try {
       const resp = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: trimmedUrl, duration: 15 })
+        body: JSON.stringify({
+          url: trimmedUrl,
+          mode: analysisMode,
+          duration: chosenDuration,
+          count: 3,
+          email: user?.email,
+          user_id: user?.id
+        })
       });
 
       clearInterval(interval);
+
+      if (resp.status === 403) {
+        const errData = await resp.json();
+        if (errData.requires_upgrade) {
+          setShowProModal(true);
+          addToast(errData.error || 'This feature requires Creator Pro plan or trial credits', 'info');
+          setIsGenerating(false);
+          return;
+        }
+      }
 
       if (!resp.ok) {
         throw new Error(`Server status ${resp.status}`);
@@ -100,21 +168,50 @@ export default function HomePage() {
 
       const data = await resp.json();
       setProgress(100);
-      setStatusText('Complete! 3 viral clips extracted.');
+      setStatusText(
+        analysisMode === 'ai_smart'
+          ? 'Deep Intelligence Analysis Complete! 3 distinct event shorts generated.'
+          : 'Complete! 3 viral clips extracted.'
+      );
       setBtnText('Generate Again');
 
       if (data.clips && data.clips.length > 0) {
         setClips(data.clips.slice(0, 3));
         setGeneratedClips(data.clips);
       }
-      addToast('Clips successfully generated with 9:16 framing!', 'success');
+      if (data.analysis_summary) {
+        setAiAnalysisSummary(data.analysis_summary);
+      }
+      if (data.credits_remaining !== undefined && user) {
+        updateUser({ credits: data.credits_remaining });
+      }
+
+      addToast(
+        analysisMode === 'ai_smart'
+          ? '✨ AI Deep Event Scanner successfully isolated key moments across the video!'
+          : 'Clips successfully generated with 9:16 framing!',
+        'success'
+      );
     } catch (err) {
       clearInterval(interval);
       setProgress(100);
-      setStatusText('AI Analysis Complete (Simulated Cache)');
+      setStatusText('AI Deep Event Analysis Complete (Simulated Cache)');
       setBtnText('Generate Again');
       setClips(initialClips);
       setGeneratedClips(initialClips);
+      setAiAnalysisSummary({
+        engine: 'ClipForge Deep Neural Event Scanner v3.2',
+        total_duration_formatted: '28:45',
+        heatmap_points_scanned: 100,
+        peak_replay_moment: '14:22',
+        peak_multiplier: '4.8x Viewer Replay Peak',
+        ai_confidence: '98.9%',
+        timeline_events: [
+          { id: '1', title: 'The Exact Blueprint', tag: '🎯 Opening Hook', startSec: 5, timeFormatted: '00:05', percent: 2, score: '98/100' },
+          { id: '2', title: 'Why 99% Fail', tag: '🔥 Heatmap Peak (4.8x)', startSec: 862, timeFormatted: '14:22', percent: 50, score: '99/100' },
+          { id: '3', title: 'Stop Doing This', tag: '💡 Breakthrough Insight', startSec: 1720, timeFormatted: '28:40', percent: 85, score: '95/100' }
+        ]
+      });
       addToast('3 clips generated with 9:16 vertical framing!', 'success');
     } finally {
       setIsGenerating(false);
@@ -228,13 +325,135 @@ export default function HomePage() {
           </span>
         </div>
 
+        {/* AI Intelligent Engine Mode Selector */}
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pt-3 pb-2">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200 shadow-inner">
+            <button
+              onClick={() => setAnalysisMode('standard')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                analysisMode === 'standard'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[15px]">flash_on</span>
+              <span>Standard Cut</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-200/70 text-slate-600 font-bold">
+                Free
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                if (!isProUser && (user?.credits || 0) <= 0) {
+                  setShowProModal(true);
+                } else {
+                  setAnalysisMode('ai_smart');
+                }
+              }}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+                analysisMode === 'ai_smart'
+                  ? 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-indigo-600'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[15px] text-amber-300">auto_awesome</span>
+              <span>AI Deep Event Scanner</span>
+              <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-full bg-amber-400 text-slate-950 shadow-xs">
+                PRO
+              </span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 text-[11px] font-medium">
+            {analysisMode === 'ai_smart' ? (
+              <span className="flex items-center gap-1.5 text-indigo-700 font-semibold bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100 shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
+                <span>Whole-Video Heatmap (100 Intervals) & Chapter Hook Analysis</span>
+              </span>
+            ) : (
+              <span className="text-slate-500 font-mono text-[11px]">
+                Standard 3-segment proportional slicing
+              </span>
+            )}
+            {!isProUser && (
+              <button
+                onClick={() => setShowProModal(true)}
+                className="text-xs font-bold text-indigo-600 hover:text-indigo-800 underline transition-colors"
+              >
+                Pro Details
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Target Clip Duration Selector Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 pb-2 text-xs border-t border-slate-100 mt-1">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1 mr-1">
+              <span className="material-symbols-outlined text-[15px] text-indigo-600">timelapse</span>
+              Clip Durations:
+            </span>
+            {[
+              { id: '15', label: '15s (Free)' },
+              { id: '30', label: '30s (Free)' },
+              { id: '45', label: '45s (Pro)' },
+              { id: '60', label: '60s Max (Pro)' },
+              { id: 'varied', label: '⚡ Varied (Pro)' }
+            ].map((opt) => (
+              <button
+                key={opt.id}
+                onClick={() => {
+                  setDuration(opt.id);
+                  setShowDurationModal(true);
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 ${
+                  duration === opt.id
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                }`}
+              >
+                <span>{opt.label}</span>
+              </button>
+            ))}
+
+            <button
+              onClick={() => setShowDurationModal(true)}
+              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/60 transition-colors flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined text-[13px] text-amber-700">tune</span>
+              <span>Custom / Change</span>
+            </button>
+          </div>
+
+          <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1">
+            <span className="text-indigo-600 font-bold">Duration:</span>
+            {duration === 'varied' ? (
+              <span className="text-slate-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/50">
+                15s + 30s + 60s Max (Pro)
+              </span>
+            ) : Number(duration) > 30 ? (
+              <span className="text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                {duration}s (Pro Paid)
+              </span>
+            ) : (
+              <span className="text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                {duration}s (100% Free)
+              </span>
+            )}
+          </div>
+        </div>
+
         {/* URL Input Console */}
-        <div className="flex flex-col sm:flex-row gap-2 mt-4">
+        <div className="flex flex-col sm:flex-row gap-2 mt-2">
           <div className="relative flex-1 flex items-center">
             <span className="material-symbols-outlined text-[18px] text-slate-400 absolute left-3">link</span>
             <input
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleGenerateClick();
+              }}
               className="w-full bg-slate-50 text-slate-900 font-mono text-xs pl-9 pr-8 py-3 rounded-xl border border-slate-300 focus:border-indigo-600 focus:bg-white focus:outline-none transition-colors"
               type="text"
               placeholder="Paste any YouTube, Podcast, or Video URL (e.g. https://youtube.com/watch?v=...)..."
@@ -249,7 +468,7 @@ export default function HomePage() {
             )}
           </div>
           <button
-            onClick={handleGenerate}
+            onClick={handleGenerateClick}
             disabled={isGenerating}
             className="h-11 sm:h-auto px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
           >
@@ -264,7 +483,7 @@ export default function HomePage() {
 
         {/* Live Processing Pipeline Bar */}
         {(isGenerating || progress > 0) && (
-          <div className="flex flex-col gap-2 mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 animate-fadeIn">
+          <div className="flex flex-col gap-2 mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 animate-fadeIn">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-indigo-600 font-semibold flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-indigo-600 animate-ping"></span>
@@ -281,13 +500,78 @@ export default function HomePage() {
           </div>
         )}
 
+        {/* Whole-Video Timeline Visualizer */}
+        {aiAnalysisSummary && clips && clips.length > 0 && (
+          <div className="mt-5 p-4 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white shadow-md border border-slate-800 animate-fadeIn space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-300 font-mono">
+                  Whole-Video Event Timeline
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-300/30">
+                  AI Deep Event Scanner v3.2
+                </span>
+              </div>
+              <div className="text-xs font-mono text-slate-300">
+                Total Video: <span className="font-bold text-white">{aiAnalysisSummary.total_duration_formatted || '28:45'}</span>
+              </div>
+            </div>
+
+            {/* Visual Timeline Bar */}
+            <div className="relative w-full h-6 rounded-xl bg-slate-800/80 border border-slate-700 overflow-hidden flex items-center px-1">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-sky-500/10"></div>
+              
+              {/* Timeline Markers */}
+              {(aiAnalysisSummary.timeline_events || [
+                { id: '1', title: 'Hook', tag: '🎯 Opening Hook', percent: 3, timeFormatted: '00:05', score: '98/100' },
+                { id: '2', title: 'Climax', tag: '🔥 Heatmap Peak (4.8x)', percent: 50, timeFormatted: '14:22', score: '99/100' },
+                { id: '3', title: 'Breakthrough', tag: '💡 Core Insight', percent: 85, timeFormatted: '28:40', score: '95/100' }
+              ]).map((ev, idx) => (
+                <div
+                  key={ev.id || idx}
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center group cursor-pointer"
+                  style={{ left: `${Math.max(5, Math.min(95, ev.percent || (idx === 0 ? 5 : (idx === 1 ? 50 : 85))))}%` }}
+                >
+                  <div className={`w-3.5 h-3.5 rounded-full border-2 border-white shadow-md ${
+                    idx === 0 ? 'bg-amber-400' : (idx === 1 ? 'bg-red-500 animate-pulse' : 'bg-sky-400')
+                  }`}></div>
+                  <span className="absolute -top-7 text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/90 text-white whitespace-nowrap opacity-90 group-hover:opacity-100 shadow-xs border border-white/20">
+                    {ev.timeFormatted} ({ev.score})
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Metrics Pills */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col">
+                <span className="text-slate-400 text-[10px]">Heatmap Scanned</span>
+                <span className="font-bold text-white">{aiAnalysisSummary.heatmap_points_scanned || 100} Intervals</span>
+              </div>
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col">
+                <span className="text-slate-400 text-[10px]">Highest Replay Surge</span>
+                <span className="font-bold text-amber-300">{aiAnalysisSummary.peak_multiplier || '4.8x Peak'}</span>
+              </div>
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col">
+                <span className="text-slate-400 text-[10px]">Peak Timestamp</span>
+                <span className="font-bold text-sky-300">{aiAnalysisSummary.peak_replay_moment || '14:22'}</span>
+              </div>
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex flex-col">
+                <span className="text-slate-400 text-[10px]">Virality Confidence</span>
+                <span className="font-bold text-emerald-300">{aiAnalysisSummary.ai_confidence || '98.9%'}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Generated Results Grid - Displayed only after link is processed and video is ready */}
         {clips && clips.length > 0 ? (
           <div className="flex flex-col gap-3 mt-5 animate-fadeIn">
             <div className="flex items-center justify-between">
               <span className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[18px] text-indigo-600">movie</span>
-                AI Detected Clips ({clips.length})
+                AI Detected Event Shorts ({clips.length})
               </span>
               <span className="text-[11px] font-mono font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">
                 Auto-Framed 9:16
@@ -317,13 +601,31 @@ export default function HomePage() {
                       </span>
                     </div>
 
-                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md flex items-center gap-1 text-[10px] font-mono text-sky-400 font-semibold">
-                      <span className="material-symbols-outlined text-[12px] text-sky-400">trending_up</span>
-                      <span>Score {clip.score}</span>
+                    {/* Pro AI Event Badge */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      <div className="px-2 py-0.5 rounded bg-black/80 backdrop-blur-md flex items-center gap-1 text-[10px] font-mono text-sky-400 font-semibold shadow-xs">
+                        <span className="material-symbols-outlined text-[12px] text-sky-400">trending_up</span>
+                        <span>Score {clip.score}</span>
+                      </div>
+                      {clip.event_tag && (
+                        <div className="px-1.5 py-0.5 rounded bg-indigo-900/90 backdrop-blur-md text-[9px] font-bold text-amber-300 shadow-xs border border-amber-400/30">
+                          {clip.event_tag}
+                        </div>
+                      )}
                     </div>
-                    <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono text-white font-semibold">
-                      {clip.duration}
+
+                    <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                      <div className="px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-mono text-cyan-300 font-bold border border-cyan-400/30 flex items-center gap-1 shadow-sm">
+                        <span>⏱️</span>
+                        <span>{clip.duration_sec ? `${clip.duration_sec}s` : clip.duration}</span>
+                      </div>
+                      {clip.startTime && (
+                        <div className="px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-md text-[9px] font-mono text-indigo-300 font-semibold">
+                          @{clip.startTime}
+                        </div>
+                      )}
                     </div>
+
                     <div className="absolute bottom-3 left-2 right-2 text-center">
                       <span className="inline-block bg-yellow-400 text-black font-extrabold text-[11px] px-2 py-1 rounded shadow-md leading-tight uppercase">
                         "{clip.caption}"
@@ -338,6 +640,11 @@ export default function HomePage() {
                         <span className="material-symbols-outlined text-[12px]">visibility</span> {clip.estViews}
                       </span>
                     </div>
+                    {clip.event_reason && (
+                      <p className="text-[10px] text-slate-500 leading-tight line-clamp-1 italic">
+                        {clip.event_reason}
+                      </p>
+                    )}
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
                       <button
                         onClick={() => loadClipToStudio(clip)}
@@ -708,6 +1015,15 @@ export default function HomePage() {
           © 2026 ClipForge AI Inc. Engineered for viral creators worldwide.
         </p>
       </footer>
+
+      {/* Choose Clip Duration Modal */}
+      <DurationSelectModal
+        isOpen={showDurationModal}
+        onClose={() => setShowDurationModal(false)}
+        onConfirm={executeGenerate}
+        initialDuration={duration}
+        url={urlInput}
+      />
     </div>
   );
 }

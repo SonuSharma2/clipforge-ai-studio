@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import ProUpgradeModal from '../components/ProUpgradeModal';
 
 const AppContext = createContext();
 
@@ -20,7 +21,12 @@ export function AppProvider({ children }) {
 
   const [generatedClips, setGeneratedClips] = useState(null);
   const [lastAnalyzedUrl, setLastAnalyzedUrl] = useState('');
+  const [analysisMode, setAnalysisMode] = useState('ai_smart'); // 'ai_smart' or 'standard'
+  const [showProModal, setShowProModal] = useState(false);
+  const [aiAnalysisSummary, setAiAnalysisSummary] = useState(null);
   
+  const isProUser = Boolean(user && user.plan && user.plan !== 'Creator Free');
+
   const [activeStudioClip, setActiveStudioClip] = useState({
     title: 'The Viral Hook Peak',
     score: '98/100',
@@ -127,6 +133,13 @@ export function AppProvider({ children }) {
         setGeneratedClips,
         lastAnalyzedUrl,
         setLastAnalyzedUrl,
+        analysisMode,
+        setAnalysisMode,
+        showProModal,
+        setShowProModal,
+        aiAnalysisSummary,
+        setAiAnalysisSummary,
+        isProUser,
         activeStudioClip,
         setActiveStudioClip,
         loadClipToStudio,
@@ -138,6 +151,7 @@ export function AppProvider({ children }) {
       }}
     >
       {children}
+      <ProUpgradeModal isOpen={showProModal} onClose={() => setShowProModal(false)} />
     </AppContext.Provider>
   );
 }

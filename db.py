@@ -467,5 +467,81 @@ def get_user_payments(email: str = None, user_id: str = None, limit: int = 15):
         results.append(item)
     return results
 
+def is_user_pro(email_or_id: str) -> bool:
+    """Checks if a user is subscribed to a paid Pro or Studio plan."""
+    if not email_or_id:
+        return False
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT plan FROM users WHERE email = ? OR id = ?", (email_or_id.strip().lower(), email_or_id.strip()))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return False
+    plan = row['plan'] or 'Creator Free'
+    return plan in ('Creator Pro', 'Pro Studio', 'Studio Scale', 'Agency Unlimited')
+
+def deduct_user_credits(email_or_id: str, amount: int = 1):
+    """
+    Deducts AI generation credits from a user's account.
+    Returns (success: bool, remaining_credits: int, plan: str, message: str).
+    """
+    if not email_or_id:
+        return True, 999, 'Pro Studio', 'Guest/Demo session'
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, email, plan, credits FROM users WHERE email = ? OR id = ?", (email_or_id.strip().lower(), email_or_id.strip()))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return True, 10, 'Creator Free', 'User not found'
+
+    current_credits = row['credits'] if row['credits'] is not None else 10
+    plan = row['plan'] or 'Creator Free'
+    user_id = row['id']
+
+    # Unlimited or Pro Studio check
+    if 'Unlimited' in plan or 'Studio' in plan:
+        conn.close()
+        return True, current_credits, plan, 'Pro unlimited plan'
+
+    if current_credits < amount:
+        conn.close()
+        return False, current_credits, plan, f'Insufficient credits ({current_credits} remaining, requires {amount}). Please upgrade to Creator Pro.'
+
+    new_credits = max(0, current_credits - amount)
+    cursor.execute("UPDATE users SET credits = ? WHERE id = ?", (new_credits, user_id))
+    conn.commit()
+    conn.close()
+    return True, new_credits, plan, f'Deducted {amount} credit(s). {new_credits} credits remaining.'
+
+def grant_trial_credits(email_or_id: str, amount: int = 3):
+    """Grants complimentary trial credits for Pro AI Event Scanner."""
+    if not email_or_id:
+        return False, 0
+    email_clean = email_or_id.strip().lower()
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, credits FROM users WHERE email = ? OR id = ?", (email_clean, email_or_id.strip()))
+    row = cursor.fetchone()
+    if not row:
+        now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        user_id = f"user_{int(time.time())}_{secrets.token_hex(3)}"
+        name = email_clean.split('@')[0].title()
+        cursor.execute('''
+            INSERT INTO users (id, name, email, plan, credits, email_verified, provider, created_at, last_login)
+            VALUES (?, ?, ?, 'Creator Free', ?, 1, 'email', ?, ?)
+        ''', (user_id, name, email_clean, amount, now, now))
+        conn.commit()
+        conn.close()
+        return True, amount
+
+    new_credits = (row['credits'] or 0) + amount
+    cursor.execute("UPDATE users SET credits = ? WHERE id = ?", (new_credits, row['id']))
+    conn.commit()
+    conn.close()
+    return True, new_credits
+
 # Auto-initialize database on module import
 init_db()
